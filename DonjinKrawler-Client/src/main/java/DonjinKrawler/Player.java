@@ -10,10 +10,11 @@ public class Player {
     private int dy;
     private int x = 40;
     private int y = 60;
+    private int id;
     private Image image;
 
-    public Player() {
-
+    public Player(int id) {
+        this.id = id;
         loadImage();
     }
 
@@ -21,7 +22,6 @@ public class Player {
 
         ImageIcon ii = new ImageIcon("/home/justas/Projects/DonjinKrawler-Client/src/resources/craft.png");
         image = ii.getImage();
-        System.out.println(image);
     }
 
     public void move() {
@@ -38,6 +38,20 @@ public class Player {
     public int getY() {
 
         return y;
+    }
+    public int getId() {
+
+        return id;
+    }
+
+    public void setX(int x) {
+
+        this.x = x;
+    }
+
+    public void setY(int y) {
+
+        this.y = y;
     }
 
     public Image getImage() {

@@ -13,6 +13,7 @@ import java.util.concurrent.Executors;
 public class Server {
     // The set of all the print writers for all the clients, used for broadcast.
     private static Set<PrintWriter> writers = new HashSet<>();
+    private static Set<Integer> ids = new HashSet<>();
 
     public static void main(String[] args) throws Exception {
 
@@ -24,14 +25,15 @@ public class Server {
         var pool = Executors.newFixedThreadPool(threadPool);
         try (var listener = new ServerSocket(serverPort)) {
             while (true) {
-                pool.execute(new Server.Handler(listener.accept(),id++));
+                id++;
+                ids.add(id);
+                pool.execute(new Server.Handler(listener.accept(),id));
             }
         }
     }
 
 
     private static class Handler implements Runnable {
-        private String name = "Player";
         private Socket socket;
         private Scanner in;
         private PrintWriter out;
@@ -42,37 +44,43 @@ public class Server {
             this.id = id;
         }
 
+        public void sendToAll(String message){
+            for (PrintWriter writer : writers) {
+                if (writer != out)
+                    writer.println(message);
+            }
+        }
+        public void sendCurrentPlayers(){
+            for (int playerId : ids) {
+                if( playerId != id)
+                    out.println("CRT " + playerId);
+            }
+        }
+
         public void run() {
             try {
                 in = new Scanner(socket.getInputStream());
                 out = new PrintWriter(socket.getOutputStream(), true);
 
-                // Now that a successful name has been chosen, add the socket's print writer
-                // to the set of all writers so this client can receive broadcast messages.
-                // But BEFORE THAT, let everyone else know that the new person has joined!
-                out.println("Prisijunge " + name + " " + id);
-                System.out.println("Prisijunge " + name + " " + id);
-                for (PrintWriter writer : writers) {
-                    writer.println("MESSAGE " + name + " " + id + " has joined");
-                }
+                out.println("MSG You joined the server");
+                System.out.println("Player has joined the server");
+                sendToAll("MSG A player has joined the server");
+                sendToAll("CRT "+id);
+                sendCurrentPlayers();
                 writers.add(out);
 
                 while (true) {
                     //erroras iseinant nes neberanda kito line, nes nutruksta rysys
                     String input = in.nextLine();
-                    System.out.println(input);
+                    sendToAll(input +" "+ id);
                 }
             } catch (Exception e) {
                 System.out.println(e);
             } finally {
                 if (out != null) {
                     writers.remove(out);
-                }
-                if (name != null) {
-                    System.out.println(name + " is leaving");
-                    for (PrintWriter writer : writers) {
-                        writer.println("MESSAGE " + name + " has left");
-                    }
+                    sendToAll("MSG A player has left");
+                    sendToAll("DLT " + id);
                 }
                 try {
                     socket.close();
