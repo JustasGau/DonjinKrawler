@@ -1,4 +1,4 @@
-package main.java.DonjinKrawler;
+package main.java.DonjinKrawler.examples;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,7 +11,7 @@ import java.util.Date;
  * you can write. Beware though that a client has to be completely served its
  * date before the server will be able to handle another client.
  */
-public class DonjinKrawler {
+public class DateServer {
     public static void main(String[] args) throws IOException {
         try (var listener = new ServerSocket(59090)) {
             System.out.println("The date server is running...");

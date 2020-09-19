@@ -10,8 +10,6 @@ public class Player {
     private int dy;
     private int x = 40;
     private int y = 60;
-    private int w;
-    private int h;
     private Image image;
 
     public Player() {
@@ -21,11 +19,9 @@ public class Player {
 
     private void loadImage() {
 
-        ImageIcon ii = new ImageIcon("src/resources/craft.png");
+        ImageIcon ii = new ImageIcon("/home/justas/Projects/DonjinKrawler-Client/src/resources/craft.png");
         image = ii.getImage();
-
-        w = image.getWidth(null);
-        h = image.getHeight(null);
+        System.out.println(image);
     }
 
     public void move() {
@@ -42,16 +38,6 @@ public class Player {
     public int getY() {
 
         return y;
-    }
-
-    public int getWidth() {
-
-        return w;
-    }
-
-    public int getHeight() {
-
-        return h;
     }
 
     public Image getImage() {
