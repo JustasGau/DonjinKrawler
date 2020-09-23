@@ -19,48 +19,40 @@ public class Player {
     }
 
     private void loadImage() {
-
-        ImageIcon ii = new ImageIcon("/home/justas/Projects/DonjinKrawler-Client/src/resources/craft.png");
+        ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("resources/craft.png").getFile());
         image = ii.getImage();
     }
 
     public void move() {
-
         x += dx;
         y += dy;
     }
 
     public int getX() {
-
         return x;
     }
 
     public int getY() {
-
         return y;
     }
-    public int getId() {
 
+    public int getId() {
         return id;
     }
 
     public void setX(int x) {
-
         this.x = x;
     }
 
     public void setY(int y) {
-
         this.y = y;
     }
 
     public Image getImage() {
-
         return image;
     }
 
     public void keyPressed(KeyEvent e) {
-
         int key = e.getKeyCode();
 
         if (key == KeyEvent.VK_LEFT) {
@@ -81,7 +73,6 @@ public class Player {
     }
 
     public void keyReleased(KeyEvent e) {
-
         int key = e.getKeyCode();
 
         if (key == KeyEvent.VK_LEFT) {

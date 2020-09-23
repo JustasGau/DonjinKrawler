@@ -4,26 +4,25 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Client{
+public class Client {
 
-    JFrame frame = new JFrame();
-    int screenWidth = 500;
-    int screenHeight = 500;
+    private JFrame frame = new JFrame();
+    private final int screenWidth = 500;
+    private final int screenHeight = 500;
 
-    int serverPort = 59001;
-    String serverAddress;
-    Scanner in;
-    PrintWriter out;
+    private final int serverPort = 59001;
+    private String serverAddress;
+    private Scanner in;
+    private PrintWriter out;
 
 
     public Client(String serverAddress) throws IOException {
         this.serverAddress = serverAddress;
-        if(serverAddress != "0.0.0.0")
-            initConnection();
-
+        initConnection();
         initUI();
     }
 
@@ -34,7 +33,6 @@ public class Client{
     }
 
     private void initUI() {
-
         frame.setTitle("Donjin Krawler");
         frame.setSize(screenWidth, screenHeight);
 
@@ -46,14 +44,18 @@ public class Client{
         messageLabel.setBackground(Color.lightGray);
         frame.getContentPane().add(messageLabel, BorderLayout.SOUTH);
 
-        frame.add(new Map(in, out, messageLabel));
+        frame.add(new GameMap(in, out, messageLabel));
 
     }
 
     public static void main(String[] args) throws IOException {
-        String address = "0.0.0.0";
-        if(args.length > 0)
+        String address;
+        if (args.length > 0) {
             address = args[0];
+        } else {
+            address = InetAddress.getByName("localhost").getHostAddress();
+        }
+
         Client window = new Client(address);
         window.frame.setVisible(true);
     }

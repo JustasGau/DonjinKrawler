@@ -8,7 +8,7 @@ import java.util.Scanner;
 import java.util.Set;
 import javax.swing.*;
 
-public class Map extends JPanel implements ActionListener{
+public class GameMap extends JPanel implements ActionListener {
 
     private Timer timer;
     private Player player;
@@ -25,8 +25,7 @@ public class Map extends JPanel implements ActionListener{
     PrintWriter out;
     JLabel label;
 
-
-    public Map(Scanner in, PrintWriter out, JLabel label) {
+    public GameMap(Scanner in, PrintWriter out, JLabel label) {
         this.in = in;
         this.out = out;
         this.label = label;
@@ -39,8 +38,7 @@ public class Map extends JPanel implements ActionListener{
     }
 
     private void initMap() {
-
-        addKeyListener(new Map.TAdapter());
+        addKeyListener(new GameMap.TAdapter());
         setBackground(Color.black);
         setFocusable(true);
 
@@ -77,8 +75,8 @@ public class Map extends JPanel implements ActionListener{
     }
 
     private void gameUpdate() {
-        if (currStep == stepMax && out != null){
-            out.println("POZ "+player.getX() + " " + player.getY());
+        if (currStep == stepMax && out != null) {
+            out.println("POZ " + player.getX() + " " + player.getY());
             currStep = 0;
         }
         currStep++;
@@ -86,16 +84,15 @@ public class Map extends JPanel implements ActionListener{
         repaint();
     }
 
-    private PlayerShell findPlayerInMap(int id){
+    private PlayerShell findPlayerInMap(int id) {
         for (PlayerShell pl : shells) {
-            if(pl.getId() == id)
+            if (pl.getId() == id)
                 return pl;
         }
         return null;
     }
 
     private class TAdapter extends KeyAdapter {
-
         @Override
         public void keyReleased(KeyEvent e) {
             player.keyReleased(e);
@@ -106,13 +103,14 @@ public class Map extends JPanel implements ActionListener{
             player.keyPressed(e);
         }
     }
+
     private class MyMouseAdapter extends MouseAdapter {
         @Override
         public void mouseMoved(MouseEvent e) {
             mouseX = e.getX() - player.getX();
             mouseY = e.getY() - player.getY();
-            angle = Math.atan2( mouseX , mouseY );
-            rotate = angle * ( 180 / Math.PI );
+            angle = Math.atan2(mouseX, mouseY);
+            rotate = angle * (180 / Math.PI);
         }
     }
 
@@ -120,14 +118,15 @@ public class Map extends JPanel implements ActionListener{
 
         Scanner in;
         JLabel label;
-        public ServerReader(Scanner in, JLabel label){
+
+        public ServerReader(Scanner in, JLabel label) {
             this.in = in;
             this.label = label;
             start();
         }
 
         public void run() {
-            while(true){
+            while (true) {
                 if (in.hasNextLine()) {
                     String response = in.nextLine();
 //                    System.out.println(response);
@@ -140,7 +139,7 @@ public class Map extends JPanel implements ActionListener{
                     } else if (response.startsWith("POZ")) {
                         String data = response.substring(4);
                         String[] arrOfStr = data.split(" ", 0);
-                        if(arrOfStr.length == 3) {
+                        if (arrOfStr.length == 3) {
                             PlayerShell temp = findPlayerInMap(Integer.parseInt(arrOfStr[2]));
                             if (temp != null) {
                                 temp.setX(Integer.parseInt(arrOfStr[0]));
@@ -151,7 +150,7 @@ public class Map extends JPanel implements ActionListener{
                     } else if (response.startsWith("DLT")) {
                         int discPlayerId = Integer.parseInt(response.substring(4));
                         PlayerShell temp = findPlayerInMap(discPlayerId);
-                        if(temp != null) {
+                        if (temp != null) {
                             shells.remove(temp);
                         }
                     }

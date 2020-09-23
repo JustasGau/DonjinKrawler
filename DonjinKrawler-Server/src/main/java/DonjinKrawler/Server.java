@@ -16,7 +16,6 @@ public class Server {
     private static Set<Integer> ids = new HashSet<>();
 
     public static void main(String[] args) throws Exception {
-
         int serverPort = 59001;
         int threadPool = 4;
         int id = 0;
@@ -44,16 +43,19 @@ public class Server {
             this.id = id;
         }
 
-        public void sendToAll(String message){
+        public void sendToAll(String message) {
             for (PrintWriter writer : writers) {
-                if (writer != out)
+                if (writer != out) {
                     writer.println(message);
+                }
             }
         }
-        public void sendCurrentPlayers(){
+
+        public void sendCurrentPlayers() {
             for (int playerId : ids) {
-                if( playerId != id)
+                if (playerId != id) {
                     out.println("CRT " + playerId);
+                }
             }
         }
 
@@ -65,14 +67,14 @@ public class Server {
                 out.println("MSG You joined the server");
                 System.out.println("Player has joined the server");
                 sendToAll("MSG A player has joined the server");
-                sendToAll("CRT "+id);
+                sendToAll("CRT " + id);
                 sendCurrentPlayers();
                 writers.add(out);
 
                 while (true) {
                     //erroras iseinant nes neberanda kito line, nes nutruksta rysys
                     String input = in.nextLine();
-                    sendToAll(input +" "+ id);
+                    sendToAll(input + " " + id);
                 }
             } catch (Exception e) {
                 System.out.println(e);
