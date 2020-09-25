@@ -10,57 +10,49 @@ public class Player {
     private int dy;
     private int x = 40;
     private int y = 60;
-    private int id;
+    private String name;
     private Image image;
+    private Boolean changedPOS = false;
 
-    public Player(int id) {
-        this.id = id;
+    public Player(String name) {
+        this.name = name;
         loadImage();
     }
 
     private void loadImage() {
-
-        ImageIcon ii = new ImageIcon("/home/justas/Projects/DonjinKrawler-Client/src/resources/craft.png");
+        ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("resources/craft.png").getFile());
         image = ii.getImage();
     }
 
     public void move() {
-
         x += dx;
         y += dy;
     }
 
     public int getX() {
-
         return x;
     }
 
     public int getY() {
-
         return y;
     }
-    public int getId() {
 
-        return id;
+    public Boolean getChangedPOS() {
+        return changedPOS;
     }
 
-    public void setX(int x) {
+    public void setChangedPOS(Boolean val) { this.changedPOS = val; }
 
-        this.x = x;
-    }
-
-    public void setY(int y) {
-
-        this.y = y;
+    public String getName() {
+        return name;
     }
 
     public Image getImage() {
-
         return image;
     }
 
     public void keyPressed(KeyEvent e) {
-
+        changedPOS = true;
         int key = e.getKeyCode();
 
         if (key == KeyEvent.VK_LEFT) {
@@ -81,7 +73,7 @@ public class Player {
     }
 
     public void keyReleased(KeyEvent e) {
-
+        changedPOS = false;
         int key = e.getKeyCode();
 
         if (key == KeyEvent.VK_LEFT) {

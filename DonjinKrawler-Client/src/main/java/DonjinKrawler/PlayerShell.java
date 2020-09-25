@@ -10,52 +10,39 @@ public class PlayerShell {
     private int dy;
     private int x = 40;
     private int y = 60;
-    private int id;
+    private String name;
     private Image image;
 
-    public PlayerShell(int id) {
-        this.id = id;
+    public PlayerShell(String name) {
+        this.name = name;
         loadImage();
     }
 
     private void loadImage() {
-
-        ImageIcon ii = new ImageIcon("/home/justas/Projects/DonjinKrawler-Client/src/resources/craft.png");
+        ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("resources/craft.png").getFile());
         image = ii.getImage();
     }
 
-    public void move() {
-
-        x += dx;
-        y += dy;
-    }
-
     public int getX() {
-
         return x;
     }
 
     public int getY() {
-
         return y;
     }
-    public int getId() {
-
-        return id;
+    public String getName() {
+        return name;
     }
 
     public void setX(int x) {
-
         this.x = x;
     }
 
     public void setY(int y) {
-
         this.y = y;
     }
 
     public Image getImage() {
-
         return image;
     }
 }

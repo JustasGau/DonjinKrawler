@@ -9,21 +9,21 @@ import java.util.Scanner;
 
 public class Client{
 
-    JFrame frame = new JFrame();
-    int screenWidth = 500;
-    int screenHeight = 500;
+    private JFrame frame = new JFrame();
+    private int screenWidth = 500;
+    private int screenHeight = 500;
 
-    int serverPort = 59001;
-    String serverAddress;
-    Scanner in;
-    PrintWriter out;
+    private int serverPort = 59001;
+    private String serverAddress;
+    private Scanner in;
+    private PrintWriter out;
+    private String name;
 
 
     public Client(String serverAddress) throws IOException {
         this.serverAddress = serverAddress;
-        if(serverAddress != "0.0.0.0")
-            initConnection();
-
+        initConnection();
+        logIn();
         initUI();
     }
 
@@ -31,6 +31,18 @@ public class Client{
         var socket = new Socket(serverAddress, serverPort);
         in = new Scanner(socket.getInputStream());
         out = new PrintWriter(socket.getOutputStream(), true);
+    }
+
+    private void logIn() {
+        while (in.hasNextLine()) {
+            var line = in.nextLine();
+            if (line.startsWith("SBN")) {
+                name = getName();
+                out.println(name);
+            } else if (line.startsWith("ACC")){
+                break;
+            }
+        }
     }
 
     private void initUI() {
@@ -46,12 +58,17 @@ public class Client{
         messageLabel.setBackground(Color.lightGray);
         frame.getContentPane().add(messageLabel, BorderLayout.SOUTH);
 
-        frame.add(new Map(in, out, messageLabel));
+        frame.add(new Map(in, out, messageLabel, new Player(name)));
 
     }
 
+    private String getName() {
+        return JOptionPane.showInputDialog(frame, "Pasirink vardą:", "Vartotojo vardas",
+                JOptionPane.PLAIN_MESSAGE);
+    }
+
     public static void main(String[] args) throws IOException {
-        String address = "0.0.0.0";
+        String address = "127.0.0.1";
         if(args.length > 0)
             address = args[0];
         Client window = new Client(address);

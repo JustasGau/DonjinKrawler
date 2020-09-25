@@ -13,21 +13,25 @@ import java.util.concurrent.Executors;
 public class Server {
     // The set of all the print writers for all the clients, used for broadcast.
     private static Set<PrintWriter> writers = new HashSet<>();
-    private static Set<Integer> ids = new HashSet<>();
+    private static Set<String> names = new HashSet<>();
+
+
 
     public static void main(String[] args) throws Exception {
-
         int serverPort = 59001;
         int threadPool = 4;
-        int id = 0;
 
-        System.out.println("Dundžion kroler server is running");
+
+        GameMapGenerator generator = new GameMapGenerator(10);
+        String gameMapString = generator.generate();
+        System.out.println(gameMapString);
+
+
+        System.out.println("Server is running");
         var pool = Executors.newFixedThreadPool(threadPool);
         try (var listener = new ServerSocket(serverPort)) {
             while (true) {
-                id++;
-                ids.add(id);
-                pool.execute(new Server.Handler(listener.accept(),id));
+                pool.execute(new Server.Handler(listener.accept()));
             }
         }
     }
@@ -37,23 +41,25 @@ public class Server {
         private Socket socket;
         private Scanner in;
         private PrintWriter out;
-        private int id;
+        private String name;
 
-        public Handler(Socket socket, int id) {
+
+        public Handler(Socket socket) {
             this.socket = socket;
-            this.id = id;
         }
 
-        public void sendToAll(String message){
+        public void sendToAll(String message) {
             for (PrintWriter writer : writers) {
                 if (writer != out)
                     writer.println(message);
             }
         }
-        public void sendCurrentPlayers(){
-            for (int playerId : ids) {
-                if( playerId != id)
-                    out.println("CRT " + playerId);
+        public void sendCurrentPlayers() {
+            for (String otherName : names) {
+                if(otherName != name) {
+                    System.out.println("Sent name: " + otherName);
+                    out.println("CRT " + otherName);
+                }
             }
         }
 
@@ -62,25 +68,41 @@ public class Server {
                 in = new Scanner(socket.getInputStream());
                 out = new PrintWriter(socket.getOutputStream(), true);
 
+                while (true) {
+                    out.println("SBN");
+                    name = in.nextLine();
+                    if (name == null) {
+                        return;
+                    }
+                    synchronized (names) {
+                        if (!name.isBlank() && !names.contains(name)) {
+                            names.add(name);
+                            break;
+                        }
+                    }
+                }
+                out.println("ACC");
+                out.println("MAP");
                 out.println("MSG You joined the server");
-                System.out.println("Player has joined the server");
+                System.out.println("Player " + name + " has joined the server");
                 sendToAll("MSG A player has joined the server");
-                sendToAll("CRT "+id);
+                sendToAll("CRT " + name);
                 sendCurrentPlayers();
                 writers.add(out);
 
                 while (true) {
-                    //erroras iseinant nes neberanda kito line, nes nutruksta rysys
                     String input = in.nextLine();
-                    sendToAll(input +" "+ id);
+                    sendToAll(input + " " + name);
                 }
             } catch (Exception e) {
                 System.out.println(e);
             } finally {
                 if (out != null) {
                     writers.remove(out);
+                    names.remove(name);
+                    System.out.println("Player " + name + " has left the server");
                     sendToAll("MSG A player has left");
-                    sendToAll("DLT " + id);
+                    sendToAll("DLT " + name);
                 }
                 try {
                     socket.close();

@@ -17,38 +17,33 @@ public class Map extends JPanel implements ActionListener{
     private int mouseY = 0;
     private double angle;
     private double rotate;
-    private int stepMax = 1;
-    private int currStep = 0;
+    private int counter = 0;
     private static Set<PlayerShell> shells = new HashSet<>();
 
-    Scanner in;
-    PrintWriter out;
-    JLabel label;
+    private Scanner in;
+    private PrintWriter out;
+    private JLabel label;
 
 
-    public Map(Scanner in, PrintWriter out, JLabel label) {
+    public Map(Scanner in, PrintWriter out, JLabel label, Player player) {
         this.in = in;
         this.out = out;
         this.label = label;
+        this.player = player;
 
         if (this.in != null) {
             new ServerReader(in, label);
         }
         addMouseMotionListener(new MyMouseAdapter());
-        initMap();
-    }
-
-    private void initMap() {
 
         addKeyListener(new Map.TAdapter());
         setBackground(Color.black);
         setFocusable(true);
 
-        player = new Player(-1);
-
         timer = new Timer(DELAY, this);
         timer.start();
     }
+
 
     @Override
     public void paintComponent(Graphics g) {
@@ -58,17 +53,23 @@ public class Map extends JPanel implements ActionListener{
     }
 
     private void doDrawing(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
-
-//        g2d.rotate(Math.toRadians( rotate )*(-1), player.getX(), player.getY());
-        g2d.drawImage(player.getImage(), player.getX(), player.getY(), this);
-
+        drawUnit(g);
+        Graphics2D g2dd = (Graphics2D) g;
+        g2dd.setColor(Color.BLUE);
         for (PlayerShell pl : shells) {
-            Graphics2D g2dd = (Graphics2D) g;
 
 //            g2dd.rotate(Math.toRadians( rotate )*(-1), pl.getX(), pl.getY());
             g2dd.drawImage(pl.getImage(), pl.getX(), pl.getY(), this);
+            g2dd.drawString(pl.getName(), pl.getX(), pl.getY() + 30);
         }
+    }
+
+    private void drawUnit(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(Color.GREEN);
+        //g2d.rotate(Math.toRadians( rotate )*(-1), player.getX(), player.getY());
+        g2d.drawImage(player.getImage(), player.getX(), player.getY(), this);
+        g2d.drawString(player.getName(), player.getX(), player.getY() + 30);
     }
 
     @Override
@@ -77,18 +78,22 @@ public class Map extends JPanel implements ActionListener{
     }
 
     private void gameUpdate() {
-        if (currStep == stepMax && out != null){
-            out.println("POZ "+player.getX() + " " + player.getY());
-            currStep = 0;
+        if (player.getChangedPOS() == true) {
+            out.println("POZ " + player.getX() + " " + player.getY());
         }
-        currStep++;
+        if (counter == 100) {
+            out.println("POZ " + player.getX() + " " + player.getY());
+            counter = 0;
+        }
+        counter++;
+
         player.move();
         repaint();
     }
 
-    private PlayerShell findPlayerInMap(int id){
+    private PlayerShell findPlayerInMap(String name) {
         for (PlayerShell pl : shells) {
-            if(pl.getId() == id)
+            if(pl.getName().equals(name))
                 return pl;
         }
         return null;
@@ -106,6 +111,7 @@ public class Map extends JPanel implements ActionListener{
             player.keyPressed(e);
         }
     }
+
     private class MyMouseAdapter extends MouseAdapter {
         @Override
         public void mouseMoved(MouseEvent e) {
@@ -130,10 +136,11 @@ public class Map extends JPanel implements ActionListener{
             while(true){
                 if (in.hasNextLine()) {
                     String response = in.nextLine();
-//                    System.out.println(response);
+                    System.out.println(response);
                     if (response.startsWith("CRT")) {
-                        int newPlayerID = Integer.parseInt(response.substring(4));
-                        shells.add(new PlayerShell(newPlayerID));
+                        System.out.println(response);
+                        String newPlayerName = response.substring(4);
+                        shells.add(new PlayerShell(newPlayerName));
 
                     } else if (response.startsWith("MSG")) {
                         label.setText(response.substring(4));
@@ -141,19 +148,15 @@ public class Map extends JPanel implements ActionListener{
                         String data = response.substring(4);
                         String[] arrOfStr = data.split(" ", 0);
                         if(arrOfStr.length == 3) {
-                            PlayerShell temp = findPlayerInMap(Integer.parseInt(arrOfStr[2]));
-                            if (temp != null) {
-                                temp.setX(Integer.parseInt(arrOfStr[0]));
-                                temp.setY(Integer.parseInt(arrOfStr[1]));
-                            }
+                            PlayerShell temp = findPlayerInMap(arrOfStr[2]);
+                            temp.setX(Integer.parseInt(arrOfStr[0]));
+                            temp.setY(Integer.parseInt(arrOfStr[1]));
                         }
-
                     } else if (response.startsWith("DLT")) {
-                        int discPlayerId = Integer.parseInt(response.substring(4));
-                        PlayerShell temp = findPlayerInMap(discPlayerId);
-                        if(temp != null) {
-                            shells.remove(temp);
-                        }
+                        System.out.println(response);
+                        String discPlayerName = response.substring(4);
+                        PlayerShell temp = findPlayerInMap(discPlayerName);
+                        shells.remove(temp);
                     }
                 }
             }
