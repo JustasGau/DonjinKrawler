@@ -1,8 +1,7 @@
-package main.java.DonjinKrawler;
+package main.java.donjinkrawler;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 
 public class PlayerShell {
 
@@ -10,7 +9,7 @@ public class PlayerShell {
     private int dy;
     private int x = 40;
     private int y = 60;
-    private String name;
+    private final String name;
     private Image image;
 
     public PlayerShell(String name) {
@@ -30,6 +29,7 @@ public class PlayerShell {
     public int getY() {
         return y;
     }
+
     public String getName() {
         return name;
     }

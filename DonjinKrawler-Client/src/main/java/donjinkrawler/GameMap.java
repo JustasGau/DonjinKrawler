@@ -1,12 +1,12 @@
-package main.java.DonjinKrawler;
+package main.java.donjinkrawler;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class GameMap {
 
-    private int x = 0;
-    private int y = 0;
+    private final int x = 0;
+    private final int y = 0;
     private Image image;
 
     public GameMap() {

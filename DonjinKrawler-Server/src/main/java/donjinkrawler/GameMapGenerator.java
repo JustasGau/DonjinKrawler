@@ -1,13 +1,13 @@
-package main.java.DonjinKrawler;
+package main.java.donjinkrawler;
 
 import java.util.Random;
 
 public class GameMapGenerator {
 
     private int size = 10;
-    private int walkerSteps = size*4;
-    private int walkers = 2;
-    private int cellIDNum = 10;
+    private final int walkerSteps = size * 4;
+    private final int walkers = 2;
+    private final int cellIDNum = 10;
 
     public GameMapGenerator(int size) {
         this.size = size;
@@ -33,24 +33,30 @@ public class GameMapGenerator {
             for (int j = 0; j < walkerSteps; j++) {
 
                 int dif = rand.nextInt((maxDif - minDif) + 1) + minDif;
-                if (dif > 1 ) { dif = 1; }
+                if (dif > 1) {
+                    dif = 1;
+                }
                 int cellID = rand.nextInt((8 - 2) + 1) + 2;
 
                 //changes direction
-                if (j%2 == 0)
+                if (j % 2 == 0) {
                     y += dif;
-                else
+                } else {
                     x += dif;
-
+                }
                 //fail safes
-                if (x < 0)
+                if (x < 0) {
                     x = 0;
-                if (x > (size-1))
+                }
+                if (x > (size - 1)) {
                     x = size - 1;
-                if (y < 0)
+                }
+                if (y < 0) {
                     y = 0;
-                if (y > (size-1))
+                }
+                if (y > (size - 1)) {
                     y = size - 1;
+                }
 
                 mapGrid[x][y] = cellID;
             }
@@ -64,16 +70,17 @@ public class GameMapGenerator {
 
     private String convertToString(int[][] arr) {
         String mapString = "";
-        for (int i = 0; i < size; i++){
-            for(int j = 0; j < size; j++){
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 mapString = mapString + arr[i][j];
             }
         }
         return mapString;
     }
+
     private void printMap(int[][] arr) {
-        for (int i = 0; i < size; i++){
-            for(int j = 0; j < size; j++){
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 System.out.print(arr[i][j]);
             }
             System.out.println();

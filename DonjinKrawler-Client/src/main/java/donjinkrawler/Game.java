@@ -1,4 +1,4 @@
-package main.java.DonjinKrawler;
+package main.java.donjinkrawler;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -8,22 +8,22 @@ import java.util.Scanner;
 import java.util.Set;
 import javax.swing.*;
 
-public class Game extends JPanel implements ActionListener{
+public class Game extends JPanel implements ActionListener {
 
-    private Timer timer;
-    private Player player;
-    private GameMap gameMap;
-    private final int DELAY = 10;
+    private final Timer timer;
+    private final Player player;
+    private final GameMap gameMap;
+    private final int delay = 10;
     private int mouseX = 0;
     private int mouseY = 0;
     private double angle;
     private double rotate;
     private int counter = 0;
-    private static Set<PlayerShell> shells = new HashSet<>();
+    private static final Set<PlayerShell> shells = new HashSet<>();
 
-    private Scanner in;
-    private PrintWriter out;
-    private JLabel label;
+    private final Scanner in;
+    private final PrintWriter out;
+    private final JLabel label;
 
 
     public Game(Scanner in, PrintWriter out, JLabel label, Player player) {
@@ -43,7 +43,7 @@ public class Game extends JPanel implements ActionListener{
         setBackground(Color.black);
         setFocusable(true);
 
-        timer = new Timer(DELAY, this);
+        timer = new Timer(delay, this);
         timer.start();
     }
 
@@ -58,7 +58,7 @@ public class Game extends JPanel implements ActionListener{
     private void doDrawing(Graphics g) {
         Graphics2D g2dd = (Graphics2D) g;
 //        g2dd.translate(player.getX(), player.getY());
-        g2dd.drawImage(gameMap.getImage(), 0,0,this);
+        g2dd.drawImage(gameMap.getImage(), 0, 0, this);
 //        g2dd.translate(0,0);
         drawUnit(g);
         g2dd.setColor(Color.BLUE);
@@ -84,7 +84,7 @@ public class Game extends JPanel implements ActionListener{
     }
 
     private void gameUpdate() {
-        if (player.getChangedPOS() == true) {
+        if (player.hasChangedPosition() == true) {
             out.println("POZ " + player.getX() + " " + player.getY());
         }
         if (counter == 100) {
@@ -99,8 +99,9 @@ public class Game extends JPanel implements ActionListener{
 
     private PlayerShell findPlayerInMap(String name) {
         for (PlayerShell pl : shells) {
-            if(pl.getName().equals(name))
+            if (pl.getName().equals(name)) {
                 return pl;
+            }
         }
         return null;
     }
@@ -122,8 +123,8 @@ public class Game extends JPanel implements ActionListener{
         public void mouseMoved(MouseEvent e) {
             mouseX = e.getX() - player.getX();
             mouseY = e.getY() - player.getY();
-            angle = Math.atan2( mouseX , mouseY );
-            rotate = angle * ( 180 / Math.PI );
+            angle = Math.atan2(mouseX, mouseY);
+            rotate = angle * (180 / Math.PI);
         }
     }
 
@@ -131,14 +132,15 @@ public class Game extends JPanel implements ActionListener{
 
         Scanner in;
         JLabel label;
-        public ServerReader(Scanner in, JLabel label){
+
+        public ServerReader(Scanner in, JLabel label) {
             this.in = in;
             this.label = label;
             start();
         }
 
         public void run() {
-            while(true){
+            while (true) {
                 if (in.hasNextLine()) {
                     String response = in.nextLine();
                     System.out.println(response);
@@ -152,7 +154,7 @@ public class Game extends JPanel implements ActionListener{
                     } else if (response.startsWith("POZ")) {
                         String data = response.substring(4);
                         String[] arrOfStr = data.split(" ", 0);
-                        if(arrOfStr.length == 3) {
+                        if (arrOfStr.length == 3) {
                             PlayerShell temp = findPlayerInMap(arrOfStr[2]);
                             temp.setX(Integer.parseInt(arrOfStr[0]));
                             temp.setY(Integer.parseInt(arrOfStr[1]));

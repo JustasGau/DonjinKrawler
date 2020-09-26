@@ -1,20 +1,21 @@
-package main.java.DonjinKrawler;
+package main.java.donjinkrawler;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Client{
+public class Client {
 
-    private JFrame frame = new JFrame();
-    private int screenWidth = 500;
-    private int screenHeight = 500;
+    private final JFrame frame = new JFrame();
+    private final int screenWidth = 500;
+    private final int screenHeight = 500;
 
-    private int serverPort = 59001;
-    private String serverAddress;
+    private final int serverPort = 59001;
+    private final String serverAddress;
     private Scanner in;
     private PrintWriter out;
     private String name;
@@ -40,7 +41,7 @@ public class Client{
             if (response.startsWith("SBN")) {
                 name = getName();
                 out.println(name);
-            } else if (response.startsWith("MAP")){
+            } else if (response.startsWith("MAP")) {
                 String data = response.substring(4);
                 String[] arrOfStr = data.split(" ", 0);
                 int gridSize = Integer.parseInt(arrOfStr[0]);
@@ -57,7 +58,7 @@ public class Client{
         int stringLength = gridSize * gridSize;
         int currentChar = 0;
         for (int i = 0; i < gridSize; i++) {
-            for (int j = 0; j < gridSize; j++ ) {
+            for (int j = 0; j < gridSize; j++) {
                 tempMapGrid[i][j] = Character.getNumericValue(mapString.charAt(currentChar));
                 currentChar++;
             }
@@ -67,8 +68,8 @@ public class Client{
     }
 
     private void printMap(int[][] arr, int size) {
-        for (int i = 0; i < size; i++){
-            for(int j = 0; j < size; j++){
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 System.out.print(arr[i][j]);
             }
             System.out.println();
@@ -98,9 +99,12 @@ public class Client{
     }
 
     public static void main(String[] args) throws IOException {
-        String address = "127.0.0.1";
-        if(args.length > 0)
+        String address;
+        if (args.length > 0) {
             address = args[0];
+        } else {
+            address = InetAddress.getByName("localhost").getHostAddress();
+        }
         Client window = new Client(address);
         window.frame.setVisible(true);
     }

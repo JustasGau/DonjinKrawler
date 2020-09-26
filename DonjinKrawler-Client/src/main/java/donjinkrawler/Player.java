@@ -1,4 +1,4 @@
-package main.java.DonjinKrawler;
+package main.java.donjinkrawler;
 
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -10,9 +10,9 @@ public class Player {
     private int dy;
     private int x = 250;
     private int y = 250;
-    private String name;
+    private final String name;
     private Image image;
-    private Boolean changedPOS = false;
+    private Boolean hasChangedPosition = false;
 
     public Player(String name) {
         this.name = name;
@@ -37,11 +37,13 @@ public class Player {
         return y;
     }
 
-    public Boolean getChangedPOS() {
-        return changedPOS;
+    public Boolean hasChangedPosition() {
+        return hasChangedPosition;
     }
 
-    public void setChangedPOS(Boolean val) { this.changedPOS = val; }
+    public void setHasChangedPosition(Boolean val) {
+        this.hasChangedPosition = val;
+    }
 
     public String getName() {
         return name;
@@ -52,7 +54,7 @@ public class Player {
     }
 
     public void keyPressed(KeyEvent e) {
-        changedPOS = true;
+        hasChangedPosition = true;
         int key = e.getKeyCode();
 
         if (key == KeyEvent.VK_LEFT) {
@@ -73,7 +75,7 @@ public class Player {
     }
 
     public void keyReleased(KeyEvent e) {
-        changedPOS = false;
+        hasChangedPosition = false;
         int key = e.getKeyCode();
 
         if (key == KeyEvent.VK_LEFT) {
