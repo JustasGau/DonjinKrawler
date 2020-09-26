@@ -18,6 +18,7 @@ public class Client{
     private Scanner in;
     private PrintWriter out;
     private String name;
+    private int[][] mapGrid;
 
 
     public Client(String serverAddress) throws IOException {
@@ -35,19 +36,48 @@ public class Client{
 
     private void logIn() {
         while (in.hasNextLine()) {
-            var line = in.nextLine();
-            if (line.startsWith("SBN")) {
+            var response = in.nextLine();
+            if (response.startsWith("SBN")) {
                 name = getName();
                 out.println(name);
-            } else if (line.startsWith("ACC")){
+            } else if (response.startsWith("MAP")){
+                String data = response.substring(4);
+                String[] arrOfStr = data.split(" ", 0);
+                int gridSize = Integer.parseInt(arrOfStr[0]);
+                String mapString = arrOfStr[1];
+                mapGrid = parseMapString(gridSize, mapString);
+                printMap(mapGrid, gridSize);
                 break;
             }
         }
     }
 
+    private int[][] parseMapString(int gridSize, String mapString) {
+        int[][] tempMapGrid = new int[gridSize][gridSize];
+        int stringLength = gridSize * gridSize;
+        int currentChar = 0;
+        for (int i = 0; i < gridSize; i++) {
+            for (int j = 0; j < gridSize; j++ ) {
+                tempMapGrid[i][j] = Character.getNumericValue(mapString.charAt(currentChar));
+                currentChar++;
+            }
+        }
+
+        return tempMapGrid;
+    }
+
+    private void printMap(int[][] arr, int size) {
+        for (int i = 0; i < size; i++){
+            for(int j = 0; j < size; j++){
+                System.out.print(arr[i][j]);
+            }
+            System.out.println();
+        }
+    }
+
     private void initUI() {
 
-        frame.setTitle("Donjin Krawler");
+        frame.setTitle("Donjin Krawler. Player - " + name);
         frame.setSize(screenWidth, screenHeight);
 
         frame.setLocationRelativeTo(null);
@@ -58,7 +88,7 @@ public class Client{
         messageLabel.setBackground(Color.lightGray);
         frame.getContentPane().add(messageLabel, BorderLayout.SOUTH);
 
-        frame.add(new Map(in, out, messageLabel, new Player(name)));
+        frame.add(new Game(in, out, messageLabel, new Player(name)));
 
     }
 

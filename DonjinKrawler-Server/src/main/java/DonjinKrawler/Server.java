@@ -14,18 +14,15 @@ public class Server {
     // The set of all the print writers for all the clients, used for broadcast.
     private static Set<PrintWriter> writers = new HashSet<>();
     private static Set<String> names = new HashSet<>();
+    private static int mapSize = 10;
+    private static GameMapGenerator generator = new GameMapGenerator(mapSize);
+    private static String gameMapString = generator.generate();
 
 
 
     public static void main(String[] args) throws Exception {
         int serverPort = 59001;
         int threadPool = 4;
-
-
-        GameMapGenerator generator = new GameMapGenerator(10);
-        String gameMapString = generator.generate();
-        System.out.println(gameMapString);
-
 
         System.out.println("Server is running");
         var pool = Executors.newFixedThreadPool(threadPool);
@@ -81,8 +78,7 @@ public class Server {
                         }
                     }
                 }
-                out.println("ACC");
-                out.println("MAP");
+                out.println("MAP " + mapSize + " " + gameMapString);
                 out.println("MSG You joined the server");
                 System.out.println("Player " + name + " has joined the server");
                 sendToAll("MSG A player has joined the server");

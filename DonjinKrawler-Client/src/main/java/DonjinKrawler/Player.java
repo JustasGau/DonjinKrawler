@@ -8,8 +8,8 @@ public class Player {
 
     private int dx;
     private int dy;
-    private int x = 40;
-    private int y = 60;
+    private int x = 250;
+    private int y = 250;
     private String name;
     private Image image;
     private Boolean changedPOS = false;

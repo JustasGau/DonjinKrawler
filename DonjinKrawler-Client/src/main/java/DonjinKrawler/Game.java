@@ -8,10 +8,11 @@ import java.util.Scanner;
 import java.util.Set;
 import javax.swing.*;
 
-public class Map extends JPanel implements ActionListener{
+public class Game extends JPanel implements ActionListener{
 
     private Timer timer;
     private Player player;
+    private GameMap gameMap;
     private final int DELAY = 10;
     private int mouseX = 0;
     private int mouseY = 0;
@@ -25,18 +26,20 @@ public class Map extends JPanel implements ActionListener{
     private JLabel label;
 
 
-    public Map(Scanner in, PrintWriter out, JLabel label, Player player) {
+    public Game(Scanner in, PrintWriter out, JLabel label, Player player) {
         this.in = in;
         this.out = out;
         this.label = label;
         this.player = player;
+        this.gameMap = new GameMap();
+
 
         if (this.in != null) {
             new ServerReader(in, label);
         }
         addMouseMotionListener(new MyMouseAdapter());
 
-        addKeyListener(new Map.TAdapter());
+        addKeyListener(new Game.TAdapter());
         setBackground(Color.black);
         setFocusable(true);
 
@@ -53,8 +56,11 @@ public class Map extends JPanel implements ActionListener{
     }
 
     private void doDrawing(Graphics g) {
-        drawUnit(g);
         Graphics2D g2dd = (Graphics2D) g;
+//        g2dd.translate(player.getX(), player.getY());
+        g2dd.drawImage(gameMap.getImage(), 0,0,this);
+//        g2dd.translate(0,0);
+        drawUnit(g);
         g2dd.setColor(Color.BLUE);
         for (PlayerShell pl : shells) {
 
@@ -100,7 +106,6 @@ public class Map extends JPanel implements ActionListener{
     }
 
     private class TAdapter extends KeyAdapter {
-
         @Override
         public void keyReleased(KeyEvent e) {
             player.keyReleased(e);
