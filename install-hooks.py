@@ -5,7 +5,7 @@ from subprocess import call
 
 def install_hooks(directory):
     checkstyleUrl = 'https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.36.1/checkstyle-8.36.1-all.jar'
-    preCommitUrl = 'https://srv-file10.gofile.io/downloadStore/srv-store1/ulBF6S/pre-commit'
+    preCommitUrl = 'https://gist.githubusercontent.com/EdotJ/d512826d5b4fd3e6cdc285b9236511b2/raw/43e5087ed173fd03aab640b0b3db22f11319c623/pre-commit'
     checkstyleName = checkstyleUrl.split('/')[len(checkstyleUrl.split('/')) - 1]
     basePath = path.abspath(directory)
     print("Downloading checkstyle to %s..." % basePath + "/.git/hooks/" + checkstyleName)
