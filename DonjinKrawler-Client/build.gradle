@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+dependencies {
+
+}
+
+sourceSets {
+    main {
+        java {
+            "src/main/java"
+        }
+        resources {
+            "src/main/resources"
+        }
+    }
+}
+
+mainClassName = 'donjinkrawler.Client'
+

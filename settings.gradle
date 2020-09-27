@@ -1,0 +1,3 @@
+rootProject.name = 'DonjinKrawler'
+include 'DonjinKrawler-Server'
+include 'DonjinKrawler-Client'
