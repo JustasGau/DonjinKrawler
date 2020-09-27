@@ -1,4 +1,4 @@
-package main.java.donjinkrawler;
+package donjinkrawler;
 
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -20,7 +20,7 @@ public class Player {
     }
 
     private void loadImage() {
-        ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("resources/craft.png").getFile());
+        ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("craft.png").getFile());
         image = ii.getImage();
     }
 

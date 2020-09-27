@@ -1,4 +1,6 @@
-package main.java.donjinkrawler;
+package donjinkrawler;
+
+import donjinkrawler.logging.LoggerSingleton;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,13 +19,13 @@ public class Server {
     private static final int mapSize = 10;
     private static final GameMapGenerator generator = new GameMapGenerator(mapSize);
     private static final String gameMapString = generator.generate();
+    private static final LoggerSingleton logger = LoggerSingleton.getInstance();
 
 
     public static void main(String[] args) throws Exception {
         int serverPort = 59001;
         int threadPool = 4;
-
-        System.out.println("Server is running");
+        logger.info("Server is running");
         var pool = Executors.newFixedThreadPool(threadPool);
         try (var listener = new ServerSocket(serverPort)) {
             while (true) {
@@ -54,8 +56,8 @@ public class Server {
 
         public void sendCurrentPlayers() {
             for (String otherName : names) {
-                if (otherName != name) {
-                    System.out.println("Sent name: " + otherName);
+                if (otherName.equals(name)) {
+                    logger.debug("Sent name: " + otherName);
                     out.println("CRT " + otherName);
                 }
             }
@@ -81,7 +83,7 @@ public class Server {
                 }
                 out.println("MAP " + mapSize + " " + gameMapString);
                 out.println("MSG You joined the server");
-                System.out.println("Player " + name + " has joined the server");
+                logger.debug("Player " + name + " has joined the server");
                 sendToAll("MSG A player has joined the server");
                 sendToAll("CRT " + name);
                 sendCurrentPlayers();
@@ -92,18 +94,18 @@ public class Server {
                     sendToAll(input + " " + name);
                 }
             } catch (Exception e) {
-                System.out.println(e);
+                logger.error(e);
             } finally {
                 if (out != null) {
                     writers.remove(out);
                     names.remove(name);
-                    System.out.println("Player " + name + " has left the server");
+                    logger.info("Player " + name + " has left the server");
                     sendToAll("MSG A player has left");
                     sendToAll("DLT " + name);
                 }
                 try {
                     socket.close();
-                } catch (IOException expected) {
+                } catch (IOException ignored) {
                 }
             }
         }

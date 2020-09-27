@@ -1,4 +1,4 @@
-package main.java.donjinkrawler;
+package donjinkrawler;
 
 import java.util.Random;
 
@@ -69,13 +69,13 @@ public class GameMapGenerator {
     }
 
     private String convertToString(int[][] arr) {
-        String mapString = "";
+        StringBuilder mapBuilder = new StringBuilder();
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                mapString = mapString + arr[i][j];
+                mapBuilder.append(arr[i][j]);
             }
         }
-        return mapString;
+        return mapBuilder.toString();
     }
 
     private void printMap(int[][] arr) {

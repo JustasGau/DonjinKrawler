@@ -1,4 +1,4 @@
-package main.java.donjinkrawler;
+package donjinkrawler;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -84,7 +84,7 @@ public class Game extends JPanel implements ActionListener {
     }
 
     private void gameUpdate() {
-        if (player.hasChangedPosition() == true) {
+        if (player.hasChangedPosition()) {
             out.println("POZ " + player.getX() + " " + player.getY());
         }
         if (counter == 100) {

@@ -1,4 +1,4 @@
-package main.java.donjinkrawler;
+package donjinkrawler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +18,7 @@ public class PlayerShell {
     }
 
     private void loadImage() {
-        ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("resources/craft.png").getFile());
+        ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("craft.png").getFile());
         image = ii.getImage();
     }
 

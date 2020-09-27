@@ -1,4 +1,4 @@
-package main.java.donjinkrawler;
+package donjinkrawler;
 
 import javax.swing.*;
 import java.awt.*;

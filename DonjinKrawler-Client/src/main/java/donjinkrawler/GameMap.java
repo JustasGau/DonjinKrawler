@@ -1,4 +1,4 @@
-package main.java.donjinkrawler;
+package donjinkrawler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +18,7 @@ public class GameMap {
     }
 
     private void loadImage() {
-        ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("resources/x.jpg").getFile());
+        ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("x.jpg").getFile());
         image = ii.getImage();
     }
 }
