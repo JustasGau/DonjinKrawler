@@ -97,10 +97,15 @@ public class LoggerSingleton {
     private LoggingLevel getLoggingLevel() {
         String loggingLevel = config.getPropertyValue("logging.level", "INFO");
         LoggingLevel level;
-        switch (loggingLevel) {
-            case "DEBUG" -> level = LoggingLevel.DEBUG;
-            case "ERROR" -> level = LoggingLevel.ERROR;
-            default -> level = LoggingLevel.INFO;
+        switch(loggingLevel) {
+            case "DEBUG":
+                level = LoggingLevel.DEBUG;
+                break;
+            case "ERROR":
+                level = LoggingLevel.ERROR;
+                break;
+            default:
+                level = LoggingLevel.INFO;
         }
         return level;
     }

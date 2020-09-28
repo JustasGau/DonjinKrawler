@@ -1,11 +1,14 @@
 package donjinkrawler;
 
+import donjinkrawler.enemies.Enemy;
+import donjinkrawler.enemies.EnemyGenerator;
 import donjinkrawler.logging.LoggerSingleton;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -56,10 +59,17 @@ public class Server {
 
         public void sendCurrentPlayers() {
             for (String otherName : names) {
-                if (otherName.equals(name)) {
+                if (!otherName.equals(name)) {
                     logger.debug("Sent name: " + otherName);
                     out.println("CRT " + otherName);
                 }
+            }
+        }
+
+        public void sendEnemies(ArrayList<Enemy> enemies) {
+            for (Enemy enemy : enemies) {
+                logger.debug("Sent enemy: " + enemy.getName());
+                out.println("ENM " + enemy.getName());
             }
         }
 
@@ -67,6 +77,8 @@ public class Server {
             try {
                 in = new Scanner(socket.getInputStream());
                 out = new PrintWriter(socket.getOutputStream(), true);
+
+                EnemyGenerator enemyGenerator = new EnemyGenerator();
 
                 while (true) {
                     out.println("SBN");
@@ -88,6 +100,9 @@ public class Server {
                 sendToAll("CRT " + name);
                 sendCurrentPlayers();
                 writers.add(out);
+
+                ArrayList<Enemy> enemies = enemyGenerator.generateRandomEnemies(3);
+                sendEnemies(enemies);
 
                 while (true) {
                     String input = in.nextLine();
