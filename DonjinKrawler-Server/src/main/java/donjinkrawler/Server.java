@@ -1,13 +1,14 @@
 package donjinkrawler;
 
-import donjinkrawler.enemy_generation.Enemy;
-import donjinkrawler.enemy_generation.EnemyGenerator;
+import donjinkrawler.enemies.Enemy;
+import donjinkrawler.enemies.EnemyGenerator;
 import donjinkrawler.logging.LoggerSingleton;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -65,10 +66,10 @@ public class Server {
             }
         }
 
-        public void sendEnemies(Enemy[] enemies) {
+        public void sendEnemies(ArrayList<Enemy> enemies) {
             for (Enemy enemy : enemies) {
                 logger.debug("Sent enemy: " + enemy.getName());
-                out.println("CRT " + enemy.getName());
+                out.println("ENM " + enemy.getName());
             }
         }
 
@@ -100,7 +101,7 @@ public class Server {
                 sendCurrentPlayers();
                 writers.add(out);
 
-                Enemy[] enemies = enemyGenerator.generateRandomEnemies(3);
+                ArrayList<Enemy> enemies = enemyGenerator.generateRandomEnemies(3);
                 sendEnemies(enemies);
 
                 while (true) {

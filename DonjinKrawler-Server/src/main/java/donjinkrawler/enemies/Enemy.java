@@ -1,4 +1,4 @@
-package donjinkrawler.enemy_generation;
+package donjinkrawler.enemies;
 
 public abstract class Enemy {
 

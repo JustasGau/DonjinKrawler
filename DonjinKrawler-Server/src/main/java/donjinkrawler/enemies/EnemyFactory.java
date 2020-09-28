@@ -1,18 +1,18 @@
-package donjinkrawler.enemy_generation;
+package donjinkrawler.enemies;
 
 public class EnemyFactory {
 
-    public Enemy make(String type) {
+    public Enemy make(EnemyType type) {
 
         if(type == null) {
             return null;
         }
 
-        if(type.equalsIgnoreCase("CHICKEN")) {
+        if(type.equals(EnemyType.CHICKEN)) {
             return new Chicken();
-        } else if(type.equalsIgnoreCase("SKELETON")) {
+        } else if(type.equals(EnemyType.SKELETON)) {
             return new Skeleton();
-        } else if(type.equalsIgnoreCase("ZOMBIE")) {
+        } else if(type.equals(EnemyType.ZOMBIE)) {
             return new Zombie();
         }
 
