@@ -32,4 +32,21 @@ public final class EnemyGenerator {
         int rnd = new Random().nextInt(TYPES.length);
         return this.enemyFactory.make(TYPES[rnd]);
     }
+
+    /**
+     * Generate new random enemies
+     *
+     * @return new randomly generated enemies list
+     */
+    public Enemy[] generateRandomEnemies(int number) {
+
+        number = (number == 0) ? 5 : number;
+        Enemy[] enemies = new Enemy[number];
+
+        for (int i = 0; i < number; i++) {
+            enemies[i] = this.generateRandomEnemy();
+        }
+
+        return enemies;
+    }
 }
