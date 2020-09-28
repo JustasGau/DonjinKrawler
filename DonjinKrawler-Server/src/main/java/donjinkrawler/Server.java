@@ -56,7 +56,7 @@ public class Server {
 
         public void sendCurrentPlayers() {
             for (String otherName : names) {
-                if (otherName.equals(name)) {
+                if (!otherName.equals(name)) {
                     logger.debug("Sent name: " + otherName);
                     out.println("CRT " + otherName);
                 }
