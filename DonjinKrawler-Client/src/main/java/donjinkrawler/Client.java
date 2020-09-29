@@ -21,7 +21,6 @@ public class Client {
     private String name;
     private int[][] mapGrid;
 
-
     public Client(String serverAddress) throws IOException {
         this.serverAddress = serverAddress;
         initConnection();

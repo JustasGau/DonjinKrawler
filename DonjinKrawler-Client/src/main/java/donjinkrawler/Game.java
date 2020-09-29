@@ -47,7 +47,23 @@ public class Game extends JPanel implements ActionListener {
         timer.start();
     }
 
-
+    //returns left, top, right, bottom door
+    private int[] doorLocations() {
+        int[] doors = {0, 0, 0, 0};
+        if (currentCell.y - 1 >= 0 && mapGrid[currentCell.x][currentCell.y-1] != 0) {
+            doors[0] = 1;
+        }
+        if (currentCell.x - 1 >= 0 && mapGrid[currentCell.x-1][currentCell.y] != 0) {
+            doors[1] = 1;
+        }
+        if (currentCell.y + 1 < mapGrid.length && mapGrid[currentCell.x][currentCell.y+1] != 0) {
+            doors[2] = 1;
+        }
+        if (currentCell.x + 1 < mapGrid.length && mapGrid[currentCell.x+1][currentCell.y] != 0) {
+            doors[3] = 1;
+        }
+        return doors;
+    }
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -57,14 +73,10 @@ public class Game extends JPanel implements ActionListener {
 
     private void doDrawing(Graphics g) {
         Graphics2D g2dd = (Graphics2D) g;
-//        g2dd.translate(player.getX(), player.getY());
-        g2dd.drawImage(gameMap.getImage(), 0, 0, this);
-//        g2dd.translate(0,0);
+        gameMap.draw(g);
         drawUnit(g);
         g2dd.setColor(Color.BLUE);
         for (PlayerShell pl : shells) {
-
-//            g2dd.rotate(Math.toRadians( rotate )*(-1), pl.getX(), pl.getY());
             g2dd.drawImage(pl.getImage(), pl.getX(), pl.getY(), this);
             g2dd.drawString(pl.getName(), pl.getX(), pl.getY() + 30);
         }
@@ -84,6 +96,26 @@ public class Game extends JPanel implements ActionListener {
     }
 
     private void gameUpdate() {
+        DoorDirection nextRoom = gameMap.update(player);
+//        System.out.println(nextRoom);
+        if (nextRoom != null) {
+            mapState[currentCell.x][currentCell.y] = 1;
+            if (nextRoom == DoorDirection.LEFT) {
+                currentCell.y -= 1;
+                player.setCoordinates(400,250);
+            } else if (nextRoom == DoorDirection.TOP) {
+                currentCell.x -= 1;
+                player.setCoordinates(250,400);
+            } else if (nextRoom == DoorDirection.RIGHT) {
+                currentCell.y += 1;
+                player.setCoordinates(40,250);
+            } else if (nextRoom == DoorDirection.BOTTOM) {
+                currentCell.x += 1;
+                player.setCoordinates(250,40);
+            }
+            out.println("ROM "+ currentCell.x + " " + currentCell.y + " " + nextRoom);
+            gameMap = new GameMap(mapGrid[currentCell.x][currentCell.y], doorLocations());
+        }
         if (player.hasChangedPosition()) {
             out.println("POZ " + player.getX() + " " + player.getY());
         }
@@ -118,15 +150,15 @@ public class Game extends JPanel implements ActionListener {
         }
     }
 
-    private class MyMouseAdapter extends MouseAdapter {
-        @Override
-        public void mouseMoved(MouseEvent e) {
-            mouseX = e.getX() - player.getX();
-            mouseY = e.getY() - player.getY();
-            angle = Math.atan2(mouseX, mouseY);
-            rotate = angle * (180 / Math.PI);
-        }
-    }
+//    private class MyMouseAdapter extends MouseAdapter {
+//        @Override
+//        public void mouseMoved(MouseEvent e) {
+//            mouseX = e.getX() - player.getX();
+//            mouseY = e.getY() - player.getY();
+//            angle = Math.atan2(mouseX, mouseY);
+//            rotate = angle * (180 / Math.PI);
+//        }
+//    }
 
     public class ServerReader extends Thread {
 
@@ -143,12 +175,11 @@ public class Game extends JPanel implements ActionListener {
             while (true) {
                 if (in.hasNextLine()) {
                     String response = in.nextLine();
-                    System.out.println(response);
+//                    System.out.println(response);
                     if (response.startsWith("CRT")) {
                         System.out.println(response);
                         String newPlayerName = response.substring(4);
                         shells.add(new PlayerShell(newPlayerName));
-
                     } else if (response.startsWith("MSG")) {
                         label.setText(response.substring(4));
                     } else if (response.startsWith("POZ")) {
@@ -164,6 +195,28 @@ public class Game extends JPanel implements ActionListener {
                         String discPlayerName = response.substring(4);
                         PlayerShell temp = findPlayerInMap(discPlayerName);
                         shells.remove(temp);
+                    } else if (response.startsWith("ROM")) {
+                        System.out.println(response);
+                        String data = response.substring(4);
+                        String[] arrOfStr = data.split(" ", 0);
+
+                        int mapX = Integer.parseInt(arrOfStr[0]);
+                        int mapY = Integer.parseInt(arrOfStr[1]);
+
+                        String direction = arrOfStr[2];
+                        System.out.println(direction);
+                        gameMap = new GameMap(mapGrid[mapX][mapY], doorLocations());
+
+                        if (direction.equals("LEFT")) {
+                            player.setCoordinates(400,250);
+                        } else if (direction.equals("TOP")) {
+                            player.setCoordinates(250,400);
+                        } else if (direction.equals("RIGHT")) {
+                            player.setCoordinates(40,250);
+                        } else if (direction.equals("BOTTOM")) {
+                            player.setCoordinates(250,40);
+                        }
+
                     }
                 }
             }
