@@ -4,10 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.ImageObserver;
 
+
 public class GameMap {
 
-    private final int x = 0;
-    private final int y = 0;
+    private final int x = 250;
+    private final int y = 250;
     private Image image;
 
     private int id;
@@ -24,11 +25,6 @@ public class GameMap {
             doors[3] = new Door(Game.DoorDirection.BOTTOM, 250,420);
         System.out.println(doorLocations[0] + " " +doorLocations[1]+ " " +doorLocations[2]+ " " +doorLocations[3]);
         this.id = id;
-//        loadImage();
-    }
-
-    public Image getImage() {
-        return image;
     }
 
     private class Door {
@@ -91,8 +87,4 @@ public class GameMap {
         }
     }
 
-    private void loadImage() {
-        ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("x.jpg").getFile());
-        image = ii.getImage();
-    }
 }

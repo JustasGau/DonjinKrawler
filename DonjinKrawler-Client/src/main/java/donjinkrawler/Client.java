@@ -88,7 +88,7 @@ public class Client {
         messageLabel.setBackground(Color.lightGray);
         frame.getContentPane().add(messageLabel, BorderLayout.SOUTH);
 
-        frame.add(new Game(in, out, messageLabel, new Player(name)));
+        frame.add(new Game(in, out, messageLabel, new Player(name), mapGrid));
 
     }
 

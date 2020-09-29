@@ -10,9 +10,16 @@ import javax.swing.*;
 
 public class Game extends JPanel implements ActionListener {
 
+    enum DoorDirection {
+        LEFT,
+        TOP,
+        RIGHT,
+        BOTTOM
+    }
+
     private final Timer timer;
     private final Player player;
-    private final GameMap gameMap;
+    private GameMap gameMap;
     private final int delay = 10;
     private int mouseX = 0;
     private int mouseY = 0;
@@ -20,24 +27,35 @@ public class Game extends JPanel implements ActionListener {
     private double rotate;
     private int counter = 0;
     private static final Set<PlayerShell> shells = new HashSet<>();
+    private int[][] mapGrid;
+    //saves states if the map cell is cleared(1) or not (0)
+    private int[][] mapState;
+    static class currentCell
+    {
+        public static int x = 0;
+        public static int y = 0;
+    };
 
     private final Scanner in;
     private final PrintWriter out;
     private final JLabel label;
 
 
-    public Game(Scanner in, PrintWriter out, JLabel label, Player player) {
+    public Game(Scanner in, PrintWriter out, JLabel label, Player player, int[][] mapGrid) {
         this.in = in;
         this.out = out;
         this.label = label;
         this.player = player;
-        this.gameMap = new GameMap();
+        this.mapGrid = mapGrid;
+        this.mapState = new int[mapGrid.length][mapGrid.length];
+        this.mapState[0][0] = 1;
+        this.gameMap = new GameMap(mapGrid[currentCell.x][currentCell.y], doorLocations());
 
 
         if (this.in != null) {
             new ServerReader(in, label);
         }
-        addMouseMotionListener(new MyMouseAdapter());
+//        addMouseMotionListener(new MyMouseAdapter());
 
         addKeyListener(new Game.TAdapter());
         setBackground(Color.black);
