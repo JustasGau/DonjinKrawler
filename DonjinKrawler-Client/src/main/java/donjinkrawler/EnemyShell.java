@@ -1,17 +1,9 @@
 package donjinkrawler;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.Random;
 
 public class EnemyShell extends AbstractShell {
-
-    private int dx;
-    private int dy;
-    private int x;
-    private int y;
-    private String name;
-    private Image image;
 
     public EnemyShell(String name) {
         this.name = name;
@@ -25,30 +17,6 @@ public class EnemyShell extends AbstractShell {
 
         ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource(this.resolveImageName()).getFile());
         image = ii.getImage();
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public Image getImage() {
-        return image;
     }
 
     private String resolveImageName()

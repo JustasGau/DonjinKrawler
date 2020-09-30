@@ -5,12 +5,12 @@ import java.awt.*;
 
 abstract public class AbstractShell {
 
-    private int dx;
-    private int dy;
-    private int x = 250;
-    private int y = 250;
-    private String name;
-    private Image image;
+    protected int dx;
+    protected int dy;
+    protected int x = 250;
+    protected int y = 250;
+    protected String name;
+    protected Image image;
 
     abstract protected void loadImage();
 
