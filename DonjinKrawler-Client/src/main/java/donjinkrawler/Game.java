@@ -51,11 +51,9 @@ public class Game extends JPanel implements ActionListener {
         this.mapState[0][0] = 1;
         this.gameMap = new GameMap(mapGrid[currentCell.x][currentCell.y], doorLocations());
 
-
         if (this.in != null) {
             new ServerReader(in, label);
         }
-//        addMouseMotionListener(new MyMouseAdapter());
 
         addKeyListener(new Game.TAdapter());
         setBackground(Color.black);
@@ -103,7 +101,6 @@ public class Game extends JPanel implements ActionListener {
     private void drawUnit(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.GREEN);
-        //g2d.rotate(Math.toRadians( rotate )*(-1), player.getX(), player.getY());
         g2d.drawImage(player.getImage(), player.getX(), player.getY(), this);
         g2d.drawString(player.getName(), player.getX(), player.getY() + 30);
     }
@@ -115,7 +112,6 @@ public class Game extends JPanel implements ActionListener {
 
     private void gameUpdate() {
         DoorDirection nextRoom = gameMap.update(player);
-//        System.out.println(nextRoom);
         if (nextRoom != null) {
             mapState[currentCell.x][currentCell.y] = 1;
             if (nextRoom == DoorDirection.LEFT) {
@@ -168,16 +164,6 @@ public class Game extends JPanel implements ActionListener {
         }
     }
 
-//    private class MyMouseAdapter extends MouseAdapter {
-//        @Override
-//        public void mouseMoved(MouseEvent e) {
-//            mouseX = e.getX() - player.getX();
-//            mouseY = e.getY() - player.getY();
-//            angle = Math.atan2(mouseX, mouseY);
-//            rotate = angle * (180 / Math.PI);
-//        }
-//    }
-
     public class ServerReader extends Thread {
 
         Scanner in;
@@ -193,9 +179,7 @@ public class Game extends JPanel implements ActionListener {
             while (true) {
                 if (in.hasNextLine()) {
                     String response = in.nextLine();
-//                    System.out.println(response);
                     if (response.startsWith("CRT")) {
-                        System.out.println(response);
                         String newPlayerName = response.substring(4);
                         shells.add(new PlayerShell(newPlayerName));
                     } else if (response.startsWith("MSG")) {
@@ -209,12 +193,10 @@ public class Game extends JPanel implements ActionListener {
                             temp.setY(Integer.parseInt(arrOfStr[1]));
                         }
                     } else if (response.startsWith("DLT")) {
-                        System.out.println(response);
                         String discPlayerName = response.substring(4);
                         PlayerShell temp = findPlayerInMap(discPlayerName);
                         shells.remove(temp);
                     } else if (response.startsWith("ROM")) {
-                        System.out.println(response);
                         String data = response.substring(4);
                         String[] arrOfStr = data.split(" ", 0);
 
@@ -222,7 +204,6 @@ public class Game extends JPanel implements ActionListener {
                         int mapY = Integer.parseInt(arrOfStr[1]);
 
                         String direction = arrOfStr[2];
-                        System.out.println(direction);
                         gameMap = new GameMap(mapGrid[mapX][mapY], doorLocations());
 
                         if (direction.equals("LEFT")) {
