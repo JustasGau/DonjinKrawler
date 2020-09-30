@@ -7,8 +7,8 @@ public final class EnemyGenerator {
 
     private final EnemyFactory enemyFactory;
 
-    public EnemyGenerator() {
-        this.enemyFactory = new EnemyFactory();
+    public EnemyGenerator(EnemyFactory enemyFactory) {
+        this.enemyFactory = enemyFactory;
     }
 
     public Enemy generateRandomEnemy() {
