@@ -7,7 +7,6 @@ public class GameMapGenerator {
     private int size = 10;
     private final int walkerSteps = size * 4;
     private final int walkers = 2;
-    private final int cellIDNum = 10;
 
     public GameMapGenerator(int size) {
         this.size = size;

@@ -8,6 +8,8 @@ public class Player {
 
     private int dx;
     private int dy;
+    private int width;
+    private int height;
     private int x = 250;
     private int y = 250;
     private final String name;
@@ -22,11 +24,15 @@ public class Player {
     private void loadImage() {
         ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("craft.png").getFile());
         image = ii.getImage();
+        height = image.getHeight(null);
+        width = image.getWidth(null);
     }
 
     public void move() {
-        x += dx;
-        y += dy;
+        if ((dx < 0 && x - dx > 2) || (dx > 0 && x + width + dx < 500))
+            x += dx;
+        if ((dy < 0 && y - dy > 2) || (dy > 0 && y + height + 50 + dy < 500))
+            y += dy;
     }
 
     public int getX() {
@@ -35,6 +41,11 @@ public class Player {
 
     public int getY() {
         return y;
+    }
+
+    public void setCoordinates(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
     public Boolean hasChangedPosition() {
@@ -70,7 +81,7 @@ public class Player {
         }
 
         if (key == KeyEvent.VK_DOWN) {
-            dy = 2;
+                dy = 2;
         }
     }
 

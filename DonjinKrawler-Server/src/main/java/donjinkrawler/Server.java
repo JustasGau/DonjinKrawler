@@ -37,7 +37,6 @@ public class Server {
         }
     }
 
-
     private static class Handler implements Runnable {
         private final Socket socket;
         private Scanner in;
