@@ -4,7 +4,7 @@ import donjinkrawler.enemies.EnemyFactory;
 import donjinkrawler.enemies.EnemyType;
 import donjinkrawler.enemies.Enemy;
 
-public class SmallEnemyFactory extends EnemyFactory {
+public class SmallEnemyFactory implements EnemyFactory {
 
     public Enemy make(EnemyType type) {
 

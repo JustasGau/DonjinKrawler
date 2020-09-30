@@ -1,10 +1,10 @@
 package donjinkrawler.enemies.big;
 
 import donjinkrawler.enemies.Enemy;
-import donjinkrawler.enemies.EnemyFactory;
 import donjinkrawler.enemies.EnemyType;
+import donjinkrawler.enemies.EnemyFactory;
 
-public class BigEnemyFactory extends EnemyFactory {
+public class BigEnemyFactory implements EnemyFactory{
 
     public Enemy make(EnemyType type) {
 
