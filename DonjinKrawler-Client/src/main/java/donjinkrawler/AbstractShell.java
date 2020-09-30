@@ -3,24 +3,16 @@ package donjinkrawler;
 import javax.swing.*;
 import java.awt.*;
 
-public class PlayerShell extends AbstractShell {
+abstract public class AbstractShell {
 
     private int dx;
     private int dy;
     private int x = 250;
     private int y = 250;
-    private final String name;
+    private String name;
     private Image image;
 
-    public PlayerShell(String name) {
-        this.name = name;
-        loadImage();
-    }
-
-    protected void loadImage() {
-        ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("craft.png").getFile());
-        image = ii.getImage();
-    }
+    abstract protected void loadImage();
 
     public int getX() {
         return x;
@@ -45,4 +37,5 @@ public class PlayerShell extends AbstractShell {
     public Image getImage() {
         return image;
     }
+
 }
