@@ -30,11 +30,11 @@ public class Game extends JPanel implements ActionListener {
     private int[][] mapGrid;
     //saves states if the map cell is cleared(1) or not (0)
     private int[][] mapState;
-    static class currentCell
-    {
+
+    static class CurrentCell {
         public static int x = 0;
         public static int y = 0;
-    };
+    }
 
     private final Scanner in;
     private final PrintWriter out;
@@ -49,7 +49,7 @@ public class Game extends JPanel implements ActionListener {
         this.mapGrid = mapGrid;
         this.mapState = new int[mapGrid.length][mapGrid.length];
         this.mapState[0][0] = 1;
-        this.gameMap = new GameMap(mapGrid[currentCell.x][currentCell.y], doorLocations());
+        this.gameMap = new GameMap(mapGrid[CurrentCell.x][CurrentCell.y], doorLocations());
 
         if (this.in != null) {
             new ServerReader(in, label);
@@ -66,20 +66,21 @@ public class Game extends JPanel implements ActionListener {
     //returns left, top, right, bottom door
     private int[] doorLocations() {
         int[] doors = {0, 0, 0, 0};
-        if (currentCell.y - 1 >= 0 && mapGrid[currentCell.x][currentCell.y-1] != 0) {
+        if (CurrentCell.y - 1 >= 0 && mapGrid[CurrentCell.x][CurrentCell.y - 1] != 0) {
             doors[0] = 1;
         }
-        if (currentCell.x - 1 >= 0 && mapGrid[currentCell.x-1][currentCell.y] != 0) {
+        if (CurrentCell.x - 1 >= 0 && mapGrid[CurrentCell.x - 1][CurrentCell.y] != 0) {
             doors[1] = 1;
         }
-        if (currentCell.y + 1 < mapGrid.length && mapGrid[currentCell.x][currentCell.y+1] != 0) {
+        if (CurrentCell.y + 1 < mapGrid.length && mapGrid[CurrentCell.x][CurrentCell.y + 1] != 0) {
             doors[2] = 1;
         }
-        if (currentCell.x + 1 < mapGrid.length && mapGrid[currentCell.x+1][currentCell.y] != 0) {
+        if (CurrentCell.x + 1 < mapGrid.length && mapGrid[CurrentCell.x + 1][CurrentCell.y] != 0) {
             doors[3] = 1;
         }
         return doors;
     }
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -113,22 +114,22 @@ public class Game extends JPanel implements ActionListener {
     private void gameUpdate() {
         DoorDirection nextRoom = gameMap.update(player);
         if (nextRoom != null) {
-            mapState[currentCell.x][currentCell.y] = 1;
+            mapState[CurrentCell.x][CurrentCell.y] = 1;
             if (nextRoom == DoorDirection.LEFT) {
-                currentCell.y -= 1;
-                player.setCoordinates(400,250);
+                CurrentCell.y -= 1;
+                player.setCoordinates(400, 250);
             } else if (nextRoom == DoorDirection.TOP) {
-                currentCell.x -= 1;
-                player.setCoordinates(250,400);
+                CurrentCell.x -= 1;
+                player.setCoordinates(250, 400);
             } else if (nextRoom == DoorDirection.RIGHT) {
-                currentCell.y += 1;
-                player.setCoordinates(40,250);
+                CurrentCell.y += 1;
+                player.setCoordinates(40, 250);
             } else if (nextRoom == DoorDirection.BOTTOM) {
-                currentCell.x += 1;
-                player.setCoordinates(250,40);
+                CurrentCell.x += 1;
+                player.setCoordinates(250, 40);
             }
-            out.println("ROM "+ currentCell.x + " " + currentCell.y + " " + nextRoom);
-            gameMap = new GameMap(mapGrid[currentCell.x][currentCell.y], doorLocations());
+            out.println("ROM " + CurrentCell.x + " " + CurrentCell.y + " " + nextRoom);
+            gameMap = new GameMap(mapGrid[CurrentCell.x][CurrentCell.y], doorLocations());
         }
         if (player.hasChangedPosition()) {
             out.println("POZ " + player.getX() + " " + player.getY());
@@ -207,13 +208,13 @@ public class Game extends JPanel implements ActionListener {
                         gameMap = new GameMap(mapGrid[mapX][mapY], doorLocations());
 
                         if (direction.equals("LEFT")) {
-                            player.setCoordinates(400,250);
+                            player.setCoordinates(400, 250);
                         } else if (direction.equals("TOP")) {
-                            player.setCoordinates(250,400);
+                            player.setCoordinates(250, 400);
                         } else if (direction.equals("RIGHT")) {
-                            player.setCoordinates(40,250);
+                            player.setCoordinates(40, 250);
                         } else if (direction.equals("BOTTOM")) {
-                            player.setCoordinates(250,40);
+                            player.setCoordinates(250, 40);
                         }
 
                     }
