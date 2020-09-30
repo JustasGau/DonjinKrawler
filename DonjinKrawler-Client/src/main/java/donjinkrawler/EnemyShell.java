@@ -14,7 +14,6 @@ public class EnemyShell extends AbstractShell {
     }
 
     protected void loadImage() {
-
         ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource(this.resolveImageName()).getFile());
         image = ii.getImage();
     }
