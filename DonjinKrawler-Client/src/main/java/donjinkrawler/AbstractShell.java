@@ -1,6 +1,5 @@
 package donjinkrawler;
 
-import javax.swing.*;
 import java.awt.*;
 
 abstract public class AbstractShell {

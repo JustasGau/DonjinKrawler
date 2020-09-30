@@ -1,7 +1,6 @@
 package donjinkrawler;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class PlayerShell extends AbstractShell {
 
