@@ -2,6 +2,8 @@ package donjinkrawler;
 
 import donjinkrawler.enemies.Enemy;
 import donjinkrawler.enemies.EnemyGenerator;
+import donjinkrawler.enemies.big.BigEnemyFactory;
+import donjinkrawler.enemies.small.SmallEnemyFactory;
 import donjinkrawler.logging.LoggerSingleton;
 
 import java.io.IOException;
@@ -77,7 +79,8 @@ public class Server {
                 in = new Scanner(socket.getInputStream());
                 out = new PrintWriter(socket.getOutputStream(), true);
 
-                EnemyGenerator enemyGenerator = new EnemyGenerator();
+                EnemyGenerator smallEnemyGenerator = new EnemyGenerator(new SmallEnemyFactory());
+                EnemyGenerator bigEnemyGenerator   = new EnemyGenerator(new BigEnemyFactory());
 
                 while (true) {
                     out.println("SBN");
@@ -100,8 +103,8 @@ public class Server {
                 sendCurrentPlayers();
                 writers.add(out);
 
-                ArrayList<Enemy> enemies = enemyGenerator.generateRandomEnemies(3);
-                sendEnemies(enemies);
+                sendEnemies(smallEnemyGenerator.generateRandomEnemies(5));
+                sendEnemies(bigEnemyGenerator.generateRandomEnemies(1));
 
                 while (true) {
                     String input = in.nextLine();
