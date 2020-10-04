@@ -26,7 +26,7 @@ public class Game extends JPanel implements ActionListener {
     private double angle;
     private double rotate;
     private int counter = 0;
-    private static final Set<PlayerShell> shells = new HashSet<>();
+    private static final Set<AbstractShell> shells = new HashSet<>();
     private int[][] mapGrid;
     //saves states if the map cell is cleared(1) or not (0)
     private int[][] mapState;
@@ -93,7 +93,7 @@ public class Game extends JPanel implements ActionListener {
         gameMap.draw(g);
         drawUnit(g);
         g2dd.setColor(Color.BLUE);
-        for (PlayerShell pl : shells) {
+        for (AbstractShell pl : shells) {
             g2dd.drawImage(pl.getImage(), pl.getX(), pl.getY(), this);
             g2dd.drawString(pl.getName(), pl.getX(), pl.getY() + 30);
         }
@@ -144,8 +144,8 @@ public class Game extends JPanel implements ActionListener {
         repaint();
     }
 
-    private PlayerShell findPlayerInMap(String name) {
-        for (PlayerShell pl : shells) {
+    private AbstractShell findPlayerInMap(String name) {
+        for (AbstractShell pl : shells) {
             if (pl.getName().equals(name)) {
                 return pl;
             }
@@ -189,13 +189,13 @@ public class Game extends JPanel implements ActionListener {
                         String data = response.substring(4);
                         String[] arrOfStr = data.split(" ", 0);
                         if (arrOfStr.length == 3) {
-                            PlayerShell temp = findPlayerInMap(arrOfStr[2]);
+                            AbstractShell temp = findPlayerInMap(arrOfStr[2]);
                             temp.setX(Integer.parseInt(arrOfStr[0]));
                             temp.setY(Integer.parseInt(arrOfStr[1]));
                         }
                     } else if (response.startsWith("DLT")) {
                         String discPlayerName = response.substring(4);
-                        PlayerShell temp = findPlayerInMap(discPlayerName);
+                        AbstractShell temp = findPlayerInMap(discPlayerName);
                         shells.remove(temp);
                     } else if (response.startsWith("ROM")) {
                         String data = response.substring(4);
@@ -217,6 +217,8 @@ public class Game extends JPanel implements ActionListener {
                             player.setCoordinates(250, 40);
                         }
 
+                    } else if (response.startsWith("ENM")) {
+                        shells.add(new EnemyShell(response.substring(4)));
                     }
                 }
             }
