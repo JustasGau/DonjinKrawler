@@ -92,10 +92,12 @@ public class Game extends JPanel implements ActionListener {
         Graphics2D g2dd = (Graphics2D) g;
         gameMap.draw(g);
         drawUnit(g);
-        g2dd.setColor(Color.BLUE);
         for (AbstractShell pl : shells) {
             g2dd.drawImage(pl.getImage(), pl.getX(), pl.getY(), this);
-            g2dd.drawString(pl.getName(), pl.getX(), pl.getY() + 30);
+            g2dd.setColor(Color.BLUE);
+            g2dd.drawString(pl.getName() + " " + pl.getID(), pl.getX(), pl.getY() + 30);
+            g2dd.setColor(Color.YELLOW);
+            g2dd.drawString(pl.getInfo(), pl.getX(), pl.getY() + 50);
         }
     }
 
@@ -148,6 +150,15 @@ public class Game extends JPanel implements ActionListener {
         for (AbstractShell pl : shells) {
             if (pl.getName().equals(name)) {
                 return pl;
+            }
+        }
+        return null;
+    }
+
+    private AbstractShell findEnemyInMap(int id) {
+        for (AbstractShell enemy : shells) {
+            if (enemy.getID() == id) {
+                return enemy;
             }
         }
         return null;
@@ -218,7 +229,22 @@ public class Game extends JPanel implements ActionListener {
                         }
 
                     } else if (response.startsWith("ENM")) {
-                        shells.add(new EnemyShell(response.substring(4)));
+                        String data = response.substring(4);
+                        String[] arrOfStr = data.split(" ", 0);
+                        int tempID = Integer.parseInt(arrOfStr[1]);
+                        int tempX = Integer.parseInt(arrOfStr[2]);
+                        int tempY = Integer.parseInt(arrOfStr[3]);
+                        shells.add(new EnemyShell(arrOfStr[0], tempID, tempX, tempY));
+                    } else if (response.startsWith("ENI")) {
+                        String data = response.substring(4);
+                        String[] arrOfStr = data.split(" ", 0);
+                        int tempID = Integer.parseInt(arrOfStr[0]);
+                        String tempInfo = arrOfStr[1];
+                        if(tempInfo == null)
+                            tempInfo = "no info";
+                        AbstractShell temp = findEnemyInMap(tempID);
+                        if (temp != null)
+                            temp.setInfo(tempInfo);
                     }
                 }
             }

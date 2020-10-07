@@ -37,4 +37,9 @@ abstract public class AbstractShell {
         return image;
     }
 
+    public int getID() { return -1; }
+
+    public String getInfo() { return ""; }
+
+    public void setInfo(String info){};
 }

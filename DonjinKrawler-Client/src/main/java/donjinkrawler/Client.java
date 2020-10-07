@@ -39,7 +39,12 @@ public class Client {
             var response = in.nextLine();
             if (response.startsWith("SBN")) {
                 name = getName();
-                out.println(name);
+                if ((name != null) && (name.length() > 0)) {
+                    out.println(name);
+                } else {
+                    System.exit(0);
+                }
+
             } else if (response.startsWith("MAP")) {
                 String data = response.substring(4);
                 String[] arrOfStr = data.split(" ", 0);

@@ -5,11 +5,14 @@ import java.util.Random;
 
 public class EnemyShell extends AbstractShell {
 
-    public EnemyShell(String name) {
+    private int id;
+    private String info = "empty";
+
+    public EnemyShell(String name, int id, int x, int y) {
         this.name = name;
-        Random random = new Random();
-        this.x = random.nextInt(250);
-        this.y = random.nextInt(250);
+        this.id = id;
+        this.x = x;
+        this.y = y;
         loadImage();
     }
 
@@ -18,29 +21,38 @@ public class EnemyShell extends AbstractShell {
         image = ii.getImage();
     }
 
+    public int getID() { return id; }
+
+    public String getInfo() { return info; }
+
+    public void setInfo(String info){
+        this.info = info;
+
+    }
+
     private String resolveImageName()
     {
-        if(this.getName().equals("Small Zombie")) {
+        if(this.getName().equals("Small-Zombie")) {
             return "zombie.png";
         }
 
-        if(this.getName().equals("Big Zombie")) {
+        if(this.getName().equals("Big-Zombie")) {
             return "zombie-big.png";
         }
 
-        if(this.getName().equals("Small Skeleton")) {
+        if(this.getName().equals("Small-Skeleton")) {
             return "skeleton.png";
         }
 
-        if(this.getName().equals("Big Skeleton")) {
+        if(this.getName().equals("Big-Skeleton")) {
             return "skeleton-big.png";
         }
 
-        if(this.getName().equals("Small Chicken")) {
+        if(this.getName().equals("Small-Chicken")) {
             return "chicken.png";
         }
 
-        if(this.getName().equals("Big Chicken")) {
+        if(this.getName().equals("Big-Chicken")) {
             return "chicken-big.png";
         }
 
