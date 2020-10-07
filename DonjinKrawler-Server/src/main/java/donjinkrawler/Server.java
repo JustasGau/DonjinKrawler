@@ -30,8 +30,8 @@ public class Server {
     private static final EnemyGenerator smallEnemyGenerator = new EnemyGenerator(new SmallEnemyFactory());
     private static final EnemyGenerator bigEnemyGenerator   = new EnemyGenerator(new BigEnemyFactory());
 
-    private static final ArrayList<Enemy> smallEnemies = smallEnemyGenerator.generateRandomEnemies(5, 0);
-    private static final ArrayList<Enemy> bigEnemies = bigEnemyGenerator.generateRandomEnemies(1, smallEnemies.size());
+    private static final ArrayList<Enemy> smallEnemies = smallEnemyGenerator.generateRandomEnemies(5);
+    private static final ArrayList<Enemy> bigEnemies = bigEnemyGenerator.generateRandomEnemies(1);
 
     private static int TARGET_FPS = 60;
     private static long OPTIMAL_TIME = 1000000000 / TARGET_FPS;

@@ -6,12 +6,14 @@ import donjinkrawler.strategies.MoveRandomly;
 import donjinkrawler.strategies.MoveTowardPlayer;
 
 import java.util.Random;
+import java.util.UUID;
 
 public abstract class Enemy {
 
+    UUID myuuid = UUID.randomUUID();
     private String name;
     private double damage;
-    private int id;
+    private int id = (int)myuuid.getMostSignificantBits();
     Random random = new Random();
     private int x = random.nextInt(450);
     private int y = random.nextInt(450);
@@ -53,9 +55,7 @@ public abstract class Enemy {
         this.damage = damage;
     }
 
-    public int getX() {
-        return x;
-    }
+    public int getX() { return x; }
 
     public int getY() { return y; }
 

@@ -6,18 +6,18 @@ import donjinkrawler.enemies.Enemy;
 
 public class SmallEnemyFactory implements EnemyFactory {
 
-    public Enemy make(EnemyType type, int id) {
+    public Enemy make(EnemyType type) {
 
         if(type == null) {
             return null;
         }
 
         if(type.equals(EnemyType.CHICKEN)) {
-            return new SmallChicken(id);
+            return new SmallChicken();
         } else if(type.equals(EnemyType.SKELETON)) {
-            return new SmallSkeleton(id);
+            return new SmallSkeleton();
         } else if(type.equals(EnemyType.ZOMBIE)) {
-            return new SmallZombie(id);
+            return new SmallZombie();
         }
 
         return null;
