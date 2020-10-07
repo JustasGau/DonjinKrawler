@@ -42,11 +42,7 @@ public abstract class Enemy {
     public void setStrategies(EnemyStrategy[] strat) {
         strategies = strat;
     }
-
-    public void setID(int id) {
-        this.id = id;
-    }
-
+    
     public double getDamage() {
         return damage;
     }
