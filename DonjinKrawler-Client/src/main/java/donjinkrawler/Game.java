@@ -1,5 +1,7 @@
 package donjinkrawler;
 
+import donjinkrawler.observer.Pet;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.PrintWriter;
@@ -219,6 +221,25 @@ public class Game extends JPanel implements ActionListener {
 
                     } else if (response.startsWith("ENM")) {
                         shells.add(new EnemyShell(response.substring(4)));
+                    } else if (response.startsWith("PET")) {
+                        Pet kitty;
+                        AbstractShell randomPlayerShell = null;
+
+                        for (AbstractShell shell : shells) {
+                           if (shell instanceof PlayerShell)
+                           {
+                               randomPlayerShell = shell;
+                               break;
+                           }
+                        }
+
+                        if (randomPlayerShell != null) {
+                            kitty = new Pet(randomPlayerShell.x - 20, randomPlayerShell.y - 20);
+                        } else {
+                            kitty = new Pet(250, 250);
+                        }
+
+                        shells.add(kitty);
                     }
                 }
             }

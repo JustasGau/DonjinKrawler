@@ -74,6 +74,11 @@ public class Server {
             }
         }
 
+        public void sendPet() {
+            logger.debug("Sent pet: kitty");
+            out.println("PET kitty");
+        }
+
         public void run() {
             try {
                 in = new Scanner(socket.getInputStream());
@@ -105,6 +110,8 @@ public class Server {
 
                 sendEnemies(smallEnemyGenerator.generateRandomEnemies(5));
                 sendEnemies(bigEnemyGenerator.generateRandomEnemies(1));
+
+                sendPet();
 
                 while (true) {
                     String input = in.nextLine();

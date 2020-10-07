@@ -2,10 +2,15 @@ package donjinkrawler;
 
 import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
-public class Player {
+import donjinkrawler.observer.Observer;
+import donjinkrawler.observer.Pet;
+import donjinkrawler.observer.Subject;
 
+public class Player implements Subject {
+    private ArrayList<Pet> pets;
     private int dx;
     private int dy;
     private int width;
@@ -103,6 +108,23 @@ public class Player {
 
         if (key == KeyEvent.VK_DOWN) {
             dy = 0;
+        }
+    }
+
+    @Override
+    public void attach(Pet pet) {
+        pets.add(pet);
+    }
+
+    @Override
+    public void detach(Pet pet) {
+        pets.remove(pet);
+    }
+
+    @Override
+    public void notifyMovement() {
+        for (Pet pet : pets) {
+            pet.update(this.x, this.y);
         }
     }
 }
