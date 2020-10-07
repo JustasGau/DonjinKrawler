@@ -5,7 +5,7 @@ import donjinkrawler.enemies.Zombie;
 public class SmallZombie extends Zombie {
 
     public SmallZombie() {
-        this.setName("Small Zombie");
+        this.setName("Small-Zombie");
         this.setDamage(15.0);
     }
 

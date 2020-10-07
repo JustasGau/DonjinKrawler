@@ -6,6 +6,7 @@ import donjinkrawler.enemies.big.BigEnemyFactory;
 import donjinkrawler.enemies.small.SmallEnemyFactory;
 import donjinkrawler.logging.LoggerSingleton;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -26,15 +27,74 @@ public class Server {
     private static final String gameMapString = generator.generate();
     private static final LoggerSingleton logger = LoggerSingleton.getInstance();
 
+    private static final EnemyGenerator smallEnemyGenerator = new EnemyGenerator(new SmallEnemyFactory());
+    private static final EnemyGenerator bigEnemyGenerator   = new EnemyGenerator(new BigEnemyFactory());
 
-    public static void main(String[] args) throws Exception {
+    private static final ArrayList<Enemy> smallEnemies = smallEnemyGenerator.generateRandomEnemies(5);
+    private static final ArrayList<Enemy> bigEnemies = bigEnemyGenerator.generateRandomEnemies(1);
+
+    private static int TARGET_FPS = 60;
+    private static long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
+
+
+
+    public static void main(String[] args) throws IOException {
+        new Timer();
         int serverPort = 59001;
         int threadPool = 4;
-        logger.info("Server is running");
         var pool = Executors.newFixedThreadPool(threadPool);
+
+        logger.info("Server is running");
+
         try (var listener = new ServerSocket(serverPort)) {
             while (true) {
                 pool.execute(new Server.Handler(listener.accept()));
+            }
+        }
+    }
+
+    public static class Timer extends Thread {
+        long now;
+        long updateTime;
+        long wait;
+
+        public Timer() {
+            start();
+        }
+        public void run() {
+            //Main loop to space out updates and entity checking
+            while (true) {
+                now = System.nanoTime();
+
+                Update();
+
+                updateTime = System.nanoTime() - now;
+                wait = (OPTIMAL_TIME - updateTime) / 1000000;
+
+                try {
+                    Thread.sleep(wait);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private static void Update() {
+        for (Enemy enemy : smallEnemies) {
+            enemy.incrementTick(TARGET_FPS);
+        }
+        for (Enemy enemy : bigEnemies) {
+            enemy.incrementTick(TARGET_FPS);
+        }
+        sendEnemyInfo(smallEnemies);
+        sendEnemyInfo(bigEnemies);
+    }
+
+    public static void sendEnemyInfo(ArrayList<Enemy> enemies){
+        for (Enemy enemy : enemies) {
+            for (PrintWriter writer : writers) {
+                writer.println("ENI " + enemy.getID() + " " + enemy.getInfo());
             }
         }
     }
@@ -69,8 +129,8 @@ public class Server {
 
         public void sendEnemies(ArrayList<Enemy> enemies) {
             for (Enemy enemy : enemies) {
-                logger.debug("Sent enemy: " + enemy.getName());
-                out.println("ENM " + enemy.getName());
+                logger.debug("Sent enemy: " + enemy.getName()+ " " + enemy.getID());
+                out.println("ENM " + enemy.getName() + " " + enemy.getID() + " " + enemy.getX() + " " + enemy.getY());
             }
         }
 
@@ -78,9 +138,6 @@ public class Server {
             try {
                 in = new Scanner(socket.getInputStream());
                 out = new PrintWriter(socket.getOutputStream(), true);
-
-                EnemyGenerator smallEnemyGenerator = new EnemyGenerator(new SmallEnemyFactory());
-                EnemyGenerator bigEnemyGenerator   = new EnemyGenerator(new BigEnemyFactory());
 
                 while (true) {
                     out.println("SBN");
@@ -103,8 +160,8 @@ public class Server {
                 sendCurrentPlayers();
                 writers.add(out);
 
-                sendEnemies(smallEnemyGenerator.generateRandomEnemies(5));
-                sendEnemies(bigEnemyGenerator.generateRandomEnemies(1));
+                sendEnemies(smallEnemies);
+                sendEnemies(bigEnemies);
 
                 while (true) {
                     String input = in.nextLine();
