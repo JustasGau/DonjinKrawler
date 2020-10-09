@@ -1,11 +1,11 @@
 package donjinkrawler;
 
+import donjinkrawler.packets.MessagePacket;
+
 import java.awt.*;
 import java.awt.event.*;
-import java.io.PrintWriter;
-import java.util.HashSet;
-import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import javax.swing.*;
 
 public class Game extends JPanel implements ActionListener {
@@ -17,6 +17,7 @@ public class Game extends JPanel implements ActionListener {
         BOTTOM
     }
 
+    com.esotericsoftware.kryonet.Client client;
     private final Timer timer;
     private final Player player;
     private GameMap gameMap;
@@ -26,7 +27,8 @@ public class Game extends JPanel implements ActionListener {
     private double angle;
     private double rotate;
     private int counter = 0;
-    private static final Set<AbstractShell> shells = new HashSet<>();
+    private String lastPos = "";
+    private static final Set<AbstractShell> shells = new CopyOnWriteArraySet<>();
     private int[][] mapGrid;
     //saves states if the map cell is cleared(1) or not (0)
     private int[][] mapState;
@@ -36,24 +38,17 @@ public class Game extends JPanel implements ActionListener {
         public static int y = 0;
     }
 
-    private final Scanner in;
-    private final PrintWriter out;
     private final JLabel label;
 
 
-    public Game(Scanner in, PrintWriter out, JLabel label, Player player, int[][] mapGrid) {
-        this.in = in;
-        this.out = out;
+    public Game(com.esotericsoftware.kryonet.Client client, JLabel label, Player player, int[][] mapGrid) {
         this.label = label;
         this.player = player;
         this.mapGrid = mapGrid;
         this.mapState = new int[mapGrid.length][mapGrid.length];
         this.mapState[0][0] = 1;
         this.gameMap = new GameMap(mapGrid[CurrentCell.x][CurrentCell.y], doorLocations());
-
-        if (this.in != null) {
-            new ServerReader(in, label);
-        }
+        this.client = client;
 
         addKeyListener(new Game.TAdapter());
         setBackground(Color.black);
@@ -130,16 +125,23 @@ public class Game extends JPanel implements ActionListener {
                 CurrentCell.x += 1;
                 player.setCoordinates(250, 40);
             }
-            out.println("ROM " + CurrentCell.x + " " + CurrentCell.y + " " + nextRoom);
+            MessagePacket messagePacket = new MessagePacket();
+            messagePacket.message = "ROM " + CurrentCell.x + " " + CurrentCell.y + " " + nextRoom;
+            client.sendTCP(messagePacket);
             gameMap = new GameMap(mapGrid[CurrentCell.x][CurrentCell.y], doorLocations());
         }
         if (player.hasChangedPosition()) {
-            out.println("POZ " + player.getX() + " " + player.getY());
+            MessagePacket messagePacket = new MessagePacket();
+            messagePacket.message = "POZ " + player.getX() + " " + player.getY();
+            client.sendTCP(messagePacket);
         }
-        if (counter == 100) {
-            out.println("POZ " + player.getX() + " " + player.getY());
-            counter = 0;
-        }
+//        if (counter == 100 /*&& !lastPos.equals(player.getX() + " " + player.getY())*/) {
+//            MessagePacket messagePacket = new MessagePacket();
+//            messagePacket.message = "POZ " + player.getX() + " " + player.getY();
+//            client.sendTCP(messagePacket);
+//            counter = 0;
+//            lastPos = player.getX() + " " + player.getY();
+//        }
         counter++;
 
         player.move();
@@ -164,6 +166,10 @@ public class Game extends JPanel implements ActionListener {
         return null;
     }
 
+    public void addPlayerShell(String name) {
+        shells.add(new PlayerShell(name));
+    }
+
     private class TAdapter extends KeyAdapter {
         @Override
         public void keyReleased(KeyEvent e) {
@@ -176,79 +182,65 @@ public class Game extends JPanel implements ActionListener {
         }
     }
 
-    public class ServerReader extends Thread {
+    public void changeRoom(String response) {
+        String data = response.substring(4);
+        String[] arrOfStr = data.split(" ", 0);
 
-        Scanner in;
-        JLabel label;
+        int mapX = Integer.parseInt(arrOfStr[0]);
+        int mapY = Integer.parseInt(arrOfStr[1]);
 
-        public ServerReader(Scanner in, JLabel label) {
-            this.in = in;
-            this.label = label;
-            start();
+        String direction = arrOfStr[2];
+        gameMap = new GameMap(mapGrid[mapX][mapY], doorLocations());
+
+        if (direction.equals("LEFT")) {
+            player.setCoordinates(400, 250);
+        } else if (direction.equals("TOP")) {
+            player.setCoordinates(250, 400);
+        } else if (direction.equals("RIGHT")) {
+            player.setCoordinates(40, 250);
+        } else if (direction.equals("BOTTOM")) {
+            player.setCoordinates(250, 40);
         }
+    }
 
-        public void run() {
-            while (true) {
-                if (in.hasNextLine()) {
-                    String response = in.nextLine();
-                    if (response.startsWith("CRT")) {
-                        String newPlayerName = response.substring(4);
-                        shells.add(new PlayerShell(newPlayerName));
-                    } else if (response.startsWith("MSG")) {
-                        label.setText(response.substring(4));
-                    } else if (response.startsWith("POZ")) {
-                        String data = response.substring(4);
-                        String[] arrOfStr = data.split(" ", 0);
-                        if (arrOfStr.length == 3) {
-                            AbstractShell temp = findPlayerInMap(arrOfStr[2]);
-                            temp.setX(Integer.parseInt(arrOfStr[0]));
-                            temp.setY(Integer.parseInt(arrOfStr[1]));
-                        }
-                    } else if (response.startsWith("DLT")) {
-                        String discPlayerName = response.substring(4);
-                        AbstractShell temp = findPlayerInMap(discPlayerName);
-                        shells.remove(temp);
-                    } else if (response.startsWith("ROM")) {
-                        String data = response.substring(4);
-                        String[] arrOfStr = data.split(" ", 0);
+    public void updateEnemyInfo(String response) {
+        String data = response.substring(4);
+        String[] arrOfStr = data.split(" ", 0);
+        int tempID = Integer.parseInt(arrOfStr[0]);
+        String tempInfo = arrOfStr[1];
+        if (tempInfo == null) {
+            tempInfo = "no info";
+        }
+        AbstractShell temp = findEnemyInMap(tempID);
+        if (temp != null) {
+            temp.setInfo(tempInfo);
+        }
+    }
 
-                        int mapX = Integer.parseInt(arrOfStr[0]);
-                        int mapY = Integer.parseInt(arrOfStr[1]);
+    public void addEnemy(String response) {
+        String data = response.substring(4);
+        String[] arrOfStr = data.split(" ", 0);
+        int tempID = Integer.parseInt(arrOfStr[1]);
+        int tempX = Integer.parseInt(arrOfStr[2]);
+        int tempY = Integer.parseInt(arrOfStr[3]);
+        shells.add(new EnemyShell(arrOfStr[0], tempID, tempX, tempY));
+    }
 
-                        String direction = arrOfStr[2];
-                        gameMap = new GameMap(mapGrid[mapX][mapY], doorLocations());
-
-                        if (direction.equals("LEFT")) {
-                            player.setCoordinates(400, 250);
-                        } else if (direction.equals("TOP")) {
-                            player.setCoordinates(250, 400);
-                        } else if (direction.equals("RIGHT")) {
-                            player.setCoordinates(40, 250);
-                        } else if (direction.equals("BOTTOM")) {
-                            player.setCoordinates(250, 40);
-                        }
-
-                    } else if (response.startsWith("ENM")) {
-                        String data = response.substring(4);
-                        String[] arrOfStr = data.split(" ", 0);
-                        int tempID = Integer.parseInt(arrOfStr[1]);
-                        int tempX = Integer.parseInt(arrOfStr[2]);
-                        int tempY = Integer.parseInt(arrOfStr[3]);
-                        shells.add(new EnemyShell(arrOfStr[0], tempID, tempX, tempY));
-                    } else if (response.startsWith("ENI")) {
-                        String data = response.substring(4);
-                        String[] arrOfStr = data.split(" ", 0);
-                        int tempID = Integer.parseInt(arrOfStr[0]);
-                        String tempInfo = arrOfStr[1];
-                        if(tempInfo == null)
-                            tempInfo = "no info";
-                        AbstractShell temp = findEnemyInMap(tempID);
-                        if (temp != null)
-                            temp.setInfo(tempInfo);
-                    }
-                }
+    public void changeShellPosition(String response) {
+        String data = response.substring(4);
+        String[] arrOfStr = data.split(" ", 0);
+        if (arrOfStr.length == 3) {
+            AbstractShell temp = findPlayerInMap(arrOfStr[2]);
+            if (temp != null) {
+                temp.setX(Integer.parseInt(arrOfStr[0]));
+                temp.setY(Integer.parseInt(arrOfStr[1]));
             }
         }
+    }
+
+    public void deletePlayerShell(String response) {
+        AbstractShell temp = findPlayerInMap(response);
+        shells.remove(temp);
     }
 
 }
