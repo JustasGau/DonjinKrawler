@@ -1,15 +1,18 @@
 package donjinkrawler;
 
-import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import donjinkrawler.packets.ConnectPacket;
-import donjinkrawler.packets.MessagePacket;
+import krawlercommon.packets.ConnectPacket;
+import krawlercommon.packets.EnemyPacket;
+import krawlercommon.packets.MessagePacket;
+import krawlercommon.RegistrationManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Client {
     private com.esotericsoftware.kryonet.Client kryoClient;
@@ -22,6 +25,7 @@ public class Client {
     private final String serverAddress;
     private String name;
     private int[][] mapGrid;
+    private Map<String, Integer> messageCounterMap = new HashMap<>();
 
     public Client(String serverAddress) throws IOException {
         setupKryo();
@@ -34,9 +38,7 @@ public class Client {
         kryoClient = new com.esotericsoftware.kryonet.Client();
         kryoClient.start();
         kryoClient.connect(5000000, "localhost", 54555, 54777);
-        Kryo kryo = kryoClient.getKryo();
-        kryo.register(ConnectPacket.class);
-        kryo.register(MessagePacket.class);
+        RegistrationManager.registerKryo(kryoClient.getKryo());
 
         kryoClient.addListener(new Listener() {
 
@@ -44,26 +46,42 @@ public class Client {
                 if (object instanceof MessagePacket) {
                     MessagePacket messagePacket = (MessagePacket) object;
                     if (messagePacket.message.startsWith("MAP")) {
+                        increaseCounter("MAP");
                         parseMap(messagePacket.message);
                         initUI();
                     } else if (messagePacket.message.startsWith("MSG")) {
+                        increaseCounter("MSG");
                         messageLabel.setText(messagePacket.message.substring(4));
                     } else if (messagePacket.message.startsWith("CRT") && game != null) {
+                        increaseCounter("CRT");
                         game.addPlayerShell(messagePacket.message.substring(4));
                     } else if (messagePacket.message.startsWith("POZ") && game != null) {
+                        increaseCounter("POZ");
                         game.changeShellPosition(messagePacket.message);
                     } else if (messagePacket.message.startsWith("DLT") && game != null) {
+                        increaseCounter("DLT");
                         game.deletePlayerShell(messagePacket.message.substring(4));
-                    } else if (messagePacket.message.startsWith("ENM") && game != null) {
-                        game.addEnemy(messagePacket.message);
                     } else if (messagePacket.message.startsWith("ENI") && game != null) {
+                        increaseCounter("ENI");
                         game.updateEnemyInfo(messagePacket.message);
                     } else if (messagePacket.message.startsWith("ROM") && game != null) {
+                        increaseCounter("ROM");
                         game.changeRoom(messagePacket.message);
                     }
+                } else if (object instanceof EnemyPacket) {
+                    EnemyPacket enemyPacket = (EnemyPacket) object;
+                    game.addEnemies(enemyPacket.getEnemies());
+                }
+                for (String key : messageCounterMap.keySet()) {
+                    System.out.println(key + " " + messageCounterMap.get(key));
                 }
             }
         });
+    }
+
+    private void increaseCounter(String msg) {
+        messageCounterMap.putIfAbsent(msg, 0);
+        messageCounterMap.put(msg, messageCounterMap.get(msg) + 1);
     }
 
     private void logIn() {

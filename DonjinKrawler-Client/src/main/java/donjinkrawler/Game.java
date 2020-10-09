@@ -1,11 +1,14 @@
 package donjinkrawler;
 
-import donjinkrawler.packets.MessagePacket;
+import krawlercommon.enemies.Enemy;
+import krawlercommon.packets.MessagePacket;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.stream.Collectors;
 import javax.swing.*;
 
 public class Game extends JPanel implements ActionListener {
@@ -217,13 +220,12 @@ public class Game extends JPanel implements ActionListener {
         }
     }
 
-    public void addEnemy(String response) {
-        String data = response.substring(4);
-        String[] arrOfStr = data.split(" ", 0);
-        int tempID = Integer.parseInt(arrOfStr[1]);
-        int tempX = Integer.parseInt(arrOfStr[2]);
-        int tempY = Integer.parseInt(arrOfStr[3]);
-        shells.add(new EnemyShell(arrOfStr[0], tempID, tempX, tempY));
+    public void addEnemies(List<Enemy> enemies) {
+        shells.addAll(
+                enemies.stream()
+                        .map(e -> new EnemyShell(e.getName(), e.getID(), e.getX(), e.getY()))
+                        .collect(Collectors.toList())
+        );
     }
 
     public void changeShellPosition(String response) {

@@ -1,29 +1,25 @@
 package donjinkrawler;
 
-import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import donjinkrawler.enemies.Enemy;
-import donjinkrawler.enemies.EnemyGenerator;
-import donjinkrawler.enemies.big.BigEnemyFactory;
-import donjinkrawler.enemies.small.SmallEnemyFactory;
+import krawlercommon.enemies.*;
+import krawlercommon.enemies.big.BigEnemyFactory;
+import krawlercommon.enemies.small.SmallEnemyFactory;
 import donjinkrawler.logging.LoggerSingleton;
-import donjinkrawler.packets.ConnectPacket;
-import donjinkrawler.packets.MessagePacket;
+import krawlercommon.RegistrationManager;
+import krawlercommon.packets.ConnectPacket;
+import krawlercommon.packets.EnemyPacket;
+import krawlercommon.packets.MessagePacket;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.*;
 
 
 public class Server {
-    // The set of all the print writers for all the clients, used for broadcast.
-    private static final com.esotericsoftware.kryonet.Server server = new com.esotericsoftware.kryonet.Server();
+    private static final com.esotericsoftware.kryonet.Server server =
+            new com.esotericsoftware.kryonet.Server(16384 * 64, 16384 * 64);
     private static final Map<Integer, PlayerContainer> playerConnectionMap = new HashMap<>();
     private static int playerIDs = 1;
-    private static Connection currentConnection;
-    private static final Set<PrintWriter> writers = new HashSet<>();
-    private static final Set<String> names = new HashSet<>();
     private static final int mapSize = 10;
     private static final GameMapGenerator generator = new GameMapGenerator(mapSize);
     private static final String gameMapString = generator.generate();
@@ -40,13 +36,9 @@ public class Server {
 
 
     public static void main(String[] args) throws IOException {
-        // TODO: maybe change buffer size
-
         server.start();
         server.bind(54555, 54777);
-        Kryo kryo = server.getKryo();
-        kryo.register(ConnectPacket.class);
-        kryo.register(MessagePacket.class);
+        RegistrationManager.registerKryo(server.getKryo());
         server.addListener(new Listener() {
             public void received(Connection connection, Object object) {
                 if (object instanceof ConnectPacket) {
@@ -54,7 +46,6 @@ public class Server {
                     if (playerConnectionMap.get(connection.getID()) == null) {
                         createNewPlayer(connection, connectPacket);
                     }
-                    currentConnection = connection;
                     System.out.println(connectPacket.name);
                 } else if (object instanceof MessagePacket) {
                     MessagePacket messagePacket = (MessagePacket) object;
@@ -73,7 +64,6 @@ public class Server {
                 messagePacket.message = "DLT " + player.getName();
                 server.sendToAllExceptTCP(connection.getID(), messagePacket);
                 playerConnectionMap.remove(connection.getID());
-
             }
         });
         new Timer();
@@ -100,11 +90,11 @@ public class Server {
     }
 
     private static void sendEnemies(int id, ArrayList<Enemy> enemies) {
+        EnemyPacket enemyPacket = new EnemyPacket();
         for (Enemy enemy : enemies) {
-            MessagePacket messagePacket = new MessagePacket();
-            messagePacket.message = "ENM " + enemy.getName() + " " + enemy.getID() + " " + enemy.getX() + " " + enemy.getY();
-            server.sendToTCP(id, messagePacket);
+            enemyPacket.addEnemy(enemy);
         }
+        server.sendToTCP(id, enemyPacket);
     }
 
     private static void sendExistingPlayers(int id, PlayerContainer player) {
@@ -161,9 +151,6 @@ public class Server {
             MessagePacket messagePacket = new MessagePacket();
             messagePacket.message = "ENI " + enemy.getID() + " " + enemy.getInfo();
             server.sendToAllTCP(messagePacket);
-//            for (PrintWriter writer : writers) {
-//                writer.println("ENI " + enemy.getID() + " " + enemy.getInfo());
-//            }
         }
     }
 }
