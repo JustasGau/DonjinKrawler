@@ -17,6 +17,7 @@ public class RangeAttack implements EnemyStrategy {
     @Override
     public void init(Enemy enemy) {
         this.enemy = enemy;
+        enemy.setInfo(getStrategy());
     }
 
     @Override

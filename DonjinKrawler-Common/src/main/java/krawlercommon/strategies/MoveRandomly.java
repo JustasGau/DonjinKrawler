@@ -17,6 +17,7 @@ public class MoveRandomly implements EnemyStrategy {
     @Override
     public void init(Enemy enemy) {
         this.enemy = enemy;
+        enemy.setInfo(getStrategy());
     }
 
     @Override

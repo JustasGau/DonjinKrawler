@@ -1,5 +1,5 @@
 package krawlercommon.packets;
 
-public class ConnectPacket {
+public class LoginPacket {
     public String name;
 }

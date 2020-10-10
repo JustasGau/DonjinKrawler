@@ -11,10 +11,7 @@ import krawlercommon.enemies.big.BigZombie;
 import krawlercommon.enemies.small.SmallChicken;
 import krawlercommon.enemies.small.SmallSkeleton;
 import krawlercommon.enemies.small.SmallZombie;
-import krawlercommon.packets.ConnectPacket;
-import krawlercommon.packets.EnemyPacket;
-import krawlercommon.packets.MessagePacket;
-import krawlercommon.strategies.*;
+import krawlercommon.packets.*;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -24,10 +21,20 @@ import java.util.concurrent.atomic.AtomicLong;
 public class RegistrationManager {
 
     public static void registerKryo(Kryo kryo) {
-        kryo.register(ConnectPacket.class);
+
+        // Packets
+        kryo.register(LoginPacket.class);
         kryo.register(MessagePacket.class);
         kryo.register(EnemyPacket.class);
-        kryo.register(ArrayList.class);
+        kryo.register(MapPacket.class);
+        kryo.register(IdPacket.class);
+        kryo.register(CreatePlayerPacket.class);
+        kryo.register(MoveCharacter.class);
+        kryo.register(DisconnectPacket.class);
+        kryo.register(RoomPacket.class);
+
+        // DonjinKrawler classes
+        kryo.register(PlayerData.class);
         kryo.register(Enemy.class);
         kryo.register(Chicken.class);
         kryo.register(Skeleton.class);
@@ -38,11 +45,9 @@ public class RegistrationManager {
         kryo.register(BigChicken.class);
         kryo.register(BigSkeleton.class);
         kryo.register(BigZombie.class);
-        kryo.register(Attack.class);
-        kryo.register(MoveAwayFromPlayer.class);
-        kryo.register(MoveRandomly.class);
-        kryo.register(MoveTowardPlayer.class);
-        kryo.register(RangeAttack.class);
+
+        // jdk classes
+        kryo.register(ArrayList.class);
         kryo.register(UUID.class);
         kryo.register(Random.class);
         kryo.register(AtomicLong.class);

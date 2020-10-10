@@ -2,14 +2,13 @@ package donjinkrawler;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import krawlercommon.PlayerData;
 import krawlercommon.enemies.*;
 import krawlercommon.enemies.big.BigEnemyFactory;
 import krawlercommon.enemies.small.SmallEnemyFactory;
 import donjinkrawler.logging.LoggerSingleton;
 import krawlercommon.RegistrationManager;
-import krawlercommon.packets.ConnectPacket;
-import krawlercommon.packets.EnemyPacket;
-import krawlercommon.packets.MessagePacket;
+import krawlercommon.packets.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -18,13 +17,13 @@ import java.util.*;
 public class Server {
     private static final com.esotericsoftware.kryonet.Server server =
             new com.esotericsoftware.kryonet.Server(16384 * 64, 16384 * 64);
-    private static final Map<Integer, PlayerContainer> playerConnectionMap = new HashMap<>();
+    private static final Map<Integer, PlayerData> playerConnectionMap = new HashMap<>();
     private static int playerIDs = 1;
     private static final int mapSize = 10;
     private static final GameMapGenerator generator = new GameMapGenerator(mapSize);
     private static final String gameMapString = generator.generate();
     private static final LoggerSingleton logger = LoggerSingleton.getInstance();
-
+    private static final Random rand = new Random();
     private static final EnemyGenerator smallEnemyGenerator = new EnemyGenerator(new SmallEnemyFactory());
     private static final EnemyGenerator bigEnemyGenerator = new EnemyGenerator(new BigEnemyFactory());
 
@@ -41,52 +40,108 @@ public class Server {
         RegistrationManager.registerKryo(server.getKryo());
         server.addListener(new Listener() {
             public void received(Connection connection, Object object) {
-                if (object instanceof ConnectPacket) {
-                    ConnectPacket connectPacket = (ConnectPacket) object;
-                    if (playerConnectionMap.get(connection.getID()) == null) {
-                        createNewPlayer(connection, connectPacket);
-                    }
-                    System.out.println(connectPacket.name);
+                if (object instanceof LoginPacket) {
+                    handleLogin(connection, (LoginPacket) object);
                 } else if (object instanceof MessagePacket) {
-                    MessagePacket messagePacket = (MessagePacket) object;
-                    String playerName = playerConnectionMap.get(connection.getID()).getName();
-                    messagePacket.message = messagePacket.message + " " + playerName;
-                    server.sendToAllExceptTCP(connection.getID(), messagePacket);
+                    handleMessage(connection, (MessagePacket) object);
+                } else if (object instanceof MoveCharacter) {
+                    handlePosUpdate(connection, object);
+                } else if (object instanceof RoomPacket) {
+                    handleRoomChange(connection, (RoomPacket) object);
                 }
             }
 
             public void disconnected(Connection connection) {
-                PlayerContainer player = playerConnectionMap.get(connection.getID());
-                logger.info("Player " + player.getName() + " has left the server");
-                MessagePacket messagePacket = new MessagePacket();
-                messagePacket.message = "MSG A player has left";
-                server.sendToAllExceptTCP(connection.getID(), messagePacket);
-                messagePacket.message = "DLT " + player.getName();
-                server.sendToAllExceptTCP(connection.getID(), messagePacket);
-                playerConnectionMap.remove(connection.getID());
+                handleDisconnect(connection);
             }
+
         });
         new Timer();
 
         logger.info("Server is running");
     }
 
-    private static void createNewPlayer(Connection connection, ConnectPacket connectPacket) {
-        PlayerContainer player = new PlayerContainer(connectPacket.name, playerIDs++);
+    private static void handleLogin(Connection connection, LoginPacket object) {
+        if (playerConnectionMap.get(connection.getID()) == null) {
+            createNewPlayer(connection, object);
+        }
+    }
+
+    private static void handleMessage(Connection connection, MessagePacket messagePacket) {
+        String playerName = playerConnectionMap.get(connection.getID()).getName();
+        messagePacket.message = messagePacket.message + " " + playerName;
+        server.sendToAllExceptUDP(connection.getID(), messagePacket);
+    }
+
+    private static void handlePosUpdate(Connection connection, Object object) {
+        MoveCharacter packet = (MoveCharacter) object;
+        PlayerData player = playerConnectionMap.get(connection.getID());
+        player.setX(packet.x);
+        player.setY(packet.y);
+        server.sendToAllExceptTCP(connection.getID(), object);
+    }
+
+    private static void handleRoomChange(Connection connection, RoomPacket roomPacket) {
+        server.sendToAllExceptUDP(connection.getID(), roomPacket);
+    }
+
+    private static void handleDisconnect(Connection connection) {
+        PlayerData player = playerConnectionMap.get(connection.getID());
+        if (player != null) {
+            String message = "Player " + player.getName() + " has left";
+            logger.info(message);
+            MessageSender.sendMessageToAllExcept(connection, server, message);
+            DisconnectPacket dcPacket = new DisconnectPacket();
+            dcPacket.id = player.getId();
+            server.sendToAllExceptTCP(connection.getID(), dcPacket);
+            playerConnectionMap.remove(connection.getID());
+        }
+    }
+
+    private static void createNewPlayer(Connection connection, LoginPacket loginPacket) {
+        // TODO: maybe add common config for starting position?
+        if (!isValidName(loginPacket.name)) {
+            loginPacket.name = loginPacket.name + rand.nextInt(69420);
+        }
+        PlayerData player = new PlayerData(loginPacket.name, playerIDs++, 250, 250);
         playerConnectionMap.put(connection.getID(), player);
-        MessagePacket messagePacket = new MessagePacket();
-        messagePacket.message = "MAP " + mapSize + " " + gameMapString;
-        server.sendToTCP(connection.getID(), messagePacket);
-        messagePacket.message = "MSG You joined the server";
-        server.sendToTCP(connection.getID(), messagePacket);
+        sendMapToPlayer(connection);
+        sendWelcomeMessages(connection);
+        sendIdentificationMessage(connection, player);
         logger.debug("Player " + player.getName() + " has joined the server");
-        messagePacket.message = "MSG A player has joined the server";
-        server.sendToAllExceptTCP(connection.getID(), messagePacket);
-        messagePacket.message = "CRT " + player.getName();
-        server.sendToAllExceptTCP(connection.getID(), messagePacket);
-        sendExistingPlayers(connection.getID(), player);
+        sendPlayerToExistingClients(connection, player);
+        sendExistingPlayersToClient(connection.getID(), player);
         sendEnemies(connection.getID(), smallEnemies);
         sendEnemies(connection.getID(), bigEnemies);
+    }
+
+    private static void sendPlayerToExistingClients(Connection connection, PlayerData player) {
+        CreatePlayerPacket pck = new CreatePlayerPacket();
+        pck.player = player;
+        server.sendToAllExceptTCP(connection.getID(), pck);
+    }
+
+    private static void sendMapToPlayer(Connection connection) {
+        MapPacket mapPacket = new MapPacket();
+        mapPacket.gridSize = mapSize;
+        mapPacket.mapString = gameMapString;
+        server.sendToTCP(connection.getID(), mapPacket);
+    }
+
+    private static void sendWelcomeMessages(Connection connection) {
+        MessageSender.sendMessageToSingle(connection, server, "You joined the server");
+        MessageSender.sendMessageToAllExcept(connection, server, "A player has joined the server");
+    }
+
+    private static void sendIdentificationMessage(Connection connection, PlayerData player) {
+        IdPacket idPacket = new IdPacket();
+        idPacket.id = player.getId();
+        idPacket.name = player.getName();
+        server.sendToTCP(connection.getID(), idPacket);
+    }
+
+    private static boolean isValidName(String name) {
+        return playerConnectionMap.values().stream().noneMatch(p -> p.getName().equals(name));
     }
 
     private static void sendEnemies(int id, ArrayList<Enemy> enemies) {
@@ -97,12 +152,12 @@ public class Server {
         server.sendToTCP(id, enemyPacket);
     }
 
-    private static void sendExistingPlayers(int id, PlayerContainer player) {
-        for (PlayerContainer tempPlayer : playerConnectionMap.values()) {
+    private static void sendExistingPlayersToClient(int id, PlayerData player) {
+        for (PlayerData tempPlayer : playerConnectionMap.values()) {
             if (tempPlayer != player) {
-                MessagePacket messagePacket = new MessagePacket();
-                messagePacket.message = "CRT " + tempPlayer.getName();
-                server.sendToTCP(id, messagePacket);
+                CreatePlayerPacket createPlayerPacket = new CreatePlayerPacket();
+                createPlayerPacket.player = tempPlayer;
+                server.sendToTCP(id, createPlayerPacket);
             }
         }
     }
@@ -153,4 +208,5 @@ public class Server {
             server.sendToAllTCP(messagePacket);
         }
     }
+
 }
