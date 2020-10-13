@@ -4,18 +4,9 @@ plugins {
 }
 
 dependencies {
-
-}
-
-sourceSets {
-    main {
-        java {
-            "src/main/java"
-        }
-        resources {
-            "src/main/resources"
-        }
-    }
+    compile "com.esotericsoftware:kryonet:2.22.0-RC1"
+    compile project(":DonjinKrawler-Server")
+    compile project(":DonjinKrawler-Common")
 }
 
 mainClassName = 'donjinkrawler.Client'

@@ -1,34 +1,31 @@
 package donjinkrawler;
 
-import donjinkrawler.enemies.Enemy;
-import donjinkrawler.enemies.EnemyGenerator;
-import donjinkrawler.enemies.big.BigEnemyFactory;
-import donjinkrawler.enemies.small.SmallEnemyFactory;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import krawlercommon.PlayerData;
+import krawlercommon.enemies.*;
+import krawlercommon.enemies.big.BigEnemyFactory;
+import krawlercommon.enemies.small.SmallEnemyFactory;
 import donjinkrawler.logging.LoggerSingleton;
+import krawlercommon.RegistrationManager;
+import krawlercommon.packets.*;
 
-import javax.swing.*;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.concurrent.Executors;
+import java.util.*;
 
 
 public class Server {
-    // The set of all the print writers for all the clients, used for broadcast.
-    private static final Set<PrintWriter> writers = new HashSet<>();
-    private static final Set<String> names = new HashSet<>();
+    private static final com.esotericsoftware.kryonet.Server server =
+            new com.esotericsoftware.kryonet.Server(16384 * 64, 16384 * 64);
+    private static final Map<Integer, PlayerData> playerConnectionMap = new HashMap<>();
+    private static int playerIDs = 1;
     private static final int mapSize = 10;
     private static final GameMapGenerator generator = new GameMapGenerator(mapSize);
     private static final String gameMapString = generator.generate();
     private static final LoggerSingleton logger = LoggerSingleton.getInstance();
-
+    private static final Random rand = new Random();
     private static final EnemyGenerator smallEnemyGenerator = new EnemyGenerator(new SmallEnemyFactory());
-    private static final EnemyGenerator bigEnemyGenerator   = new EnemyGenerator(new BigEnemyFactory());
+    private static final EnemyGenerator bigEnemyGenerator = new EnemyGenerator(new BigEnemyFactory());
 
     private static final ArrayList<Enemy> smallEnemies = smallEnemyGenerator.generateRandomEnemies(5);
     private static final ArrayList<Enemy> bigEnemies = bigEnemyGenerator.generateRandomEnemies(1);
@@ -37,18 +34,130 @@ public class Server {
     private static long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
 
 
-
     public static void main(String[] args) throws IOException {
+        server.start();
+        server.bind(54555, 54777);
+        RegistrationManager.registerKryo(server.getKryo());
+        server.addListener(new Listener() {
+            public void received(Connection connection, Object object) {
+                if (object instanceof LoginPacket) {
+                    handleLogin(connection, (LoginPacket) object);
+                } else if (object instanceof MessagePacket) {
+                    handleMessage(connection, (MessagePacket) object);
+                } else if (object instanceof MoveCharacter) {
+                    handlePosUpdate(connection, object);
+                } else if (object instanceof RoomPacket) {
+                    handleRoomChange(connection, (RoomPacket) object);
+                }
+            }
+
+            public void disconnected(Connection connection) {
+                handleDisconnect(connection);
+            }
+
+        });
         new Timer();
-        int serverPort = 59001;
-        int threadPool = 4;
-        var pool = Executors.newFixedThreadPool(threadPool);
 
         logger.info("Server is running");
+    }
 
-        try (var listener = new ServerSocket(serverPort)) {
-            while (true) {
-                pool.execute(new Server.Handler(listener.accept()));
+    private static void handleLogin(Connection connection, LoginPacket object) {
+        if (playerConnectionMap.get(connection.getID()) == null) {
+            createNewPlayer(connection, object);
+        }
+    }
+
+    private static void handleMessage(Connection connection, MessagePacket messagePacket) {
+        String playerName = playerConnectionMap.get(connection.getID()).getName();
+        messagePacket.message = messagePacket.message + " " + playerName;
+        server.sendToAllExceptUDP(connection.getID(), messagePacket);
+    }
+
+    private static void handlePosUpdate(Connection connection, Object object) {
+        MoveCharacter packet = (MoveCharacter) object;
+        PlayerData player = playerConnectionMap.get(connection.getID());
+        player.setX(packet.x);
+        player.setY(packet.y);
+        server.sendToAllExceptTCP(connection.getID(), object);
+    }
+
+    private static void handleRoomChange(Connection connection, RoomPacket roomPacket) {
+        server.sendToAllExceptUDP(connection.getID(), roomPacket);
+    }
+
+    private static void handleDisconnect(Connection connection) {
+        PlayerData player = playerConnectionMap.get(connection.getID());
+        if (player != null) {
+            String message = "Player " + player.getName() + " has left";
+            logger.info(message);
+            MessageSender.sendMessageToAllExcept(connection, server, message);
+            DisconnectPacket dcPacket = new DisconnectPacket();
+            dcPacket.id = player.getId();
+            server.sendToAllExceptTCP(connection.getID(), dcPacket);
+            playerConnectionMap.remove(connection.getID());
+        }
+    }
+
+    private static void createNewPlayer(Connection connection, LoginPacket loginPacket) {
+        // TODO: maybe add common config for starting position?
+        if (!isValidName(loginPacket.name)) {
+            loginPacket.name = loginPacket.name + rand.nextInt(69420);
+        }
+        PlayerData player = new PlayerData(loginPacket.name, playerIDs++, 250, 250);
+        playerConnectionMap.put(connection.getID(), player);
+        sendMapToPlayer(connection);
+        sendWelcomeMessages(connection);
+        sendIdentificationMessage(connection, player);
+        logger.debug("Player " + player.getName() + " has joined the server");
+        sendPlayerToExistingClients(connection, player);
+        sendExistingPlayersToClient(connection.getID(), player);
+        sendEnemies(connection.getID(), smallEnemies);
+        sendEnemies(connection.getID(), bigEnemies);
+    }
+
+    private static void sendPlayerToExistingClients(Connection connection, PlayerData player) {
+        CreatePlayerPacket pck = new CreatePlayerPacket();
+        pck.player = player;
+        server.sendToAllExceptTCP(connection.getID(), pck);
+    }
+
+    private static void sendMapToPlayer(Connection connection) {
+        MapPacket mapPacket = new MapPacket();
+        mapPacket.gridSize = mapSize;
+        mapPacket.mapString = gameMapString;
+        server.sendToTCP(connection.getID(), mapPacket);
+    }
+
+    private static void sendWelcomeMessages(Connection connection) {
+        MessageSender.sendMessageToSingle(connection, server, "You joined the server");
+        MessageSender.sendMessageToAllExcept(connection, server, "A player has joined the server");
+    }
+
+    private static void sendIdentificationMessage(Connection connection, PlayerData player) {
+        IdPacket idPacket = new IdPacket();
+        idPacket.id = player.getId();
+        idPacket.name = player.getName();
+        server.sendToTCP(connection.getID(), idPacket);
+    }
+
+    private static boolean isValidName(String name) {
+        return playerConnectionMap.values().stream().noneMatch(p -> p.getName().equals(name));
+    }
+
+    private static void sendEnemies(int id, ArrayList<Enemy> enemies) {
+        EnemyPacket enemyPacket = new EnemyPacket();
+        for (Enemy enemy : enemies) {
+            enemyPacket.addEnemy(enemy);
+        }
+        server.sendToTCP(id, enemyPacket);
+    }
+
+    private static void sendExistingPlayersToClient(int id, PlayerData player) {
+        for (PlayerData tempPlayer : playerConnectionMap.values()) {
+            if (tempPlayer != player) {
+                CreatePlayerPacket createPlayerPacket = new CreatePlayerPacket();
+                createPlayerPacket.player = tempPlayer;
+                server.sendToTCP(id, createPlayerPacket);
             }
         }
     }
@@ -61,12 +170,13 @@ public class Server {
         public Timer() {
             start();
         }
+
         public void run() {
             //Main loop to space out updates and entity checking
             while (true) {
                 now = System.nanoTime();
 
-                Update();
+                update();
 
                 updateTime = System.nanoTime() - now;
                 wait = (OPTIMAL_TIME - updateTime) / 1000000;
@@ -80,7 +190,7 @@ public class Server {
         }
     }
 
-    private static void Update() {
+    private static void update() {
         for (Enemy enemy : smallEnemies) {
             enemy.incrementTick(TARGET_FPS);
         }
@@ -91,97 +201,12 @@ public class Server {
         sendEnemyInfo(bigEnemies);
     }
 
-    public static void sendEnemyInfo(ArrayList<Enemy> enemies){
+    public static void sendEnemyInfo(ArrayList<Enemy> enemies) {
         for (Enemy enemy : enemies) {
-            for (PrintWriter writer : writers) {
-                writer.println("ENI " + enemy.getID() + " " + enemy.getInfo());
-            }
+            MessagePacket messagePacket = new MessagePacket();
+            messagePacket.message = "ENI " + enemy.getID() + " " + enemy.getInfo();
+            server.sendToAllTCP(messagePacket);
         }
     }
 
-    private static class Handler implements Runnable {
-        private final Socket socket;
-        private Scanner in;
-        private PrintWriter out;
-        private String name;
-
-
-        public Handler(Socket socket) {
-            this.socket = socket;
-        }
-
-        public void sendToAll(String message) {
-            for (PrintWriter writer : writers) {
-                if (writer != out) {
-                    writer.println(message);
-                }
-            }
-        }
-
-        public void sendCurrentPlayers() {
-            for (String otherName : names) {
-                if (!otherName.equals(name)) {
-                    logger.debug("Sent name: " + otherName);
-                    out.println("CRT " + otherName);
-                }
-            }
-        }
-
-        public void sendEnemies(ArrayList<Enemy> enemies) {
-            for (Enemy enemy : enemies) {
-                logger.debug("Sent enemy: " + enemy.getName()+ " " + enemy.getID());
-                out.println("ENM " + enemy.getName() + " " + enemy.getID() + " " + enemy.getX() + " " + enemy.getY());
-            }
-        }
-
-        public void run() {
-            try {
-                in = new Scanner(socket.getInputStream());
-                out = new PrintWriter(socket.getOutputStream(), true);
-
-                while (true) {
-                    out.println("SBN");
-                    name = in.nextLine();
-                    if (name == null) {
-                        return;
-                    }
-                    synchronized (names) {
-                        if (!name.isBlank() && !names.contains(name)) {
-                            names.add(name);
-                            break;
-                        }
-                    }
-                }
-                out.println("MAP " + mapSize + " " + gameMapString);
-                out.println("MSG You joined the server");
-                logger.debug("Player " + name + " has joined the server");
-                sendToAll("MSG A player has joined the server");
-                sendToAll("CRT " + name);
-                sendCurrentPlayers();
-                writers.add(out);
-
-                sendEnemies(smallEnemies);
-                sendEnemies(bigEnemies);
-
-                while (true) {
-                    String input = in.nextLine();
-                    sendToAll(input + " " + name);
-                }
-            } catch (Exception e) {
-                logger.error(e);
-            } finally {
-                if (out != null) {
-                    writers.remove(out);
-                    names.remove(name);
-                    logger.info("Player " + name + " has left the server");
-                    sendToAll("MSG A player has left");
-                    sendToAll("DLT " + name);
-                }
-                try {
-                    socket.close();
-                } catch (IOException ignored) {
-                }
-            }
-        }
-    }
 }

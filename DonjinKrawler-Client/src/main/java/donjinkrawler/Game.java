@@ -1,11 +1,15 @@
 package donjinkrawler;
 
+import krawlercommon.PlayerData;
+import krawlercommon.enemies.Enemy;
+import krawlercommon.packets.MoveCharacter;
+import krawlercommon.packets.RoomPacket;
+
 import java.awt.*;
 import java.awt.event.*;
-import java.io.PrintWriter;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.swing.*;
 
 public class Game extends JPanel implements ActionListener {
@@ -17,43 +21,32 @@ public class Game extends JPanel implements ActionListener {
         BOTTOM
     }
 
+    com.esotericsoftware.kryonet.Client client;
     private final Timer timer;
     private final Player player;
     private GameMap gameMap;
     private final int delay = 10;
-    private int mouseX = 0;
-    private int mouseY = 0;
-    private double angle;
-    private double rotate;
-    private int counter = 0;
-    private static final Set<AbstractShell> shells = new HashSet<>();
-    private int[][] mapGrid;
+    private static final Map<Integer, AbstractShell> shells = new ConcurrentHashMap<>();
+    private final int[][] mapGrid;
     //saves states if the map cell is cleared(1) or not (0)
-    private int[][] mapState;
+    private final int[][] mapState;
 
     static class CurrentCell {
         public static int x = 0;
         public static int y = 0;
     }
 
-    private final Scanner in;
-    private final PrintWriter out;
     private final JLabel label;
 
 
-    public Game(Scanner in, PrintWriter out, JLabel label, Player player, int[][] mapGrid) {
-        this.in = in;
-        this.out = out;
+    public Game(com.esotericsoftware.kryonet.Client client, JLabel label, Player player, int[][] mapGrid) {
         this.label = label;
         this.player = player;
         this.mapGrid = mapGrid;
         this.mapState = new int[mapGrid.length][mapGrid.length];
         this.mapState[0][0] = 1;
         this.gameMap = new GameMap(mapGrid[CurrentCell.x][CurrentCell.y], doorLocations());
-
-        if (this.in != null) {
-            new ServerReader(in, label);
-        }
+        this.client = client;
 
         addKeyListener(new Game.TAdapter());
         setBackground(Color.black);
@@ -92,7 +85,7 @@ public class Game extends JPanel implements ActionListener {
         Graphics2D g2dd = (Graphics2D) g;
         gameMap.draw(g);
         drawUnit(g);
-        for (AbstractShell pl : shells) {
+        for (AbstractShell pl : shells.values()) {
             g2dd.drawImage(pl.getImage(), pl.getX(), pl.getY(), this);
             g2dd.setColor(Color.BLUE);
             g2dd.drawString(pl.getName() + " " + pl.getID(), pl.getX(), pl.getY() + 30);
@@ -120,48 +113,61 @@ public class Game extends JPanel implements ActionListener {
             if (nextRoom == DoorDirection.LEFT) {
                 CurrentCell.y -= 1;
                 player.setCoordinates(400, 250);
+                movePlayerShellsToRoom(400, 250);
             } else if (nextRoom == DoorDirection.TOP) {
                 CurrentCell.x -= 1;
                 player.setCoordinates(250, 400);
+                movePlayerShellsToRoom(250, 400);
             } else if (nextRoom == DoorDirection.RIGHT) {
                 CurrentCell.y += 1;
                 player.setCoordinates(40, 250);
+                movePlayerShellsToRoom(40, 250);
             } else if (nextRoom == DoorDirection.BOTTOM) {
                 CurrentCell.x += 1;
                 player.setCoordinates(250, 40);
+                movePlayerShellsToRoom(250, 40);
             }
-            out.println("ROM " + CurrentCell.x + " " + CurrentCell.y + " " + nextRoom);
+            sendRoomPacket(nextRoom);
             gameMap = new GameMap(mapGrid[CurrentCell.x][CurrentCell.y], doorLocations());
         }
         if (player.hasChangedPosition()) {
-            out.println("POZ " + player.getX() + " " + player.getY());
+            sendPositionUpdate();
         }
-        if (counter == 100) {
-            out.println("POZ " + player.getX() + " " + player.getY());
-            counter = 0;
-        }
-        counter++;
 
         player.move();
         repaint();
     }
 
-    private AbstractShell findPlayerInMap(String name) {
-        for (AbstractShell pl : shells) {
-            if (pl.getName().equals(name)) {
-                return pl;
-            }
-        }
-        return null;
+    private void sendRoomPacket(DoorDirection nextRoom) {
+        RoomPacket roomPacket = new RoomPacket();
+        roomPacket.x = CurrentCell.x;
+        roomPacket.y = CurrentCell.y;
+        roomPacket.direction = nextRoom.toString();
+        client.sendTCP(roomPacket);
     }
 
-    private AbstractShell findEnemyInMap(int id) {
-        for (AbstractShell enemy : shells) {
-            if (enemy.getID() == id) {
-                return enemy;
+    private void sendPositionUpdate() {
+        MoveCharacter msg = new MoveCharacter();
+        msg.id = player.getId();
+        msg.x = player.getX();
+        msg.y = player.getY();
+        client.sendTCP(msg);
+    }
+
+    private void movePlayerShellsToRoom(int x, int y) {
+        for (AbstractShell sh : shells.values()) {
+            if (sh instanceof PlayerShell) {
+                sh.setX(x);
+                sh.setY(y);
             }
         }
-        return null;
+    }
+
+    public void addPlayerShell(PlayerData player) {
+        PlayerShell playerShell = new PlayerShell(player.getName());
+        playerShell.setX(player.getX());
+        playerShell.setY(player.getY());
+        shells.put(player.getId(), playerShell);
     }
 
     private class TAdapter extends KeyAdapter {
@@ -176,79 +182,50 @@ public class Game extends JPanel implements ActionListener {
         }
     }
 
-    public class ServerReader extends Thread {
+    public void changeRoom(RoomPacket roomPacket) {
+        int mapX = roomPacket.x;
+        int mapY = roomPacket.y;
 
-        Scanner in;
-        JLabel label;
+        String direction = roomPacket.direction;
+        CurrentCell.x = mapX;
+        CurrentCell.y = mapY;
+        gameMap = new GameMap(mapGrid[mapX][mapY], doorLocations());
 
-        public ServerReader(Scanner in, JLabel label) {
-            this.in = in;
-            this.label = label;
-            start();
+        if (direction.equals("LEFT")) {
+            player.setCoordinates(400, 250);
+        } else if (direction.equals("TOP")) {
+            player.setCoordinates(250, 400);
+        } else if (direction.equals("RIGHT")) {
+            player.setCoordinates(40, 250);
+        } else if (direction.equals("BOTTOM")) {
+            player.setCoordinates(250, 40);
         }
+    }
 
-        public void run() {
-            while (true) {
-                if (in.hasNextLine()) {
-                    String response = in.nextLine();
-                    if (response.startsWith("CRT")) {
-                        String newPlayerName = response.substring(4);
-                        shells.add(new PlayerShell(newPlayerName));
-                    } else if (response.startsWith("MSG")) {
-                        label.setText(response.substring(4));
-                    } else if (response.startsWith("POZ")) {
-                        String data = response.substring(4);
-                        String[] arrOfStr = data.split(" ", 0);
-                        if (arrOfStr.length == 3) {
-                            AbstractShell temp = findPlayerInMap(arrOfStr[2]);
-                            temp.setX(Integer.parseInt(arrOfStr[0]));
-                            temp.setY(Integer.parseInt(arrOfStr[1]));
-                        }
-                    } else if (response.startsWith("DLT")) {
-                        String discPlayerName = response.substring(4);
-                        AbstractShell temp = findPlayerInMap(discPlayerName);
-                        shells.remove(temp);
-                    } else if (response.startsWith("ROM")) {
-                        String data = response.substring(4);
-                        String[] arrOfStr = data.split(" ", 0);
-
-                        int mapX = Integer.parseInt(arrOfStr[0]);
-                        int mapY = Integer.parseInt(arrOfStr[1]);
-
-                        String direction = arrOfStr[2];
-                        gameMap = new GameMap(mapGrid[mapX][mapY], doorLocations());
-
-                        if (direction.equals("LEFT")) {
-                            player.setCoordinates(400, 250);
-                        } else if (direction.equals("TOP")) {
-                            player.setCoordinates(250, 400);
-                        } else if (direction.equals("RIGHT")) {
-                            player.setCoordinates(40, 250);
-                        } else if (direction.equals("BOTTOM")) {
-                            player.setCoordinates(250, 40);
-                        }
-
-                    } else if (response.startsWith("ENM")) {
-                        String data = response.substring(4);
-                        String[] arrOfStr = data.split(" ", 0);
-                        int tempID = Integer.parseInt(arrOfStr[1]);
-                        int tempX = Integer.parseInt(arrOfStr[2]);
-                        int tempY = Integer.parseInt(arrOfStr[3]);
-                        shells.add(new EnemyShell(arrOfStr[0], tempID, tempX, tempY));
-                    } else if (response.startsWith("ENI")) {
-                        String data = response.substring(4);
-                        String[] arrOfStr = data.split(" ", 0);
-                        int tempID = Integer.parseInt(arrOfStr[0]);
-                        String tempInfo = arrOfStr[1];
-                        if(tempInfo == null)
-                            tempInfo = "no info";
-                        AbstractShell temp = findEnemyInMap(tempID);
-                        if (temp != null)
-                            temp.setInfo(tempInfo);
-                    }
-                }
-            }
+    public void updateEnemyInfo(String enemyData) {
+        String[] arrOfStr = enemyData.substring(4).split(" ");
+        int tempID = Integer.parseInt(arrOfStr[0]);
+        String tempInfo = arrOfStr[1];
+        AbstractShell temp = shells.get(tempID);
+        if (temp != null) {
+            temp.setInfo(tempInfo);
         }
+    }
+
+    public void addEnemies(List<Enemy> enemies) {
+        enemies.forEach(e -> shells.put(e.getID(), new EnemyShell(e.getName(), e.getID(), e.getX(), e.getY())));
+    }
+
+    public void changeShellPosition(MoveCharacter packet) {
+        AbstractShell temp = shells.get(packet.id);
+        if (temp != null) {
+            temp.setX(packet.x);
+            temp.setY(packet.y);
+        }
+    }
+
+    public void deletePlayerShell(int id) {
+        shells.remove(id);
     }
 
 }

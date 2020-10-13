@@ -15,8 +15,10 @@ public class Player {
     private final String name;
     private Image image;
     private Boolean hasChangedPosition = false;
+    private int id;
 
-    public Player(String name) {
+    public Player(int id, String name) {
+        this.id = id;
         this.name = name;
         loadImage();
     }
@@ -29,10 +31,12 @@ public class Player {
     }
 
     public void move() {
-        if ((dx < 0 && x - dx > 2) || (dx > 0 && x + width + dx < 500))
+        if ((dx < 0 && x - dx > 2) || (dx > 0 && x + width + dx < 500)) {
             x += dx;
-        if ((dy < 0 && y - dy > 2) || (dy > 0 && y + height + 50 + dy < 500))
+        }
+        if ((dy < 0 && y - dy > 2) || (dy > 0 && y + height + 50 + dy < 500)) {
             y += dy;
+        }
     }
 
     public int getX() {
@@ -64,6 +68,14 @@ public class Player {
         return image;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public void keyPressed(KeyEvent e) {
         hasChangedPosition = true;
         int key = e.getKeyCode();
@@ -81,7 +93,7 @@ public class Player {
         }
 
         if (key == KeyEvent.VK_DOWN) {
-                dy = 2;
+            dy = 2;
         }
     }
 

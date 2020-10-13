@@ -1,65 +1,110 @@
 package donjinkrawler;
 
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.minlog.Log;
+import krawlercommon.packets.*;
+import krawlercommon.RegistrationManager;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.InetAddress;
-import java.net.Socket;
-import java.util.Scanner;
 
 public class Client {
 
-    private final JFrame frame = new JFrame();
-    private final int screenWidth = 500;
-    private final int screenHeight = 500;
+    private static final int screenWidth = 500;
+    private static final int screenHeight = 500;
+    private static final int SERVER_TCP_PORT = 54555;
+    private static final int SERVER_UDP_PORT = 54777;
 
-    private final int serverPort = 59001;
+    private com.esotericsoftware.kryonet.Client kryoClient;
+    private final JFrame frame = new JFrame();
+    private final JLabel messageLabel = new JLabel("...");
+    private Game game;
     private final String serverAddress;
-    private Scanner in;
-    private PrintWriter out;
     private String name;
     private int[][] mapGrid;
 
     public Client(String serverAddress) throws IOException {
+        setupKryo();
         this.serverAddress = serverAddress;
-        initConnection();
         logIn();
-        initUI();
     }
 
-    private void initConnection() throws IOException {
-        var socket = new Socket(serverAddress, serverPort);
-        in = new Scanner(socket.getInputStream());
-        out = new PrintWriter(socket.getOutputStream(), true);
-    }
+    private void setupKryo() throws IOException {
+        Log.set(Log.LEVEL_DEBUG);
+        kryoClient = new com.esotericsoftware.kryonet.Client();
+        kryoClient.start();
+        kryoClient.connect(5000, serverAddress, SERVER_TCP_PORT, SERVER_UDP_PORT);
+        RegistrationManager.registerKryo(kryoClient.getKryo());
 
-    private void logIn() {
-        while (in.hasNextLine()) {
-            var response = in.nextLine();
-            if (response.startsWith("SBN")) {
-                name = getName();
-                if ((name != null) && (name.length() > 0)) {
-                    out.println(name);
-                } else {
-                    System.exit(0);
+        kryoClient.addListener(new Listener() {
+
+            public void received(Connection connection, Object object) {
+                if (object instanceof MessagePacket) {
+                    handleMessagePacket((MessagePacket) object);
+                } else if (object instanceof MapPacket) {
+                    parseMap((MapPacket) object);
+                } else if (object instanceof IdPacket) {
+                    handleIdPacket((IdPacket) object);
+                } else if (object instanceof EnemyPacket && game != null) {
+                    EnemyPacket enemyPacket = (EnemyPacket) object;
+                    game.addEnemies(enemyPacket.getEnemies());
+                } else if (object instanceof MoveCharacter && game != null) {
+                    MoveCharacter msg = (MoveCharacter) object;
+                    game.changeShellPosition(msg);
+                } else if (object instanceof CreatePlayerPacket && game != null) {
+                    CreatePlayerPacket packet = (CreatePlayerPacket) object;
+                    game.addPlayerShell(packet.player);
+                } else if (object instanceof DisconnectPacket && game != null) {
+                    DisconnectPacket dcPacket = (DisconnectPacket) object;
+                    game.deletePlayerShell(dcPacket.id);
+                } else if (object instanceof RoomPacket && game != null) {
+                    game.changeRoom((RoomPacket) object);
                 }
-
-            } else if (response.startsWith("MAP")) {
-                String data = response.substring(4);
-                String[] arrOfStr = data.split(" ", 0);
-                int gridSize = Integer.parseInt(arrOfStr[0]);
-                String mapString = arrOfStr[1];
-                mapGrid = parseMapString(gridSize, mapString);
-                printMap(mapGrid, gridSize);
-                break;
             }
+        });
+    }
+
+    private void handleIdPacket(IdPacket idPacket) {
+        name = idPacket.name;
+        initUI(idPacket.id);
+    }
+
+    private void initUI(int playerId) {
+
+        frame.setTitle("Donjin Krawler. Player - " + name);
+        frame.setSize(screenWidth, screenHeight);
+
+        frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        messageLabel.setBackground(Color.lightGray);
+        frame.getContentPane().add(messageLabel, BorderLayout.SOUTH);
+        game = new Game(kryoClient, messageLabel, new Player(playerId, name), mapGrid);
+        frame.add(game);
+        frame.setVisible(true);
+
+    }
+
+    private void handleMessagePacket(MessagePacket messagePacket) {
+        if (messagePacket.message.startsWith("MSG")) {
+            messageLabel.setText(messagePacket.message.substring(4));
+        } else if (messagePacket.message.startsWith("ENI") && game != null) {
+            game.updateEnemyInfo(messagePacket.message);
         }
+    }
+
+    private void parseMap(MapPacket mapPacket) {
+        int gridSize = mapPacket.gridSize;
+        mapGrid = parseMapString(gridSize, mapPacket.mapString);
+        printMap(mapGrid, gridSize);
     }
 
     private int[][] parseMapString(int gridSize, String mapString) {
         int[][] tempMapGrid = new int[gridSize][gridSize];
-        int stringLength = gridSize * gridSize;
         int currentChar = 0;
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
@@ -80,25 +125,21 @@ public class Client {
         }
     }
 
-    private void initUI() {
-
-        frame.setTitle("Donjin Krawler. Player - " + name);
-        frame.setSize(screenWidth, screenHeight);
-
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        JLabel messageLabel = new JLabel("...");
-        messageLabel.setBackground(Color.lightGray);
-        frame.getContentPane().add(messageLabel, BorderLayout.SOUTH);
-
-        frame.add(new Game(in, out, messageLabel, new Player(name), mapGrid));
-
+    private void logIn() {
+        name = getName();
+        if ((name != null) && (name.length() > 0)) {
+            LoginPacket loginPacket = new LoginPacket();
+            loginPacket.name = name;
+            if (kryoClient.isConnected()) {
+                kryoClient.sendTCP(loginPacket);
+            }
+        } else {
+            System.exit(0);
+        }
     }
 
     private String getName() {
-        return JOptionPane.showInputDialog(frame, "Pasirink vardą:", "Vartotojo vardas",
+        return JOptionPane.showInputDialog(frame, "Choose name:", "Username",
                 JOptionPane.PLAIN_MESSAGE);
     }
 
@@ -109,7 +150,6 @@ public class Client {
         } else {
             address = InetAddress.getByName("localhost").getHostAddress();
         }
-        Client window = new Client(address);
-        window.frame.setVisible(true);
+        new Client(address);
     }
 }
