@@ -1,16 +1,11 @@
 package krawlercommon.map;
 
-
-import krawlercommon.items.ItemData;
+import krawlercommon.items.ItemLocationData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-// TODO: refactor to RoomData class for things that are networked and Room class for things
 public class RoomData {
-    // Item list
-    // Walls object?
-    // Enemies?
     private int id;
     private boolean cleared;
     private RoomData left;
@@ -18,7 +13,7 @@ public class RoomData {
     private RoomData top;
     private RoomData bottom;
     private final ArrayList<Wall> walls;
-    private final HashMap<Integer, ItemData> items;
+    private final HashMap<Integer, ItemLocationData> items;
     private final ArrayList<Obstacle> obstacles;
     private final ArrayList<Decoration> decorations;
     private int tileTexture;
@@ -83,7 +78,7 @@ public class RoomData {
         return walls;
     }
 
-    public HashMap<Integer, ItemData> getItems() {
+    public HashMap<Integer, ItemLocationData> getItems() {
         return items;
     }
 

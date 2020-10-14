@@ -1,6 +1,6 @@
 package krawlercommon.items;
 
-public class WeaponData extends ItemData {
+public class WeaponData extends ItemLocationData {
 
     public WeaponData() {
     }

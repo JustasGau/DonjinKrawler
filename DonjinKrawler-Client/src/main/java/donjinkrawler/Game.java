@@ -40,8 +40,6 @@ public class Game extends JPanel implements ActionListener {
         setBackground(Color.black);
         setFocusable(true);
 
-
-
         timer = new Timer(delay, this);
         timer.start();
     }
@@ -58,7 +56,9 @@ public class Game extends JPanel implements ActionListener {
         gameMap.currentRoom.draw(g);
         drawCurrentPlayer(g);
         for (AbstractShell pl : shells.values()) {
-            if (gameMap.currentRoom.roomData.getRoomType() != RoomType.ITEM && !(pl instanceof EnemyShell)) {
+            if (gameMap.currentRoom.roomData.getRoomType() != RoomType.ITEM) {
+                drawShell(g2d, pl);
+            } else if (!(pl instanceof EnemyShell)) {
                 drawShell(g2d, pl);
             }
         }

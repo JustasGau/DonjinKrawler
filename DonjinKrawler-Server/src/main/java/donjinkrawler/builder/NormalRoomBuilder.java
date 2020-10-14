@@ -1,6 +1,6 @@
 package donjinkrawler.builder;
 
-import krawlercommon.items.ItemData;
+import krawlercommon.items.ItemLocationData;
 import krawlercommon.items.ItemGenerator;
 import krawlercommon.map.Obstacle;
 import krawlercommon.map.ObstacleType;
@@ -51,7 +51,7 @@ public class NormalRoomBuilder extends RoomBuilder {
 
     @Override
     public RoomBuilder buildItems() {
-        ItemData item = ItemGenerator.generateRandomItem(roomData.getItems().size());
+        ItemLocationData item = ItemGenerator.generateRandomItem(roomData.getItems().size());
         roomData.getItems().put(roomData.getItems().size(), item);
         return this;
     }

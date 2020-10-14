@@ -52,7 +52,7 @@ public class RegistrationManager {
         kryo.register(Door.class);
         kryo.register(DoorDirection.class);
         kryo.register(Wall.class);
-        kryo.register(ItemData.class);
+        kryo.register(ItemLocationData.class);
         kryo.register(WeaponData.class);
         kryo.register(ArmorData.class);
         kryo.register(SpeedPotionData.class);

@@ -4,7 +4,7 @@ import krawlercommon.items.*;
 
 public class ItemMaker {
 
-    public static BaseItem makeItem(ItemData itemData) {
+    public static BaseItem makeItem(ItemLocationData itemData) {
         if (itemData instanceof ArmorData) {
             return new Armor((ArmorData) itemData);
         } else if (itemData instanceof SpeedPotionData) {

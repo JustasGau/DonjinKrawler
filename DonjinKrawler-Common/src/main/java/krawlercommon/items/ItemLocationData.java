@@ -1,15 +1,15 @@
 package krawlercommon.items;
 
-public abstract class ItemData {
+public abstract class ItemLocationData {
     protected int id;
     protected int x;
     protected int y;
 
-    public ItemData() {
+    public ItemLocationData() {
 
     }
 
-    public ItemData(int id, int x, int y) {
+    public ItemLocationData(int id, int x, int y) {
         this.x = x;
         this.y = y;
         this.id = id;

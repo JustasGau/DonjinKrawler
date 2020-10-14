@@ -1,13 +1,13 @@
 package donjinkrawler.items;
 
-import krawlercommon.items.ItemData;
+import krawlercommon.items.ItemLocationData;
 
 import javax.swing.*;
 import java.awt.*;
 
 public abstract class BaseItem {
 
-    protected ItemData itemData;
+    protected ItemLocationData itemData;
     protected Image image;
 
     protected void loadImage(String imagePath) {
@@ -19,6 +19,6 @@ public abstract class BaseItem {
         return image;
     }
 
-    public abstract ItemData getData();
+    public abstract ItemLocationData getData();
 
 }

@@ -15,12 +15,12 @@ public class ItemGenerator {
 
     }
 
-    public static ItemData generateRandomItem(int id) {
+    public static ItemLocationData generateRandomItem(int id) {
         Random rand = new Random();
         return generateRandomItem(id, rand.nextInt(300) + 30, rand.nextInt(300) + 30);
     }
 
-    public static ItemData generateRandomItem(int id, int x, int y) {
+    public static ItemLocationData generateRandomItem(int id, int x, int y) {
 
         ItemType itemType = ItemType.values()[new Random().nextInt(ItemType.values().length)];
         if (itemType == ItemType.ARMOR) {
@@ -37,12 +37,12 @@ public class ItemGenerator {
         return null;
     }
 
-    public static ItemData generateRandomPotion(int id) {
+    public static ItemLocationData generateRandomPotion(int id) {
         Random rand = new Random();
         return generateRandomPotion(id, rand.nextInt(300) + 30, rand.nextInt(300) + 30);
     }
 
-    public static ItemData generateRandomPotion(int id, int x, int y) {
+    public static ItemLocationData generateRandomPotion(int id, int x, int y) {
         Random rand = new Random();
         int num = rand.nextInt(3) + 1;
         if (num == 1) {

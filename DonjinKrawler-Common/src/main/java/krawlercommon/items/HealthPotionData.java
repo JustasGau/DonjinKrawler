@@ -1,6 +1,6 @@
 package krawlercommon.items;
 
-public class HealthPotionData extends ItemData {
+public class HealthPotionData extends ItemLocationData {
 
     public HealthPotionData() {
     }

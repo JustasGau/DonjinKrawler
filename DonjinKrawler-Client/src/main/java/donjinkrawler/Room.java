@@ -2,7 +2,7 @@ package donjinkrawler;
 
 import donjinkrawler.items.BaseItem;
 import donjinkrawler.items.ItemMaker;
-import krawlercommon.items.ItemData;
+import krawlercommon.items.ItemLocationData;
 import krawlercommon.map.*;
 
 import javax.imageio.ImageIO;
@@ -145,7 +145,7 @@ public class Room {
     }
 
     private void drawItems(Graphics2D g2d) {
-        for (ItemData item : roomData.getItems().values()) {
+        for (ItemLocationData item : roomData.getItems().values()) {
             BaseItem gameItem = ItemMaker.makeItem(item);
             if (gameItem != null) {
                 g2d.drawImage(gameItem.getImage(), gameItem.getData().getX(), gameItem.getData().getY(), null);
