@@ -2,12 +2,14 @@ package donjinkrawler;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.minlog.Log;
 import krawlercommon.PlayerData;
 import krawlercommon.enemies.*;
 import krawlercommon.enemies.big.BigEnemyFactory;
 import krawlercommon.enemies.small.SmallEnemyFactory;
 import donjinkrawler.logging.LoggerSingleton;
 import krawlercommon.RegistrationManager;
+import krawlercommon.map.RoomData;
 import krawlercommon.packets.*;
 
 import java.io.IOException;
@@ -18,23 +20,28 @@ public class Server {
     private static final com.esotericsoftware.kryonet.Server server =
             new com.esotericsoftware.kryonet.Server(16384 * 64, 16384 * 64);
     private static final Map<Integer, PlayerData> playerConnectionMap = new HashMap<>();
-    private static int playerIDs = 1;
+
     private static final int mapSize = 10;
-    private static final GameMapGenerator generator = new GameMapGenerator(mapSize);
-    private static final String gameMapString = generator.generate();
+
     private static final LoggerSingleton logger = LoggerSingleton.getInstance();
     private static final Random rand = new Random();
+
     private static final EnemyGenerator smallEnemyGenerator = new EnemyGenerator(new SmallEnemyFactory());
     private static final EnemyGenerator bigEnemyGenerator = new EnemyGenerator(new BigEnemyFactory());
-
     private static final ArrayList<Enemy> smallEnemies = smallEnemyGenerator.generateRandomEnemies(5);
     private static final ArrayList<Enemy> bigEnemies = bigEnemyGenerator.generateRandomEnemies(1);
+
+    private static HashMap<Integer, RoomData> rooms;
+    private static int playerIDs = 1;
+    private static int currentRoom = 0;
 
     private static int TARGET_FPS = 60;
     private static long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
 
 
     public static void main(String[] args) throws IOException {
+        Log.set(Log.LEVEL_ERROR);
+        server.getKryo().setReferences(true);
         server.start();
         server.bind(54555, 54777);
         RegistrationManager.registerKryo(server.getKryo());
@@ -57,8 +64,14 @@ public class Server {
 
         });
         new Timer();
-
+        initMap();
         logger.info("Server is running");
+    }
+
+    private static void initMap() {
+        GameMapGenerator generator = new GameMapGenerator(mapSize);
+        List<String> gameMapString = generator.generate();
+        rooms = generator.generateRoomsFromString(gameMapString);
     }
 
     private static void handleLogin(Connection connection, LoginPacket object) {
@@ -82,6 +95,7 @@ public class Server {
     }
 
     private static void handleRoomChange(Connection connection, RoomPacket roomPacket) {
+        currentRoom = roomPacket.id;
         server.sendToAllExceptUDP(connection.getID(), roomPacket);
     }
 
@@ -124,7 +138,7 @@ public class Server {
     private static void sendMapToPlayer(Connection connection) {
         MapPacket mapPacket = new MapPacket();
         mapPacket.gridSize = mapSize;
-        mapPacket.mapString = gameMapString;
+        mapPacket.rooms = rooms;
         server.sendToTCP(connection.getID(), mapPacket);
     }
 
@@ -135,8 +149,8 @@ public class Server {
 
     private static void sendIdentificationMessage(Connection connection, PlayerData player) {
         IdPacket idPacket = new IdPacket();
-        idPacket.id = player.getId();
-        idPacket.name = player.getName();
+        idPacket.currentRoom = currentRoom;
+        idPacket.playerData = player;
         server.sendToTCP(connection.getID(), idPacket);
     }
 
@@ -179,7 +193,7 @@ public class Server {
                 update();
 
                 updateTime = System.nanoTime() - now;
-                wait = (OPTIMAL_TIME - updateTime) / 1000000;
+                wait = (OPTIMAL_TIME - updateTime);
 
                 try {
                     Thread.sleep(wait);

@@ -1,25 +1,25 @@
 package donjinkrawler;
 
+import krawlercommon.PlayerData;
+import krawlercommon.map.*;
+
 import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.util.List;
 import javax.swing.ImageIcon;
 
 public class Player {
-
+    private final PlayerData data;
     private int dx;
     private int dy;
     private int width;
     private int height;
-    private int x = 250;
-    private int y = 250;
-    private final String name;
     private Image image;
     private Boolean hasChangedPosition = false;
-    private int id;
+    int obstacleCollisionCount = 0;
 
-    public Player(int id, String name) {
-        this.id = id;
-        this.name = name;
+    public Player(PlayerData playerData) {
+        data = playerData;
         loadImage();
     }
 
@@ -30,26 +30,124 @@ public class Player {
         width = image.getWidth(null);
     }
 
-    public void move() {
-        if ((dx < 0 && x - dx > 2) || (dx > 0 && x + width + dx < 500)) {
-            x += dx;
+    public void move(List<Wall> walls, List<Door> doors, List<Obstacle> obstacles, List<Decoration> decorations) {
+        if (isCollidingWithObstacle(obstacles)) {
+            return;
         }
-        if ((dy < 0 && y - dy > 2) || (dy > 0 && y + height + 50 + dy < 500)) {
-            y += dy;
+        if (isCollidingWithDoor(doors)) {
+            return;
         }
+        if (isCollidingWithImmovableObject(walls) || isCollidingWithImmovableObject(decorations)) {
+            return;
+        }
+        data.setX(data.getX() + dx);
+        data.setY(data.getY() + dy);
+    }
+
+    private boolean isCollidingWithDoor(List<Door> doors) {
+        for (Door door : doors) {
+            if (isCollidingWith(door)) {
+                data.setX(data.getX() + dx);
+                data.setY(data.getY() + dy);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isCollidingWithImmovableObject(List<? extends CollidableObject> objects) {
+        for (CollidableObject object : objects) {
+            if (isCollidingWith(object)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isCollidingWithObstacle(List<Obstacle> obstacles) {
+        for (Obstacle obstacle : obstacles) {
+            if (isCollidingWith(obstacle)) {
+
+                handleObstacleCollision(obstacle);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void handleObstacleCollision(Obstacle obstacle) {
+        if (obstacle.getObstacleType() == ObstacleType.LAVA) {
+            reduceHealthFromObstacle(10);
+        } else if (obstacle.getObstacleType() == ObstacleType.SPIKES) {
+            reduceHealthFromObstacle(5);
+        } else if (obstacle.getObstacleType() == ObstacleType.SLIME) {
+            reducePlayerSpeed();
+        }
+        data.setX(data.getX() + dx);
+        data.setY(data.getY() + dy);
+    }
+
+    private void reducePlayerSpeed() {
+        if (dx != 0) {
+            if (dx > 0) {
+                dx = 1;
+            } else {
+                dx = -1;
+            }
+        }
+        if (dy != 0) {
+            if (dy > 0) {
+                dy = 1;
+            } else {
+                dy = -1;
+            }
+        }
+    }
+
+    private void reduceHealthFromObstacle(int health) {
+        obstacleCollisionCount++;
+        if (obstacleCollisionCount % 25 == 0) {
+            data.setHealth(data.getHealth() - health);
+            obstacleCollisionCount = 0;
+        }
+    }
+
+    private boolean isCollidingWith(CollidableObject obj) {
+        int topCornerX = data.getX() + dx;
+        int topCornerY = data.getY() + dy;
+        int botCornerX = data.getX() + width + dx;
+        int botCornerY = data.getY() + height + dy;
+        return obj.getTopX() < botCornerX && obj.getBotX() > topCornerX
+                && obj.getTopY() < botCornerY && obj.getBotY() > topCornerY;
+    }
+
+    private boolean isCollidingWith(Door door) {
+        int topCornerX = data.getX() + dx;
+        int topCornerY = data.getY() + dy;
+        int botCornerX = data.getX() + width + dx;
+        int botCornerY = data.getY() + height + dy;
+        return door.checkCollision(topCornerX, topCornerY, botCornerX, botCornerY, width, height);
     }
 
     public int getX() {
-        return x;
+        return data.getX();
     }
 
     public int getY() {
-        return y;
+        return data.getY();
+    }
+
+    public int getBotX() {
+        return data.getX() + image.getWidth(null);
+    }
+
+    public int getBotY() {
+        return data.getY() + image.getHeight(null);
     }
 
     public void setCoordinates(int x, int y) {
-        this.x = x;
-        this.y = y;
+        data.setX(x);
+        data.setY(y);
     }
 
     public Boolean hasChangedPosition() {
@@ -61,7 +159,7 @@ public class Player {
     }
 
     public String getName() {
-        return name;
+        return data.getName();
     }
 
     public Image getImage() {
@@ -69,11 +167,27 @@ public class Player {
     }
 
     public int getId() {
-        return id;
+        return data.getId();
     }
 
     public void setId(int id) {
-        this.id = id;
+        data.setId(id);
+    }
+
+    public PlayerData getData() {
+        return data;
+    }
+
+    public int getWidth() {
+        return image.getWidth(null);
+    }
+
+    public int getHeight() {
+        return image.getHeight(null);
+    }
+
+    public double getHealth() {
+        return data.getHealth();
     }
 
     public void keyPressed(KeyEvent e) {

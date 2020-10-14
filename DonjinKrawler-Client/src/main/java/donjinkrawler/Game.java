@@ -2,6 +2,9 @@ package donjinkrawler;
 
 import krawlercommon.PlayerData;
 import krawlercommon.enemies.Enemy;
+import krawlercommon.map.DoorDirection;
+import krawlercommon.map.RoomData;
+import krawlercommon.map.RoomType;
 import krawlercommon.packets.MoveCharacter;
 import krawlercommon.packets.RoomPacket;
 
@@ -14,64 +17,33 @@ import javax.swing.*;
 
 public class Game extends JPanel implements ActionListener {
 
-    enum DoorDirection {
-        LEFT,
-        TOP,
-        RIGHT,
-        BOTTOM
-    }
-
     com.esotericsoftware.kryonet.Client client;
     private final Timer timer;
     private final Player player;
     private GameMap gameMap;
     private final int delay = 10;
     private static final Map<Integer, AbstractShell> shells = new ConcurrentHashMap<>();
-    private final int[][] mapGrid;
-    //saves states if the map cell is cleared(1) or not (0)
-    private final int[][] mapState;
-
-    static class CurrentCell {
-        public static int x = 0;
-        public static int y = 0;
-    }
 
     private final JLabel label;
 
-
-    public Game(com.esotericsoftware.kryonet.Client client, JLabel label, Player player, int[][] mapGrid) {
+    public Game(com.esotericsoftware.kryonet.Client client,
+                JLabel label,
+                Player player,
+                Map<Integer, RoomData> rooms,
+                int currentRoom) {
         this.label = label;
         this.player = player;
-        this.mapGrid = mapGrid;
-        this.mapState = new int[mapGrid.length][mapGrid.length];
-        this.mapState[0][0] = 1;
-        this.gameMap = new GameMap(mapGrid[CurrentCell.x][CurrentCell.y], doorLocations());
+        this.gameMap = new GameMap(new Room(rooms.get(currentRoom)));
         this.client = client;
 
         addKeyListener(new Game.TAdapter());
         setBackground(Color.black);
         setFocusable(true);
 
+
+
         timer = new Timer(delay, this);
         timer.start();
-    }
-
-    //returns left, top, right, bottom door
-    private int[] doorLocations() {
-        int[] doors = {0, 0, 0, 0};
-        if (CurrentCell.y - 1 >= 0 && mapGrid[CurrentCell.x][CurrentCell.y - 1] != 0) {
-            doors[0] = 1;
-        }
-        if (CurrentCell.x - 1 >= 0 && mapGrid[CurrentCell.x - 1][CurrentCell.y] != 0) {
-            doors[1] = 1;
-        }
-        if (CurrentCell.y + 1 < mapGrid.length && mapGrid[CurrentCell.x][CurrentCell.y + 1] != 0) {
-            doors[2] = 1;
-        }
-        if (CurrentCell.x + 1 < mapGrid.length && mapGrid[CurrentCell.x + 1][CurrentCell.y] != 0) {
-            doors[3] = 1;
-        }
-        return doors;
     }
 
     @Override
@@ -82,23 +54,30 @@ public class Game extends JPanel implements ActionListener {
     }
 
     private void doDrawing(Graphics g) {
-        Graphics2D g2dd = (Graphics2D) g;
-        gameMap.draw(g);
-        drawUnit(g);
+        Graphics2D g2d = (Graphics2D) g;
+        gameMap.currentRoom.draw(g);
+        drawCurrentPlayer(g);
         for (AbstractShell pl : shells.values()) {
-            g2dd.drawImage(pl.getImage(), pl.getX(), pl.getY(), this);
-            g2dd.setColor(Color.BLUE);
-            g2dd.drawString(pl.getName() + " " + pl.getID(), pl.getX(), pl.getY() + 30);
-            g2dd.setColor(Color.YELLOW);
-            g2dd.drawString(pl.getInfo(), pl.getX(), pl.getY() + 50);
+            if (gameMap.currentRoom.roomData.getRoomType() != RoomType.ITEM && !(pl instanceof EnemyShell)) {
+                drawShell(g2d, pl);
+            }
         }
     }
 
-    private void drawUnit(Graphics g) {
+    private void drawCurrentPlayer(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.GREEN);
         g2d.drawImage(player.getImage(), player.getX(), player.getY(), this);
+        SwingUtils.drawHealthBar(g2d, player.getX(), player.getY(), 20, 5, player.getHealth());
+        g2d.setColor(Color.GREEN);
         g2d.drawString(player.getName(), player.getX(), player.getY() + 30);
+    }
+
+    private void drawShell(Graphics2D g2d, AbstractShell pl) {
+        g2d.drawImage(pl.getImage(), pl.getX(), pl.getY(), this);
+        g2d.setColor(Color.BLUE);
+        g2d.drawString(pl.getName() + " " + pl.getID(), pl.getX(), pl.getY() + 30);
+        g2d.setColor(Color.YELLOW);
+        g2d.drawString(pl.getInfo(), pl.getX(), pl.getY() + 50);
     }
 
     @Override
@@ -107,42 +86,40 @@ public class Game extends JPanel implements ActionListener {
     }
 
     private void gameUpdate() {
-        DoorDirection nextRoom = gameMap.update(player);
-        if (nextRoom != null) {
-            mapState[CurrentCell.x][CurrentCell.y] = 1;
-            if (nextRoom == DoorDirection.LEFT) {
-                CurrentCell.y -= 1;
+        DoorDirection direction = gameMap.update(player);
+        if (direction != null) {
+            if (direction == DoorDirection.LEFT) {
                 player.setCoordinates(400, 250);
-                movePlayerShellsToRoom(400, 250);
-            } else if (nextRoom == DoorDirection.TOP) {
-                CurrentCell.x -= 1;
+                movePlayerShells(400, 250);
+            } else if (direction == DoorDirection.TOP) {
                 player.setCoordinates(250, 400);
-                movePlayerShellsToRoom(250, 400);
-            } else if (nextRoom == DoorDirection.RIGHT) {
-                CurrentCell.y += 1;
+                movePlayerShells(250, 400);
+            } else if (direction == DoorDirection.RIGHT) {
                 player.setCoordinates(40, 250);
-                movePlayerShellsToRoom(40, 250);
-            } else if (nextRoom == DoorDirection.BOTTOM) {
-                CurrentCell.x += 1;
+                movePlayerShells(40, 250);
+            } else if (direction == DoorDirection.BOTTOM) {
                 player.setCoordinates(250, 40);
-                movePlayerShellsToRoom(250, 40);
+                movePlayerShells(250, 40);
             }
-            sendRoomPacket(nextRoom);
-            gameMap = new GameMap(mapGrid[CurrentCell.x][CurrentCell.y], doorLocations());
+            RoomData newRoom = gameMap.currentRoom.getRoomFromDirection(direction);
+            sendRoomPacket(direction, newRoom.getId());
+            gameMap.currentRoom = new Room(newRoom);
         }
         if (player.hasChangedPosition()) {
             sendPositionUpdate();
         }
 
-        player.move();
+        player.move(gameMap.currentRoom.getWalls(),
+                gameMap.currentRoom.getDoors(),
+                gameMap.currentRoom.getObstacles(),
+                gameMap.currentRoom.getDecorations());
         repaint();
     }
 
-    private void sendRoomPacket(DoorDirection nextRoom) {
+    private void sendRoomPacket(DoorDirection nextRoom, int roomID) {
         RoomPacket roomPacket = new RoomPacket();
-        roomPacket.x = CurrentCell.x;
-        roomPacket.y = CurrentCell.y;
         roomPacket.direction = nextRoom.toString();
+        roomPacket.id = roomID;
         client.sendTCP(roomPacket);
     }
 
@@ -154,7 +131,7 @@ public class Game extends JPanel implements ActionListener {
         client.sendTCP(msg);
     }
 
-    private void movePlayerShellsToRoom(int x, int y) {
+    private void movePlayerShells(int x, int y) {
         for (AbstractShell sh : shells.values()) {
             if (sh instanceof PlayerShell) {
                 sh.setX(x);
@@ -183,13 +160,10 @@ public class Game extends JPanel implements ActionListener {
     }
 
     public void changeRoom(RoomPacket roomPacket) {
-        int mapX = roomPacket.x;
-        int mapY = roomPacket.y;
-
         String direction = roomPacket.direction;
-        CurrentCell.x = mapX;
-        CurrentCell.y = mapY;
-        gameMap = new GameMap(mapGrid[mapX][mapY], doorLocations());
+        DoorDirection doorDirection = DoorDirection.valueOf(roomPacket.direction);
+        RoomData currentRoomData = gameMap.currentRoom.getRoomFromDirection(doorDirection);
+        gameMap.currentRoom = new Room(currentRoomData);
 
         if (direction.equals("LEFT")) {
             player.setCoordinates(400, 250);

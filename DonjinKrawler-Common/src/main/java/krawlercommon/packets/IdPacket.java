@@ -1,7 +1,8 @@
 package krawlercommon.packets;
 
-public class IdPacket {
+import krawlercommon.PlayerData;
 
-    public String name;
-    public int id;
+public class IdPacket {
+    public int currentRoom;
+    public PlayerData playerData;
 }
