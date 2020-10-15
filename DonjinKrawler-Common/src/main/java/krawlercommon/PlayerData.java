@@ -5,6 +5,7 @@ public class PlayerData {
     private int id;
     private int x;
     private int y;
+    private double health;
 
     public PlayerData() {
 
@@ -15,6 +16,7 @@ public class PlayerData {
         this.id = id;
         this.x = x;
         this.y = y;
+        health = 100;
     }
 
     public String getName() {
@@ -47,5 +49,13 @@ public class PlayerData {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public double getHealth() {
+        return health;
+    }
+
+    public void setHealth(double health) {
+        this.health = health;
     }
 }

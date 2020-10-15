@@ -3,6 +3,8 @@ package donjinkrawler;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
+import krawlercommon.PlayerData;
+import krawlercommon.map.RoomData;
 import krawlercommon.packets.*;
 import krawlercommon.RegistrationManager;
 
@@ -10,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.Map;
 
 public class Client {
 
@@ -24,7 +27,7 @@ public class Client {
     private Game game;
     private final String serverAddress;
     private String name;
-    private int[][] mapGrid;
+    private Map<Integer, RoomData> rooms;
 
     public Client(String serverAddress) throws IOException {
         setupKryo();
@@ -33,8 +36,9 @@ public class Client {
     }
 
     private void setupKryo() throws IOException {
-        Log.set(Log.LEVEL_DEBUG);
-        kryoClient = new com.esotericsoftware.kryonet.Client();
+        Log.set(Log.LEVEL_ERROR);
+        kryoClient = new com.esotericsoftware.kryonet.Client(16384, 16384);
+        kryoClient.getKryo().setReferences(true);
         kryoClient.start();
         kryoClient.connect(5000, serverAddress, SERVER_TCP_PORT, SERVER_UDP_PORT);
         RegistrationManager.registerKryo(kryoClient.getKryo());
@@ -45,7 +49,8 @@ public class Client {
                 if (object instanceof MessagePacket) {
                     handleMessagePacket((MessagePacket) object);
                 } else if (object instanceof MapPacket) {
-                    parseMap((MapPacket) object);
+                    MapPacket mapPacket = (MapPacket) object;
+                    rooms = mapPacket.rooms;
                 } else if (object instanceof IdPacket) {
                     handleIdPacket((IdPacket) object);
                 } else if (object instanceof EnemyPacket && game != null) {
@@ -68,11 +73,11 @@ public class Client {
     }
 
     private void handleIdPacket(IdPacket idPacket) {
-        name = idPacket.name;
-        initUI(idPacket.id);
+        name = idPacket.playerData.getName();
+        initUI(idPacket.currentRoom, idPacket.playerData);
     }
 
-    private void initUI(int playerId) {
+    private void initUI(int currentRoom, PlayerData playerData) {
 
         frame.setTitle("Donjin Krawler. Player - " + name);
         frame.setSize(screenWidth, screenHeight);
@@ -83,7 +88,7 @@ public class Client {
 
         messageLabel.setBackground(Color.lightGray);
         frame.getContentPane().add(messageLabel, BorderLayout.SOUTH);
-        game = new Game(kryoClient, messageLabel, new Player(playerId, name), mapGrid);
+        game = new Game(kryoClient, messageLabel, new Player(playerData), rooms, currentRoom);
         frame.add(game);
         frame.setVisible(true);
 
@@ -94,34 +99,6 @@ public class Client {
             messageLabel.setText(messagePacket.message.substring(4));
         } else if (messagePacket.message.startsWith("ENI") && game != null) {
             game.updateEnemyInfo(messagePacket.message);
-        }
-    }
-
-    private void parseMap(MapPacket mapPacket) {
-        int gridSize = mapPacket.gridSize;
-        mapGrid = parseMapString(gridSize, mapPacket.mapString);
-        printMap(mapGrid, gridSize);
-    }
-
-    private int[][] parseMapString(int gridSize, String mapString) {
-        int[][] tempMapGrid = new int[gridSize][gridSize];
-        int currentChar = 0;
-        for (int i = 0; i < gridSize; i++) {
-            for (int j = 0; j < gridSize; j++) {
-                tempMapGrid[i][j] = Character.getNumericValue(mapString.charAt(currentChar));
-                currentChar++;
-            }
-        }
-
-        return tempMapGrid;
-    }
-
-    private void printMap(int[][] arr, int size) {
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                System.out.print(arr[i][j]);
-            }
-            System.out.println();
         }
     }
 
