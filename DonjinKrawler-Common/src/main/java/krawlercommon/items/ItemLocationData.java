@@ -1,6 +1,6 @@
 package krawlercommon.items;
 
-public abstract class ItemLocationData {
+public abstract class ItemLocationData implements Cloneable {
     protected int id;
     protected int x;
     protected int y;
@@ -29,5 +29,10 @@ public abstract class ItemLocationData {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    @Override
+    public ItemLocationData clone() throws CloneNotSupportedException {
+        return (ItemLocationData) super.clone();
     }
 }

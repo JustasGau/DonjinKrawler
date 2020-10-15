@@ -67,4 +67,8 @@ public class Wall extends CollidableObject {
         this.texture = texture;
     }
 
+    protected Wall clone() throws CloneNotSupportedException {
+        return (Wall) super.clone();
+    }
+
 }

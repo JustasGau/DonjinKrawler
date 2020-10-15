@@ -1,6 +1,6 @@
 package krawlercommon.map;
 
-public class CollidableObject {
+public class CollidableObject implements Cloneable{
     protected int x;
     protected int y;
     protected int width;
@@ -63,5 +63,10 @@ public class CollidableObject {
 
     public int getBotY() {
         return y + height;
+    }
+
+    @Override
+    protected CollidableObject clone() throws CloneNotSupportedException {
+        return (CollidableObject) super.clone();
     }
 }

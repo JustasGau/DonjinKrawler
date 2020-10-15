@@ -1,5 +1,8 @@
-package donjinkrawler;
+package donjinkrawler.map;
 
+import donjinkrawler.FileUtils;
+import donjinkrawler.Player;
+import donjinkrawler.SwingUtils;
 import donjinkrawler.items.BaseItem;
 import donjinkrawler.items.ItemMaker;
 import krawlercommon.items.ItemLocationData;
@@ -14,17 +17,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Room {
+public class Room implements Cloneable {
 
-    RoomData roomData;
-    private final int x = 250;
-    private final int y = 250;
-
-    private final ArrayList<Door> doors = new ArrayList<>();
-    private final Map<String, BufferedImage> wallImages = new HashMap<>();
-    private final Map<String, BufferedImage> tileImages = new HashMap<>();
-    private final Map<String, BufferedImage> obstacleImages = new HashMap<>();
-    private final Map<String, BufferedImage> decorationImages = new HashMap<>();
+    private RoomData roomData;
+    private ArrayList<Door> doors = new ArrayList<>();
+    private Map<String, BufferedImage> wallImages = new HashMap<>();
+    private Map<String, BufferedImage> tileImages = new HashMap<>();
+    private Map<String, BufferedImage> obstacleImages = new HashMap<>();
+    private Map<String, BufferedImage> decorationImages = new HashMap<>();
 
     public Room(RoomData roomData) {
         this.roomData = roomData;
@@ -32,7 +32,7 @@ public class Room {
         loadImages();
     }
 
-    private void initDoors() {
+    public void initDoors() {
         if (roomData.getTop() != null) {
             doors.add(new Door(DoorDirection.TOP, 250, 0));
         }
@@ -89,7 +89,7 @@ public class Room {
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.RED);
-        g2d.drawString(String.valueOf(roomData.getId()), x, y);
+        g2d.drawString(String.valueOf(roomData.getId()), 250, 250);
         drawTiles(g2d);
         drawObstacles(g2d);
         drawDecorations(g2d);
@@ -145,7 +145,7 @@ public class Room {
     }
 
     private void drawItems(Graphics2D g2d) {
-        for (ItemLocationData item : roomData.getItems().values()) {
+        for (ItemLocationData item : getRoomData().getItems().values()) {
             BaseItem gameItem = ItemMaker.makeItem(item);
             if (gameItem != null) {
                 g2d.drawImage(gameItem.getImage(), gameItem.getData().getX(), gameItem.getData().getY(), null);
@@ -167,5 +167,42 @@ public class Room {
 
     public ArrayList<Decoration> getDecorations() {
         return roomData.getDecorations();
+    }
+
+    public Room deepCopy() throws CloneNotSupportedException {
+        Room clone = (Room) super.clone();
+        clone.setRoomData(roomData.deepCopy());
+        clone.doors = new ArrayList<>();
+        clone.initDoors();
+        clone.wallImages = new HashMap<>();
+        cloneMap(wallImages, clone.wallImages);
+        clone.tileImages = new HashMap<>();
+        cloneMap(tileImages, clone.tileImages);
+        clone.decorationImages = new HashMap<>();
+        cloneMap(decorationImages, clone.decorationImages);
+        clone.obstacleImages = new HashMap<>();
+        cloneMap(obstacleImages, clone.obstacleImages);
+        return clone;
+    }
+
+    private Map<String, BufferedImage> cloneMap(Map<String, BufferedImage> origMap, Map<String, BufferedImage> dest) {
+        Map<String, BufferedImage> clonedMap = new HashMap<>();
+        for (Map.Entry<String, BufferedImage> entry : origMap.entrySet()) {
+            dest.put(entry.getKey(), SwingUtils.deepCopy(entry.getValue()));
+        }
+        return clonedMap;
+    }
+
+    @Override
+    public Room clone() throws CloneNotSupportedException {
+        return (Room) super.clone();
+    }
+
+    public RoomData getRoomData() {
+        return roomData;
+    }
+
+    public void setRoomData(RoomData roomData) {
+        this.roomData = roomData;
     }
 }

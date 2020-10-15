@@ -4,18 +4,19 @@ import krawlercommon.items.ItemLocationData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
-public class RoomData {
+public class RoomData implements Cloneable {
     private int id;
     private boolean cleared;
     private RoomData left;
     private RoomData right;
     private RoomData top;
     private RoomData bottom;
-    private final ArrayList<Wall> walls;
-    private final HashMap<Integer, ItemLocationData> items;
-    private final ArrayList<Obstacle> obstacles;
-    private final ArrayList<Decoration> decorations;
+    private ArrayList<Wall> walls;
+    private HashMap<Integer, ItemLocationData> items;
+    private ArrayList<Obstacle> obstacles;
+    private ArrayList<Decoration> decorations;
     private int tileTexture;
     private RoomType roomType;
 
@@ -122,4 +123,48 @@ public class RoomData {
         }
     }
 
+    public RoomData deepCopy() throws CloneNotSupportedException {
+        RoomData clonedData = new RoomData();
+        clonedData.setId(id);
+        clonedData.setCleared(cleared);
+        clonedData.setTileTexture(tileTexture);
+        if (top != null) {
+            clonedData.setTop(top.clone());
+        }
+        if (bottom != null) {
+            clonedData.setBottom(bottom.clone());
+        }
+        if (left != null) {
+            clonedData.setLeft(left.clone());
+        }
+        if (right != null) {
+            clonedData.setRight(right.clone());
+        }
+        clonedData.walls = new ArrayList<>();
+        for (Wall wall : walls) {
+            Wall clone = wall.clone();
+            clonedData.walls.add(clone);
+        }
+        clonedData.items = new HashMap<>();
+        for (Map.Entry<Integer, ItemLocationData> entry : items.entrySet()) {
+            clonedData.getItems().put(entry.getKey(), entry.getValue().clone());
+        }
+        clonedData.obstacles = new ArrayList<>();
+        for (Obstacle obstacle : obstacles) {
+            Obstacle clone = obstacle.clone();
+            clonedData.obstacles.add(clone);
+        }
+        clonedData.decorations = new ArrayList<>();
+        for (Decoration decoration : decorations) {
+            Decoration clone = decoration.clone();
+            clonedData.decorations.add(clone);
+        }
+        clonedData.roomType = roomType;
+        return clonedData;
+    }
+
+    @Override
+    public RoomData clone() throws CloneNotSupportedException {
+        return (RoomData) super.clone();
+    }
 }
