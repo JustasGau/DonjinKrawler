@@ -8,11 +8,11 @@ test {
 }
 
 dependencies {
-    compile "com.esotericsoftware:kryonet:2.22.0-RC1"
-    compile project(":DonjinKrawler-Common")
+    implementation "com.esotericsoftware:kryonet:2.22.0-RC1"
+    implementation project(":DonjinKrawler-Common")
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
-    testCompile("org.junit.jupiter:junit-jupiter-params:5.4.2")
+    testImplementation ("org.junit.jupiter:junit-jupiter-params:5.4.2")
 }
 
 mainClassName = 'donjinkrawler.Server'

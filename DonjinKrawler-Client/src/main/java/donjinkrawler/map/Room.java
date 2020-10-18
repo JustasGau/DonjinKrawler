@@ -33,6 +33,9 @@ public class Room implements Cloneable {
     }
 
     public void initDoors() {
+        if (!doors.isEmpty()) {
+            doors = new ArrayList<>();
+        }
         if (roomData.getTop() != null) {
             doors.add(new Door(DoorDirection.TOP, 250, 0));
         }
@@ -198,12 +201,10 @@ public class Room implements Cloneable {
         return clone;
     }
 
-    private Map<String, BufferedImage> cloneMap(Map<String, BufferedImage> origMap, Map<String, BufferedImage> dest) {
-        Map<String, BufferedImage> clonedMap = new HashMap<>();
+    private void cloneMap(Map<String, BufferedImage> origMap, Map<String, BufferedImage> dest) {
         for (Map.Entry<String, BufferedImage> entry : origMap.entrySet()) {
             dest.put(entry.getKey(), SwingUtils.deepCopy(entry.getValue()));
         }
-        return clonedMap;
     }
 
     @Override

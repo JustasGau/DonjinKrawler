@@ -193,7 +193,7 @@ public class Server {
                 update();
 
                 updateTime = System.nanoTime() - now;
-                wait = (OPTIMAL_TIME - updateTime);
+                wait = (OPTIMAL_TIME - updateTime) / 1000000;
 
                 try {
                     Thread.sleep(wait);
