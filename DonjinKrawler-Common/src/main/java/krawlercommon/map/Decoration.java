@@ -11,4 +11,9 @@ public class Decoration extends CollidableObject {
     public void setImageNumber(int imageNumber) {
         this.imageNumber = imageNumber;
     }
+
+    @Override
+    protected Decoration clone() throws CloneNotSupportedException {
+        return (Decoration) super.clone();
+    }
 }

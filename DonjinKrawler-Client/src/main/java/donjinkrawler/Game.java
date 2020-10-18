@@ -1,5 +1,8 @@
 package donjinkrawler;
 
+import donjinkrawler.logging.LoggerSingleton;
+import donjinkrawler.map.GameMap;
+import donjinkrawler.map.Room;
 import krawlercommon.PlayerData;
 import krawlercommon.enemies.Enemy;
 import krawlercommon.map.DoorDirection;
@@ -16,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.swing.*;
 
 public class Game extends JPanel implements ActionListener {
-
+    LoggerSingleton logger = LoggerSingleton.getInstance();
     com.esotericsoftware.kryonet.Client client;
     private final Timer timer;
     private final Player player;
@@ -53,10 +56,10 @@ public class Game extends JPanel implements ActionListener {
 
     private void doDrawing(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        gameMap.currentRoom.draw(g);
+        gameMap.getCurrentRoom().draw(g);
         drawCurrentPlayer(g);
         for (AbstractShell pl : shells.values()) {
-            if (gameMap.currentRoom.roomData.getRoomType() != RoomType.ITEM) {
+            if (gameMap.getCurrentRoom().getRoomData().getRoomType() != RoomType.ITEM) {
                 drawShell(g2d, pl);
             } else if (!(pl instanceof EnemyShell)) {
                 drawShell(g2d, pl);
@@ -101,18 +104,19 @@ public class Game extends JPanel implements ActionListener {
                 player.setCoordinates(250, 40);
                 movePlayerShells(250, 40);
             }
-            RoomData newRoom = gameMap.currentRoom.getRoomFromDirection(direction);
+            RoomData newRoom = gameMap.getCurrentRoom().getRoomFromDirection(direction);
             sendRoomPacket(direction, newRoom.getId());
-            gameMap.currentRoom = new Room(newRoom);
+            Room newRoomObj = getNewRoom(newRoom);
+            gameMap.setCurrentRoom(newRoomObj);
         }
         if (player.hasChangedPosition()) {
             sendPositionUpdate();
         }
 
-        player.move(gameMap.currentRoom.getWalls(),
-                gameMap.currentRoom.getDoors(),
-                gameMap.currentRoom.getObstacles(),
-                gameMap.currentRoom.getDecorations());
+        player.move(gameMap.getCurrentRoom().getWalls(),
+                gameMap.getCurrentRoom().getDoors(),
+                gameMap.getCurrentRoom().getObstacles(),
+                gameMap.getCurrentRoom().getDecorations());
         repaint();
     }
 
@@ -121,6 +125,22 @@ public class Game extends JPanel implements ActionListener {
         roomPacket.direction = nextRoom.toString();
         roomPacket.id = roomID;
         client.sendTCP(roomPacket);
+    }
+
+    private Room getNewRoom(RoomData newRoom) {
+        Room newRoomObj = null;
+        try {
+            newRoomObj = gameMap.getCurrentRoom().clone();
+        } catch (CloneNotSupportedException e) {
+            logger.error("Cloning not supported " + e.getMessage());
+        }
+        if (newRoomObj != null) {
+            newRoomObj.setRoomData(newRoom);
+            newRoomObj.initDoors();
+        } else {
+            newRoomObj = new Room(newRoom);
+        }
+        return newRoomObj;
     }
 
     private void sendPositionUpdate() {
@@ -162,8 +182,8 @@ public class Game extends JPanel implements ActionListener {
     public void changeRoom(RoomPacket roomPacket) {
         String direction = roomPacket.direction;
         DoorDirection doorDirection = DoorDirection.valueOf(roomPacket.direction);
-        RoomData currentRoomData = gameMap.currentRoom.getRoomFromDirection(doorDirection);
-        gameMap.currentRoom = new Room(currentRoomData);
+        RoomData currentRoomData = gameMap.getCurrentRoom().getRoomFromDirection(doorDirection);
+        gameMap.setCurrentRoom(new Room(currentRoomData));
 
         if (direction.equals("LEFT")) {
             player.setCoordinates(400, 250);

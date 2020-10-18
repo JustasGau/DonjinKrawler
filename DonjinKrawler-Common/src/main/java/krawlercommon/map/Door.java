@@ -6,8 +6,6 @@ import java.awt.*;
 public class Door {
     private int x;
     private int y;
-    private int width = 20;
-    private int height = 20;
     private DoorDirection direction;
     private transient Image doorImage;
 
@@ -25,8 +23,6 @@ public class Door {
     private void loadImage() {
         ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("door.png").getFile());
         doorImage = ii.getImage();
-        width = doorImage.getWidth(null);
-        height = doorImage.getHeight(null);
     }
 
     public boolean checkCollision(int topCornerX, int topCornerY, int botCornerX,

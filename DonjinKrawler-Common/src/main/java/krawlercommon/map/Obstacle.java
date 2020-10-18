@@ -19,4 +19,11 @@ public class Obstacle extends CollidableObject {
     public void setObstacleType(ObstacleType obstacleType) {
         this.obstacleType = obstacleType;
     }
+
+    @Override
+    protected Obstacle clone() throws CloneNotSupportedException {
+        Obstacle clone = (Obstacle) super.clone();
+        clone.setObstacleType(obstacleType);
+        return clone;
+    }
 }

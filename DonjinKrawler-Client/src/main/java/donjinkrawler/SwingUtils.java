@@ -2,6 +2,9 @@ package donjinkrawler;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 
 public class SwingUtils {
 
@@ -12,5 +15,13 @@ public class SwingUtils {
         g2d.setColor(Color.GREEN);
         Rectangle2D.Double healthBar = new Rectangle2D.Double(x, y - 13.5, health * width / 100, height);
         g2d.fill(healthBar);
+    }
+
+
+    public static BufferedImage deepCopy(BufferedImage bi) {
+        ColorModel cm = bi.getColorModel();
+        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+        WritableRaster raster = bi.copyData(null);
+        return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
 }
