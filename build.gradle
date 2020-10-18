@@ -15,7 +15,3 @@ task runClient {
 task runServer {
     dependsOn ':DonjinKrawler-Server:run'
 }
-
-tasks.withType(JavaCompile).each {
-    it.options.compilerArgs.add('--enable-preview')
-}

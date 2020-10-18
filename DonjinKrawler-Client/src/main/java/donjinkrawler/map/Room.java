@@ -81,25 +81,12 @@ public class Room implements Cloneable {
     }
 
     public RoomData getRoomFromDirection(DoorDirection direction) {
-
-        RoomData data = null;
-
-        switch(direction) {
-            case TOP:
-                data = roomData.getTop();
-                break;
-            case LEFT:
-                data = roomData.getLeft();
-                break;
-            case RIGHT:
-                data = roomData.getRight();
-                break;
-            case BOTTOM:
-                data = roomData.getBottom();
-                break;
-        }
-        
-        return data;
+        return switch (direction) {
+            case TOP -> roomData.getTop();
+            case LEFT -> roomData.getLeft();
+            case RIGHT -> roomData.getRight();
+            case BOTTOM -> roomData.getBottom();
+        };
     }
 
     public void draw(Graphics g) {
