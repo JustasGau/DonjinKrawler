@@ -40,9 +40,6 @@ public class Game extends JPanel implements ActionListener {
         this.gameMap = new GameMap(new Room(rooms.get(currentRoom)));
         this.client = client;
 
-        // Quick hack
-//        addEnemies(gameMap.getCurrentRoom().getRoomData().getEnemies());
-
         addKeyListener(new Game.TAdapter());
         setBackground(Color.black);
         setFocusable(true);
@@ -112,7 +109,6 @@ public class Game extends JPanel implements ActionListener {
             sendRoomPacket(direction, newRoom.getId());
             Room newRoomObj = getNewRoom(newRoom);
             gameMap.setCurrentRoom(newRoomObj);
-//            addEnemies(gameMap.getCurrentRoom().getRoomData().getEnemies());
         }
         if (player.hasChangedPosition()) {
             sendPositionUpdate();
@@ -142,11 +138,9 @@ public class Game extends JPanel implements ActionListener {
         if (newRoomObj != null) {
             newRoomObj.setRoomData(newRoom);
             newRoomObj.initDoors();
-//            player.detachAllObservers();
-//            player.setHasNotifiedObservers(false);
-//            newRoomObj.getRoomData().getEnemies().forEach(e -> player.attachObserver(e));
-//            EnemyPacket roomEnemies = new EnemyPacket(newRoomObj.getRoomData().getId());
-//            client.sendTCP(roomEnemies);
+            player.detachAllObservers();
+            player.setHasNotifiedObservers(false);
+            newRoomObj.getRoomData().getEnemies().forEach(e -> player.attachObserver(e));
         } else {
             newRoomObj = new Room(newRoom);
         }
