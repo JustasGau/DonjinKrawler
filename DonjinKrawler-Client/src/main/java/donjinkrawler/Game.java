@@ -8,7 +8,6 @@ import krawlercommon.enemies.Enemy;
 import krawlercommon.map.DoorDirection;
 import krawlercommon.map.RoomData;
 import krawlercommon.map.RoomType;
-import krawlercommon.packets.EnemyPacket;
 import krawlercommon.packets.MoveCharacter;
 import krawlercommon.packets.RoomPacket;
 import krawlercommon.strategies.*;
@@ -18,7 +17,6 @@ import java.awt.event.*;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 import javax.swing.*;
 
 public class Game extends JPanel implements ActionListener {
@@ -234,11 +232,7 @@ public class Game extends JPanel implements ActionListener {
     }
 
     public void addEnemies(List<Enemy> enemies) {
-        ConcurrentHashMap<Integer, AbstractShell> hackMap = new ConcurrentHashMap<>();
-        hackMap.putAll(shells.values().stream()
-                .filter(s -> !(s instanceof EnemyShell))
-                .collect(Collectors.toMap(AbstractShell::getID, s -> s)));
-        shells = hackMap;
+        shells.values().removeIf(abstractShell -> abstractShell instanceof EnemyShell);
         enemies.forEach(e -> shells.put(e.getID(), new EnemyShell(e.getName(), e.getID(), e.getX(), e.getY())));
     }
 

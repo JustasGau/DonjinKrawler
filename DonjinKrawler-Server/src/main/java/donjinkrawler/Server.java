@@ -91,9 +91,8 @@ public class Server {
 
     private static void handleRoomChange(Connection connection, RoomPacket roomPacket) {
         currentRoom = roomPacket.id;
-        roomPacket.enemies = new ArrayList<>();
-        rooms.get(currentRoom).getEnemies().forEach(e -> roomPacket.enemies.add(e));
-        server.sendToAllTCP(roomPacket);
+        sendEnemies();
+        server.sendToAllExceptUDP(connection.getID(), roomPacket);
     }
 
     private static void handleDisconnect(Connection connection) {
@@ -126,6 +125,7 @@ public class Server {
         logger.debug("Player " + player.getName() + " has joined the server");
         sendPlayerToExistingClients(connection, player);
         sendExistingPlayersToClient(connection.getID(), player);
+        sendEnemiesToPlayer(connection);
     }
 
     private static void sendPlayerToExistingClients(Connection connection, PlayerData player) {
@@ -204,6 +204,18 @@ public class Server {
 //        }
 //        sendEnemyInfo(smallEnemies);
 //        sendEnemyInfo(bigEnemies);
+    }
+
+    private static void sendEnemies() {
+        EnemyPacket enemyPacket = new EnemyPacket();
+        enemyPacket.getEnemies().addAll(rooms.get(currentRoom).getEnemies());
+        server.sendToAllTCP(enemyPacket);
+    }
+
+    private static void sendEnemiesToPlayer(Connection connection) {
+        EnemyPacket enemyPacket = new EnemyPacket();
+        enemyPacket.getEnemies().addAll(rooms.get(currentRoom).getEnemies());
+        server.sendToTCP(connection.getID(), enemyPacket);
     }
 
     public static void sendEnemyInfo(ArrayList<Enemy> enemies) {
