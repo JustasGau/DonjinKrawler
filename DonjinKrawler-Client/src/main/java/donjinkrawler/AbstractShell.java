@@ -1,6 +1,10 @@
 package donjinkrawler;
 
+import donjinkrawler.decorator.Clothing;
+
+import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 abstract public class AbstractShell {
 
@@ -42,4 +46,6 @@ abstract public class AbstractShell {
     public String getInfo() { return ""; }
 
     public void setInfo(String info){};
+
+
 }

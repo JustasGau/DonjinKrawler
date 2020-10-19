@@ -1,5 +1,6 @@
 package donjinkrawler;
 
+import donjinkrawler.decorator.Sombreros;
 import donjinkrawler.logging.LoggerSingleton;
 import donjinkrawler.map.GameMap;
 import donjinkrawler.map.Room;
@@ -27,14 +28,11 @@ public class Game extends JPanel implements ActionListener {
     private final int delay = 10;
     private static final Map<Integer, AbstractShell> shells = new ConcurrentHashMap<>();
 
-    private final JLabel label;
-
     public Game(com.esotericsoftware.kryonet.Client client,
                 JLabel label,
                 Player player,
                 Map<Integer, RoomData> rooms,
                 int currentRoom) {
-        this.label = label;
         this.player = player;
         this.gameMap = new GameMap(new Room(rooms.get(currentRoom)));
         this.client = client;
@@ -61,6 +59,7 @@ public class Game extends JPanel implements ActionListener {
         for (AbstractShell pl : shells.values()) {
             if (gameMap.getCurrentRoom().getRoomData().getRoomType() != RoomType.ITEM) {
                 drawShell(g2d, pl);
+                pl.drawClothes(g2d, this);
             } else if (!(pl instanceof EnemyShell)) {
                 drawShell(g2d, pl);
             }
@@ -207,7 +206,7 @@ public class Game extends JPanel implements ActionListener {
     }
 
     public void addEnemies(List<Enemy> enemies) {
-        enemies.forEach(e -> shells.put(e.getID(), new EnemyShell(e.getName(), e.getID(), e.getX(), e.getY())));
+        enemies.forEach(e -> shells.put(e.getID(), new Sombreros(new EnemyShell(e.getName(), e.getID(), e.getX(), e.getY()))));
     }
 
     public void changeShellPosition(MoveCharacter packet) {
