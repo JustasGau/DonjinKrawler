@@ -1,6 +1,6 @@
 package krawlercommon;
 
-public class PlayerData  {
+public class PlayerData {
     private String name;
     private int id;
     private int x;

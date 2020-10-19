@@ -23,9 +23,6 @@ public class Player implements Subject {
     private int height;
     private Image image;
     private Boolean hasChangedPosition = false;
-
-
-
     private Boolean hasNotifiedObservers = false;
     int obstacleCollisionCount = 0;
     private ArrayList<Observer> observers;
