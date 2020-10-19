@@ -82,6 +82,8 @@ public abstract class RoomBuilder {
 
     abstract RoomBuilder buildDecorations();
 
+    abstract RoomBuilder buildEnemies();
+
     public RoomData build() {
         return roomData;
     }

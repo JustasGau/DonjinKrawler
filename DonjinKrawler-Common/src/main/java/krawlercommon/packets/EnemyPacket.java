@@ -6,11 +6,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EnemyPacket {
+    public int roomId;
 
     private List<Enemy> enemies;
 
     public EnemyPacket() {
         enemies = new ArrayList<>();
+    }
+
+    public EnemyPacket(int roomId) {
+        this.roomId = roomId;
+        this.enemies = new ArrayList<>();
     }
 
     public void addEnemy(Enemy enemy) {

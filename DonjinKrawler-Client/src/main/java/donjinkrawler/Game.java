@@ -8,14 +8,17 @@ import krawlercommon.enemies.Enemy;
 import krawlercommon.map.DoorDirection;
 import krawlercommon.map.RoomData;
 import krawlercommon.map.RoomType;
+import krawlercommon.packets.EnemyPacket;
 import krawlercommon.packets.MoveCharacter;
 import krawlercommon.packets.RoomPacket;
+import krawlercommon.strategies.*;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 import javax.swing.*;
 
 public class Game extends JPanel implements ActionListener {
@@ -25,7 +28,7 @@ public class Game extends JPanel implements ActionListener {
     private final Player player;
     private GameMap gameMap;
     private final int delay = 10;
-    private static final Map<Integer, AbstractShell> shells = new ConcurrentHashMap<>();
+    private static Map<Integer, AbstractShell> shells = new ConcurrentHashMap<>();
 
     private final JLabel label;
 
@@ -38,6 +41,9 @@ public class Game extends JPanel implements ActionListener {
         this.player = player;
         this.gameMap = new GameMap(new Room(rooms.get(currentRoom)));
         this.client = client;
+
+        // Quick hack
+//        addEnemies(gameMap.getCurrentRoom().getRoomData().getEnemies());
 
         addKeyListener(new Game.TAdapter());
         setBackground(Color.black);
@@ -108,6 +114,7 @@ public class Game extends JPanel implements ActionListener {
             sendRoomPacket(direction, newRoom.getId());
             Room newRoomObj = getNewRoom(newRoom);
             gameMap.setCurrentRoom(newRoomObj);
+//            addEnemies(gameMap.getCurrentRoom().getRoomData().getEnemies());
         }
         if (player.hasChangedPosition()) {
             sendPositionUpdate();
@@ -137,6 +144,11 @@ public class Game extends JPanel implements ActionListener {
         if (newRoomObj != null) {
             newRoomObj.setRoomData(newRoom);
             newRoomObj.initDoors();
+//            player.detachAllObservers();
+//            player.setHasNotifiedObservers(false);
+//            newRoomObj.getRoomData().getEnemies().forEach(e -> player.attachObserver(e));
+//            EnemyPacket roomEnemies = new EnemyPacket(newRoomObj.getRoomData().getId());
+//            client.sendTCP(roomEnemies);
         } else {
             newRoomObj = new Room(newRoom);
         }
@@ -196,6 +208,21 @@ public class Game extends JPanel implements ActionListener {
         }
     }
 
+    public void updateEnemyStrategy(int id, EnemyStrategy strategy) {
+        AbstractShell temp = shells.get(id);
+        if (strategy instanceof MoveTowardPlayer) {
+            temp.setInfo("MoveTowardPlayer");
+        } else if (strategy instanceof MoveAwayFromPlayer) {
+            temp.setInfo("MoveAwayFromPlayer");
+        } else if (strategy instanceof MoveRandomly) {
+            temp.setInfo("MoveRandomly");
+        } else if (strategy instanceof Attack) {
+            temp.setInfo("Attack");
+        } else {
+            temp.setInfo("RangeAttack");
+        }
+    }
+
     public void updateEnemyInfo(String enemyData) {
         String[] arrOfStr = enemyData.substring(4).split(" ");
         int tempID = Integer.parseInt(arrOfStr[0]);
@@ -207,6 +234,11 @@ public class Game extends JPanel implements ActionListener {
     }
 
     public void addEnemies(List<Enemy> enemies) {
+        ConcurrentHashMap<Integer, AbstractShell> hackMap = new ConcurrentHashMap<>();
+        hackMap.putAll(shells.values().stream()
+                .filter(s -> !(s instanceof EnemyShell))
+                .collect(Collectors.toMap(AbstractShell::getID, s -> s)));
+        shells = hackMap;
         enemies.forEach(e -> shells.put(e.getID(), new EnemyShell(e.getName(), e.getID(), e.getX(), e.getY())));
     }
 

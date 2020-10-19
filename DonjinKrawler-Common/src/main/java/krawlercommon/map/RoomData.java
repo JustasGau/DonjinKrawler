@@ -1,5 +1,6 @@
 package krawlercommon.map;
 
+import krawlercommon.enemies.Enemy;
 import krawlercommon.items.ItemLocationData;
 
 import java.util.ArrayList;
@@ -17,10 +18,12 @@ public class RoomData implements Cloneable {
     private HashMap<Integer, ItemLocationData> items;
     private ArrayList<Obstacle> obstacles;
     private ArrayList<Decoration> decorations;
+    private ArrayList<Enemy> enemies;
     private int tileTexture;
     private RoomType roomType;
 
     public RoomData() {
+        enemies = new ArrayList<>();
         walls = new ArrayList<>();
         obstacles = new ArrayList<>();
         items = new HashMap<>();
@@ -105,6 +108,10 @@ public class RoomData implements Cloneable {
 
     public ArrayList<Decoration> getDecorations() {
         return decorations;
+    }
+
+    public ArrayList<Enemy> getEnemies() {
+        return enemies;
     }
 
     public void setAdjacentRooms(RoomData other) {

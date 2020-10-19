@@ -37,7 +37,7 @@ public class Client {
 
     private void setupKryo() throws IOException {
         Log.set(Log.LEVEL_ERROR);
-        kryoClient = new com.esotericsoftware.kryonet.Client(16384, 16384);
+        kryoClient = new com.esotericsoftware.kryonet.Client(32768, 32768);
         kryoClient.getKryo().setReferences(true);
         kryoClient.start();
         kryoClient.connect(5000, serverAddress, SERVER_TCP_PORT, SERVER_UDP_PORT);
@@ -53,9 +53,6 @@ public class Client {
                     rooms = mapPacket.rooms;
                 } else if (object instanceof IdPacket) {
                     handleIdPacket((IdPacket) object);
-                } else if (object instanceof EnemyPacket && game != null) {
-                    EnemyPacket enemyPacket = (EnemyPacket) object;
-                    game.addEnemies(enemyPacket.getEnemies());
                 } else if (object instanceof MoveCharacter && game != null) {
                     MoveCharacter msg = (MoveCharacter) object;
                     game.changeShellPosition(msg);
@@ -67,6 +64,10 @@ public class Client {
                     game.deletePlayerShell(dcPacket.id);
                 } else if (object instanceof RoomPacket && game != null) {
                     game.changeRoom((RoomPacket) object);
+                    game.addEnemies(((RoomPacket) object).enemies);
+                } else if (object instanceof ChangeEnemyStrategyPacket && game != null) {
+                    ChangeEnemyStrategyPacket enemy = (ChangeEnemyStrategyPacket) object;
+                    game.updateEnemyStrategy(enemy.id, enemy.strategy);
                 }
             }
         });
@@ -88,7 +89,7 @@ public class Client {
 
         messageLabel.setBackground(Color.lightGray);
         frame.getContentPane().add(messageLabel, BorderLayout.SOUTH);
-        game = new Game(kryoClient, messageLabel, new Player(playerData), rooms, currentRoom);
+        game = new Game(kryoClient, messageLabel, new Player(playerData, kryoClient), rooms, currentRoom);
         frame.add(game);
         frame.setVisible(true);
 

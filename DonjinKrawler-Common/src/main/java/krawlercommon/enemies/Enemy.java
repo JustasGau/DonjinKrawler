@@ -1,5 +1,6 @@
 package krawlercommon.enemies;
 
+import krawlercommon.observer.Observer;
 import krawlercommon.strategies.EnemyStrategy;
 import krawlercommon.strategies.MoveAwayFromPlayer;
 import krawlercommon.strategies.MoveRandomly;
@@ -8,7 +9,7 @@ import krawlercommon.strategies.MoveTowardPlayer;
 import java.util.Random;
 import java.util.UUID;
 
-public abstract class Enemy {
+public abstract class Enemy implements Observer {
 
     private String name;
     private double damage;
@@ -76,6 +77,10 @@ public abstract class Enemy {
         int strategyID = random.nextInt(strategies.length);
         currentStrategy = strategies[strategyID];
         currentStrategy.init(this);
+    }
+
+    public void setCurrentStrategy(EnemyStrategy strategy) {
+        this.currentStrategy = strategy;
     }
 
     public void setInfo(String info) {
