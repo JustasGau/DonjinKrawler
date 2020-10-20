@@ -3,24 +3,19 @@ package donjinkrawler.decorator;
 import donjinkrawler.EnemyShell;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 public abstract class EnemyClothingDecorator extends EnemyShell implements Clothing {
 
-    private EnemyShell wrappee;
-
+    protected EnemyShell wrappee;
     EnemyClothingDecorator(EnemyShell source) {
-        super();
+        super(source.getName(), source.getID(), source.getX(), source.getY());
         this.wrappee = source;
     }
 
     @Override
-    protected void loadImage() {
-
-    }
-
-    @Override
-    public void addClothing(ImageIcon item) {
-        wrappee.addClothing(item);
+    public ArrayList<ImageIcon> addClothing() {
+        return wrappee.addClothing();
     }
 
 }

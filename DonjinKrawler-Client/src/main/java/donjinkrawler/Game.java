@@ -1,5 +1,6 @@
 package donjinkrawler;
 
+import donjinkrawler.decorator.Ponchos;
 import donjinkrawler.decorator.Sombreros;
 import donjinkrawler.logging.LoggerSingleton;
 import donjinkrawler.map.GameMap;
@@ -206,7 +207,17 @@ public class Game extends JPanel implements ActionListener {
     }
 
     public void addEnemies(List<Enemy> enemies) {
-        enemies.forEach(e -> shells.put(e.getID(), new Sombreros(new EnemyShell(e.getName(), e.getID(), e.getX(), e.getY()))));
+        enemies.forEach(e -> shells.put(e.getID(),
+                new Ponchos(
+                        new Sombreros(
+                            new EnemyShell(e.getName(), e.getID(), e.getX(), e.getY()))
+                        )
+                )
+        );
+
+        for (AbstractShell pl : shells.values()) {
+            pl.addClothing();
+        }
     }
 
     public void changeShellPosition(MoveCharacter packet) {

@@ -20,7 +20,7 @@ public class EnemyShell extends AbstractShell implements Clothing {
         loadImage();
     }
 
-    protected void loadImage() {
+    public void loadImage() {
         ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource(this.resolveImageName()).getFile());
         image = ii.getImage();
     }
@@ -62,15 +62,16 @@ public class EnemyShell extends AbstractShell implements Clothing {
         return "zombie.png";
     }
 
-    @Override
-    public void addClothing(ImageIcon item) {
-        clothes.add(item);
-    }
-
     public void drawClothes(Graphics2D g2d, Game g){
         for (ImageIcon ii : clothes) {
             Image clothImage = ii.getImage();
             g2d.drawImage(clothImage, getX(), getY(), g);
         }
     }
+
+    @Override
+    public ArrayList<ImageIcon> addClothing() {
+        return clothes;
+    }
+
 }

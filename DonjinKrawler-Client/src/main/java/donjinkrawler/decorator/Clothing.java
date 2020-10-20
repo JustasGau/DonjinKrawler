@@ -1,8 +1,9 @@
 package donjinkrawler.decorator;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 public interface Clothing {
 
-    void addClothing(ImageIcon item);
+    ArrayList<ImageIcon> addClothing();
 }

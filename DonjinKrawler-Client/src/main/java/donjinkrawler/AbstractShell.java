@@ -1,7 +1,5 @@
 package donjinkrawler;
 
-import donjinkrawler.decorator.Clothing;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -15,7 +13,7 @@ abstract public class AbstractShell {
     protected String name;
     protected Image image;
 
-    abstract protected void loadImage();
+    abstract public void loadImage();
 
     public int getX() {
         return x;
@@ -47,5 +45,8 @@ abstract public class AbstractShell {
 
     public void setInfo(String info){};
 
+    public abstract void drawClothes(Graphics2D g2d, Game game);
+
+    public abstract ArrayList<ImageIcon> addClothing();
 
 }
