@@ -37,7 +37,7 @@ public class Client {
 
     private void setupKryo() throws IOException {
         Log.set(Log.LEVEL_ERROR);
-        kryoClient = new com.esotericsoftware.kryonet.Client(16384, 16384);
+        kryoClient = new com.esotericsoftware.kryonet.Client(32768, 32768);
         kryoClient.getKryo().setReferences(true);
         kryoClient.start();
         kryoClient.connect(5000, serverAddress, SERVER_TCP_PORT, SERVER_UDP_PORT);
@@ -48,25 +48,22 @@ public class Client {
             public void received(Connection connection, Object object) {
                 if (object instanceof MessagePacket) {
                     handleMessagePacket((MessagePacket) object);
-                } else if (object instanceof MapPacket) {
-                    MapPacket mapPacket = (MapPacket) object;
+                } else if (object instanceof MapPacket mapPacket) {
                     rooms = mapPacket.rooms;
                 } else if (object instanceof IdPacket) {
                     handleIdPacket((IdPacket) object);
-                } else if (object instanceof EnemyPacket && game != null) {
-                    EnemyPacket enemyPacket = (EnemyPacket) object;
-                    game.addEnemies(enemyPacket.getEnemies());
-                } else if (object instanceof MoveCharacter && game != null) {
-                    MoveCharacter msg = (MoveCharacter) object;
+                } else if (object instanceof MoveCharacter msg && game != null) {
                     game.changeShellPosition(msg);
-                } else if (object instanceof CreatePlayerPacket && game != null) {
-                    CreatePlayerPacket packet = (CreatePlayerPacket) object;
+                } else if (object instanceof EnemyPacket enemyPacket && game != null) {
+                    game.addEnemies(enemyPacket.getEnemies());
+                } else if (object instanceof CreatePlayerPacket packet && game != null) {
                     game.addPlayerShell(packet.player);
-                } else if (object instanceof DisconnectPacket && game != null) {
-                    DisconnectPacket dcPacket = (DisconnectPacket) object;
+                } else if (object instanceof DisconnectPacket dcPacket && game != null) {
                     game.deletePlayerShell(dcPacket.id);
                 } else if (object instanceof RoomPacket && game != null) {
                     game.changeRoom((RoomPacket) object);
+                } else if (object instanceof ChangeEnemyStrategyPacket enemy && game != null) {
+                    game.updateEnemyStrategy(enemy.id, enemy.strategy);
                 }
             }
         });
@@ -88,7 +85,7 @@ public class Client {
 
         messageLabel.setBackground(Color.lightGray);
         frame.getContentPane().add(messageLabel, BorderLayout.SOUTH);
-        game = new Game(kryoClient, messageLabel, new Player(playerData), rooms, currentRoom);
+        game = new Game(kryoClient, messageLabel, new Player(playerData, kryoClient), rooms, currentRoom);
         frame.add(game);
         frame.setVisible(true);
 

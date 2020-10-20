@@ -51,4 +51,9 @@ public class ItemRoomBuilder extends RoomBuilder {
         super.generateRandomDecorations(200, 202);
         return this;
     }
+
+    @Override
+    RoomBuilder buildEnemies() {
+        return this;
+    }
 }

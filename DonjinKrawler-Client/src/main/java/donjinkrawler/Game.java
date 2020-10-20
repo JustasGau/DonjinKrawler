@@ -13,6 +13,7 @@ import krawlercommon.map.RoomData;
 import krawlercommon.map.RoomType;
 import krawlercommon.packets.MoveCharacter;
 import krawlercommon.packets.RoomPacket;
+import krawlercommon.strategies.*;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -28,13 +29,16 @@ public class Game extends JPanel implements ActionListener {
     private final Player player;
     private GameMap gameMap;
     private final int delay = 10;
-    private static final Map<Integer, AbstractShellInterface> shells = new ConcurrentHashMap<>();
+    private static Map<Integer, AbstractShellInterface> shells = new ConcurrentHashMap<>();
+
+    private final JLabel label;
 
     public Game(com.esotericsoftware.kryonet.Client client,
                 JLabel label,
                 Player player,
                 Map<Integer, RoomData> rooms,
                 int currentRoom) {
+        this.label = label;
         this.player = player;
         this.gameMap = new GameMap(new Room(rooms.get(currentRoom)));
         this.client = client;
@@ -138,6 +142,9 @@ public class Game extends JPanel implements ActionListener {
         if (newRoomObj != null) {
             newRoomObj.setRoomData(newRoom);
             newRoomObj.initDoors();
+            player.detachAllObservers();
+            player.setHasNotifiedObservers(false);
+            newRoomObj.getRoomData().getEnemies().forEach(e -> player.attachObserver(e));
         } else {
             newRoomObj = new Room(newRoom);
         }
@@ -197,6 +204,21 @@ public class Game extends JPanel implements ActionListener {
         }
     }
 
+    public void updateEnemyStrategy(int id, EnemyStrategy strategy) {
+        AbstractShellInterface temp = shells.get(id);
+        if (strategy instanceof MoveTowardPlayer) {
+            temp.setInfo("MoveTowardPlayer");
+        } else if (strategy instanceof MoveAwayFromPlayer) {
+            temp.setInfo("MoveAwayFromPlayer");
+        } else if (strategy instanceof MoveRandomly) {
+            temp.setInfo("MoveRandomly");
+        } else if (strategy instanceof Attack) {
+            temp.setInfo("Attack");
+        } else {
+            temp.setInfo("RangeAttack");
+        }
+    }
+
     public void updateEnemyInfo(String enemyData) {
         String[] arrOfStr = enemyData.substring(4).split(" ");
         int tempID = Integer.parseInt(arrOfStr[0]);
@@ -208,6 +230,7 @@ public class Game extends JPanel implements ActionListener {
     }
 
     public void addEnemies(List<Enemy> enemies) {
+        shells.values().removeIf(abstractShell -> abstractShell instanceof EnemyShell);
         enemies.forEach(e -> shells.put(e.getID(),
                 new MaracasEnemy(
                     new PonchosEnemy(

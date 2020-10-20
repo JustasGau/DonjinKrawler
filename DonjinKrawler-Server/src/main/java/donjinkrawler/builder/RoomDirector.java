@@ -16,6 +16,7 @@ public class RoomDirector {
         roomBuilder.buildItems();
         roomBuilder.buildObstacles();
         roomBuilder.buildDecorations();
+        roomBuilder.buildEnemies();
         return roomBuilder.build();
     }
 }

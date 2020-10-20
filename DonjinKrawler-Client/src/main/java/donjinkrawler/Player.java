@@ -1,14 +1,21 @@
 package donjinkrawler;
 
 import krawlercommon.PlayerData;
+import krawlercommon.enemies.Enemy;
 import krawlercommon.map.*;
+import krawlercommon.observer.Observer;
+import krawlercommon.observer.Subject;
 
 import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
+import com.esotericsoftware.kryonet.Client;
+import krawlercommon.packets.ChangeEnemyStrategyPacket;
+import krawlercommon.strategies.MoveTowardPlayer;
 
-public class Player {
+public class Player implements Subject {
     private final PlayerData data;
     private int dx;
     private int dy;
@@ -16,9 +23,14 @@ public class Player {
     private int height;
     private Image image;
     private Boolean hasChangedPosition = false;
+    private Boolean hasNotifiedObservers = false;
     int obstacleCollisionCount = 0;
+    private ArrayList<Observer> observers;
+    private Client client;
 
-    public Player(PlayerData playerData) {
+    public Player(PlayerData playerData, Client client) {
+        this.client = client;
+        this.observers = new ArrayList<>();
         data = playerData;
         loadImage();
     }
@@ -42,6 +54,7 @@ public class Player {
         }
         data.setX(data.getX() + dx);
         data.setY(data.getY() + dy);
+
     }
 
     private boolean isCollidingWithDoor(List<Door> doors) {
@@ -109,6 +122,11 @@ public class Player {
         if (obstacleCollisionCount % 25 == 0) {
             data.setHealth(data.getHealth() - health);
             obstacleCollisionCount = 0;
+
+            if (data.getHealth() < 50) {
+                notifyObservers();
+                setHasNotifiedObservers(true);
+            }
         }
     }
 
@@ -190,6 +208,10 @@ public class Player {
         return data.getHealth();
     }
 
+    public void setHasNotifiedObservers(Boolean hasNotifiedObservers) {
+        this.hasNotifiedObservers = hasNotifiedObservers;
+    }
+
     public void keyPressed(KeyEvent e) {
         hasChangedPosition = true;
         int key = e.getKeyCode();
@@ -229,6 +251,32 @@ public class Player {
 
         if (key == KeyEvent.VK_DOWN) {
             dy = 0;
+        }
+    }
+
+    @Override
+    public void attachObserver(Observer observer) {
+        this.observers.add(observer);
+    }
+
+    @Override
+    public void detachObserver(Observer observer) {
+        this.observers.remove(observer);
+    }
+
+    @Override
+    public void detachAllObservers() {
+        this.observers = new ArrayList<>();
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(Observer observer: observers) {
+            observer.update(new MoveTowardPlayer());
+            ChangeEnemyStrategyPacket packet = new ChangeEnemyStrategyPacket();
+            packet.id = ((Enemy) observer).getID();
+            packet.strategy = new MoveTowardPlayer();
+            client.sendTCP(packet);
         }
     }
 }

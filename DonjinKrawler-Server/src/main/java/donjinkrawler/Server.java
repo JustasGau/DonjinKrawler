@@ -5,8 +5,6 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import krawlercommon.PlayerData;
 import krawlercommon.enemies.*;
-import krawlercommon.enemies.big.BigEnemyFactory;
-import krawlercommon.enemies.small.SmallEnemyFactory;
 import donjinkrawler.logging.LoggerSingleton;
 import krawlercommon.RegistrationManager;
 import krawlercommon.map.RoomData;
@@ -25,11 +23,6 @@ public class Server {
 
     private static final LoggerSingleton logger = LoggerSingleton.getInstance();
     private static final Random rand = new Random();
-
-    private static final EnemyGenerator smallEnemyGenerator = new EnemyGenerator(new SmallEnemyFactory());
-    private static final EnemyGenerator bigEnemyGenerator = new EnemyGenerator(new BigEnemyFactory());
-    private static final ArrayList<Enemy> smallEnemies = smallEnemyGenerator.generateRandomEnemies(5);
-    private static final ArrayList<Enemy> bigEnemies = bigEnemyGenerator.generateRandomEnemies(1);
 
     private static HashMap<Integer, RoomData> rooms;
     private static int playerIDs = 1;
@@ -55,6 +48,8 @@ public class Server {
                     handlePosUpdate(connection, object);
                 } else if (object instanceof RoomPacket) {
                     handleRoomChange(connection, (RoomPacket) object);
+                } else if (object instanceof ChangeEnemyStrategyPacket) {
+                    handleEnemyStrategyChange(connection, (ChangeEnemyStrategyPacket) object);
                 }
             }
 
@@ -96,6 +91,7 @@ public class Server {
 
     private static void handleRoomChange(Connection connection, RoomPacket roomPacket) {
         currentRoom = roomPacket.id;
+        sendEnemies();
         server.sendToAllExceptUDP(connection.getID(), roomPacket);
     }
 
@@ -112,6 +108,10 @@ public class Server {
         }
     }
 
+    private static void handleEnemyStrategyChange(Connection connection, ChangeEnemyStrategyPacket packet) {
+        server.sendToAllTCP(packet);
+    }
+
     private static void createNewPlayer(Connection connection, LoginPacket loginPacket) {
         // TODO: maybe add common config for starting position?
         if (!isValidName(loginPacket.name)) {
@@ -125,8 +125,7 @@ public class Server {
         logger.debug("Player " + player.getName() + " has joined the server");
         sendPlayerToExistingClients(connection, player);
         sendExistingPlayersToClient(connection.getID(), player);
-        sendEnemies(connection.getID(), smallEnemies);
-        sendEnemies(connection.getID(), bigEnemies);
+        sendEnemiesToPlayer(connection);
     }
 
     private static void sendPlayerToExistingClients(Connection connection, PlayerData player) {
@@ -156,14 +155,6 @@ public class Server {
 
     private static boolean isValidName(String name) {
         return playerConnectionMap.values().stream().noneMatch(p -> p.getName().equals(name));
-    }
-
-    private static void sendEnemies(int id, ArrayList<Enemy> enemies) {
-        EnemyPacket enemyPacket = new EnemyPacket();
-        for (Enemy enemy : enemies) {
-            enemyPacket.addEnemy(enemy);
-        }
-        server.sendToTCP(id, enemyPacket);
     }
 
     private static void sendExistingPlayersToClient(int id, PlayerData player) {
@@ -205,14 +196,26 @@ public class Server {
     }
 
     private static void update() {
-        for (Enemy enemy : smallEnemies) {
-            enemy.incrementTick(TARGET_FPS);
-        }
-        for (Enemy enemy : bigEnemies) {
-            enemy.incrementTick(TARGET_FPS);
-        }
-        sendEnemyInfo(smallEnemies);
-        sendEnemyInfo(bigEnemies);
+//        for (Enemy enemy : smallEnemies) {
+//            enemy.incrementTick(TARGET_FPS);
+//        }
+//        for (Enemy enemy : bigEnemies) {
+//            enemy.incrementTick(TARGET_FPS);
+//        }
+//        sendEnemyInfo(smallEnemies);
+//        sendEnemyInfo(bigEnemies);
+    }
+
+    private static void sendEnemies() {
+        EnemyPacket enemyPacket = new EnemyPacket();
+        enemyPacket.getEnemies().addAll(rooms.get(currentRoom).getEnemies());
+        server.sendToAllTCP(enemyPacket);
+    }
+
+    private static void sendEnemiesToPlayer(Connection connection) {
+        EnemyPacket enemyPacket = new EnemyPacket();
+        enemyPacket.getEnemies().addAll(rooms.get(currentRoom).getEnemies());
+        server.sendToTCP(connection.getID(), enemyPacket);
     }
 
     public static void sendEnemyInfo(ArrayList<Enemy> enemies) {

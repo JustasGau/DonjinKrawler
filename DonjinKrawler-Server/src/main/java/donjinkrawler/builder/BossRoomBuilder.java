@@ -1,6 +1,11 @@
 package donjinkrawler.builder;
 
+import krawlercommon.enemies.Enemy;
+import krawlercommon.enemies.EnemyGenerator;
+import krawlercommon.enemies.big.BigEnemyFactory;
 import krawlercommon.map.RoomType;
+
+import java.util.ArrayList;
 
 public class BossRoomBuilder extends RoomBuilder {
 
@@ -39,6 +44,14 @@ public class BossRoomBuilder extends RoomBuilder {
 
     @Override
     public RoomBuilder buildDecorations() {
+        return this;
+    }
+
+    @Override
+    RoomBuilder buildEnemies() {
+        EnemyGenerator bigEnemyGenerator = new EnemyGenerator(new BigEnemyFactory());
+        ArrayList<Enemy> bigEnemies = bigEnemyGenerator.generateRandomEnemies(1);
+        roomData.getEnemies().addAll(bigEnemies);
         return this;
     }
 }

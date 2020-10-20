@@ -1,5 +1,8 @@
 package donjinkrawler.builder;
 
+import krawlercommon.enemies.Enemy;
+import krawlercommon.enemies.EnemyGenerator;
+import krawlercommon.enemies.small.SmallEnemyFactory;
 import krawlercommon.items.ItemLocationData;
 import krawlercommon.items.ItemGenerator;
 import krawlercommon.map.Obstacle;
@@ -7,6 +10,7 @@ import krawlercommon.map.ObstacleType;
 import krawlercommon.map.RoomType;
 import krawlercommon.map.Wall;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -82,6 +86,14 @@ public class NormalRoomBuilder extends RoomBuilder {
     @Override
     public RoomBuilder buildDecorations() {
         super.generateRandomDecorations(1, 2);
+        return this;
+    }
+
+    @Override
+    RoomBuilder buildEnemies() {
+        EnemyGenerator smallEnemyGenerator = new EnemyGenerator(new SmallEnemyFactory());
+        ArrayList<Enemy> smallEnemies = smallEnemyGenerator.generateRandomEnemies(5);
+        roomData.getEnemies().addAll(smallEnemies);
         return this;
     }
 

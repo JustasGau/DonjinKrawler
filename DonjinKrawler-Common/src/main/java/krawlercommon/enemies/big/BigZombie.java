@@ -1,6 +1,7 @@
 package krawlercommon.enemies.big;
 
 import krawlercommon.enemies.Enemy;
+import krawlercommon.strategies.EnemyStrategy;
 
 public class BigZombie extends Enemy {
 
@@ -9,4 +10,8 @@ public class BigZombie extends Enemy {
         this.setDamage(30.0);
     }
 
+    @Override
+    public void update(EnemyStrategy strategy) {
+        setCurrentStrategy(strategy);
+    }
 }
