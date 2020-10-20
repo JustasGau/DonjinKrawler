@@ -1,12 +1,10 @@
 package donjinkrawler;
 
-import donjinkrawler.decorator.Clothing;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class EnemyShell extends AbstractShell implements Clothing {
+public class EnemyShell extends AbstractShell {
 
     private int id;
     private String info = "empty";

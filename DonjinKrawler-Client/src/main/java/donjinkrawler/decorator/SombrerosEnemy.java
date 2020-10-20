@@ -1,23 +1,21 @@
 package donjinkrawler.decorator;
 
-import donjinkrawler.EnemyShell;
+import donjinkrawler.AbstractShellInterface;
 
 import javax.swing.*;
 import java.util.ArrayList;
 
-public class Ponchos extends EnemyClothingDecorator {
+public class SombrerosEnemy extends EnemyClothingDecorator {
 
-    public Ponchos(EnemyShell source) {
+    public SombrerosEnemy(AbstractShellInterface source) {
         super(source);
     }
 
     @Override
     public ArrayList<ImageIcon> addClothing() {
-
-        ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("poncho.png").getFile());
+        ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("sombrero.png").getFile());
         ArrayList<ImageIcon> clothes = wrappee.addClothing();
         clothes.add(ii);
-        System.out.println("ad poncho" + clothes.size());
         return clothes;
     }
 }

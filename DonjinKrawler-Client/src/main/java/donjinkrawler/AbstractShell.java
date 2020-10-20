@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-abstract public class AbstractShell {
+abstract public class AbstractShell implements AbstractShellInterface {
 
     protected int dx;
     protected int dy;

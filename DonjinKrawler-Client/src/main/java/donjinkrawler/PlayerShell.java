@@ -23,7 +23,6 @@ public class PlayerShell extends AbstractShell {
 
     @Override
     public ArrayList<ImageIcon> addClothing() {
-
         return null;
     }
 }
