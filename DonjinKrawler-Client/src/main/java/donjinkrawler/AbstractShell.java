@@ -1,8 +1,10 @@
 package donjinkrawler;
 
+import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
-abstract public class AbstractShell {
+abstract public class AbstractShell implements AbstractShellInterface {
 
     protected int dx;
     protected int dy;
@@ -11,7 +13,7 @@ abstract public class AbstractShell {
     protected String name;
     protected Image image;
 
-    abstract protected void loadImage();
+    abstract public void loadImage();
 
     public int getX() {
         return x;
@@ -42,4 +44,9 @@ abstract public class AbstractShell {
     public String getInfo() { return ""; }
 
     public void setInfo(String info){};
+
+    public abstract void drawClothes(Graphics2D g2d, Game game);
+
+    public abstract ArrayList<ImageIcon> addClothing();
+
 }

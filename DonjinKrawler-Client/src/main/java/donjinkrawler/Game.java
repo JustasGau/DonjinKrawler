@@ -1,5 +1,8 @@
 package donjinkrawler;
 
+import donjinkrawler.decorator.MaracasEnemy;
+import donjinkrawler.decorator.PonchosEnemy;
+import donjinkrawler.decorator.SombrerosEnemy;
 import donjinkrawler.logging.LoggerSingleton;
 import donjinkrawler.map.GameMap;
 import donjinkrawler.map.Room;
@@ -26,7 +29,7 @@ public class Game extends JPanel implements ActionListener {
     private final Player player;
     private GameMap gameMap;
     private final int delay = 10;
-    private static Map<Integer, AbstractShell> shells = new ConcurrentHashMap<>();
+    private static Map<Integer, AbstractShellInterface> shells = new ConcurrentHashMap<>();
 
     private final JLabel label;
 
@@ -59,9 +62,10 @@ public class Game extends JPanel implements ActionListener {
         Graphics2D g2d = (Graphics2D) g;
         gameMap.getCurrentRoom().draw(g);
         drawCurrentPlayer(g);
-        for (AbstractShell pl : shells.values()) {
+        for (AbstractShellInterface pl : shells.values()) {
             if (gameMap.getCurrentRoom().getRoomData().getRoomType() != RoomType.ITEM) {
                 drawShell(g2d, pl);
+                pl.drawClothes(g2d, this);
             } else if (!(pl instanceof EnemyShell)) {
                 drawShell(g2d, pl);
             }
@@ -76,7 +80,7 @@ public class Game extends JPanel implements ActionListener {
         g2d.drawString(player.getName(), player.getX(), player.getY() + 30);
     }
 
-    private void drawShell(Graphics2D g2d, AbstractShell pl) {
+    private void drawShell(Graphics2D g2d, AbstractShellInterface pl) {
         g2d.drawImage(pl.getImage(), pl.getX(), pl.getY(), this);
         g2d.setColor(Color.BLUE);
         g2d.drawString(pl.getName() + " " + pl.getID(), pl.getX(), pl.getY() + 30);
@@ -156,7 +160,7 @@ public class Game extends JPanel implements ActionListener {
     }
 
     private void movePlayerShells(int x, int y) {
-        for (AbstractShell sh : shells.values()) {
+        for (AbstractShellInterface sh : shells.values()) {
             if (sh instanceof PlayerShell) {
                 sh.setX(x);
                 sh.setY(y);
@@ -201,7 +205,7 @@ public class Game extends JPanel implements ActionListener {
     }
 
     public void updateEnemyStrategy(int id, EnemyStrategy strategy) {
-        AbstractShell temp = shells.get(id);
+        AbstractShellInterface temp = shells.get(id);
         if (strategy instanceof MoveTowardPlayer) {
             temp.setInfo("MoveTowardPlayer");
         } else if (strategy instanceof MoveAwayFromPlayer) {
@@ -219,7 +223,7 @@ public class Game extends JPanel implements ActionListener {
         String[] arrOfStr = enemyData.substring(4).split(" ");
         int tempID = Integer.parseInt(arrOfStr[0]);
         String tempInfo = arrOfStr[1];
-        AbstractShell temp = shells.get(tempID);
+        AbstractShellInterface temp = shells.get(tempID);
         if (temp != null) {
             temp.setInfo(tempInfo);
         }
@@ -227,11 +231,23 @@ public class Game extends JPanel implements ActionListener {
 
     public void addEnemies(List<Enemy> enemies) {
         shells.values().removeIf(abstractShell -> abstractShell instanceof EnemyShell);
-        enemies.forEach(e -> shells.put(e.getID(), new EnemyShell(e.getName(), e.getID(), e.getX(), e.getY())));
+        enemies.forEach(e -> shells.put(e.getID(),
+                new MaracasEnemy(
+                    new PonchosEnemy(
+                            new SombrerosEnemy(
+                                new EnemyShell(e.getName(), e.getID(), e.getX(), e.getY())
+                            )
+                    )
+                ))
+        );
+
+        for (AbstractShellInterface pl : shells.values()) {
+            pl.addClothing();
+        }
     }
 
     public void changeShellPosition(MoveCharacter packet) {
-        AbstractShell temp = shells.get(packet.id);
+        AbstractShellInterface temp = shells.get(packet.id);
         if (temp != null) {
             temp.setX(packet.x);
             temp.setY(packet.y);

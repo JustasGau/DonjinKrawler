@@ -1,12 +1,14 @@
 package donjinkrawler;
 
 import javax.swing.*;
-import java.util.Random;
+import java.awt.*;
+import java.util.ArrayList;
 
 public class EnemyShell extends AbstractShell {
 
     private int id;
     private String info = "empty";
+    private ArrayList<ImageIcon> clothes = new ArrayList<>();
 
     public EnemyShell(String name, int id, int x, int y) {
         this.name = name;
@@ -16,7 +18,7 @@ public class EnemyShell extends AbstractShell {
         loadImage();
     }
 
-    protected void loadImage() {
+    public void loadImage() {
         ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource(this.resolveImageName()).getFile());
         image = ii.getImage();
     }
@@ -27,7 +29,6 @@ public class EnemyShell extends AbstractShell {
 
     public void setInfo(String info){
         this.info = info;
-
     }
 
     private String resolveImageName()
@@ -58,4 +59,17 @@ public class EnemyShell extends AbstractShell {
 
         return "zombie.png";
     }
+
+    public void drawClothes(Graphics2D g2d, Game g){
+        for (ImageIcon ii : clothes) {
+            Image clothImage = ii.getImage();
+            g2d.drawImage(clothImage, getX(), getY(), g);
+        }
+    }
+
+    @Override
+    public ArrayList<ImageIcon> addClothing() {
+        return clothes;
+    }
+
 }
