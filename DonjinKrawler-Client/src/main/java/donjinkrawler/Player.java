@@ -131,7 +131,7 @@ public class Player implements Subject {
     private void reduceHealthFromObstacle(int health) {
         obstacleCollisionCount++;
         if (obstacleCollisionCount % 25 == 0) {
-            data.setHealth(data.getHealth() - health);
+            commander.execute(new DamageCommand(this, health));
             obstacleCollisionCount = 0;
 
             if (data.getHealth() < 50) {
@@ -225,6 +225,10 @@ public class Player implements Subject {
 
     public double getHealth() {
         return data.getHealth();
+    }
+
+    public void setHealth(double val) {
+        data.setHealth(val);
     }
 
     public void setHasNotifiedObservers(Boolean hasNotifiedObservers) {

@@ -24,7 +24,6 @@ public class MoveCommand implements Command{
 
     @Override
     public void undo() {
-        System.out.println("asdasdasd");
         controllerPlayer.setY(oldY);
         controllerPlayer.setX(oldX);
     }
