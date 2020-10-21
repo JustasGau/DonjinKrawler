@@ -87,10 +87,6 @@ public abstract class Enemy implements Observer {
         currentStrategy.init(this);
     }
 
-    public void setCurrentStrategy(EnemyStrategy strategy) {
-        this.currentStrategy = strategy;
-    }
-
     public void setInfo(String info) {
         this.info = info;
     }

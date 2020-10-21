@@ -1,5 +1,6 @@
 package donjinkrawler;
 
+import donjinkrawler.adapter.AudioPlayer;
 import donjinkrawler.decorator.EnemyClothingDecorator;
 import donjinkrawler.decorator.MaracasEnemy;
 import donjinkrawler.decorator.PonchosEnemy;
@@ -33,6 +34,7 @@ public class Game extends JPanel implements ActionListener {
     private final int delay = 10;
     private static final Map<Integer, AbstractShellInterface> shells = new ConcurrentHashMap<>();
 
+    private AudioPlayer audioPlayer = new AudioPlayer();
     private final JLabel label;
 
     public Game(com.esotericsoftware.kryonet.Client client,
@@ -231,17 +233,7 @@ public class Game extends JPanel implements ActionListener {
 
     public void updateEnemyStrategy(int id, EnemyStrategy strategy) {
         AbstractShellInterface temp = shells.get(id);
-        if (strategy instanceof MoveTowardPlayer) {
-            temp.setInfo("MoveTowardPlayer");
-        } else if (strategy instanceof MoveAwayFromPlayer) {
-            temp.setInfo("MoveAwayFromPlayer");
-        } else if (strategy instanceof MoveRandomly) {
-            temp.setInfo("MoveRandomly");
-        } else if (strategy instanceof Attack) {
-            temp.setInfo("Attack");
-        } else {
-            temp.setInfo("RangeAttack");
-        }
+        temp.setInfo(strategy.getStrategy());
     }
 
     public void updateEnemyInfo(String enemyData) {

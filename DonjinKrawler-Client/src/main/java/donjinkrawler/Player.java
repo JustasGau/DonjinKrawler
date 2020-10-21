@@ -1,5 +1,6 @@
 package donjinkrawler;
 
+import donjinkrawler.adapter.AudioPlayer;
 import command.*;
 import donjinkrawler.items.Armor;
 import donjinkrawler.items.BaseItem;
@@ -18,6 +19,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import com.esotericsoftware.kryonet.Client;
 import krawlercommon.packets.ChangeEnemyStrategyPacket;
+import krawlercommon.strategies.EnemyStrategy;
 import krawlercommon.strategies.MoveTowardPlayer;
 
 public class Player implements Subject {
@@ -32,6 +34,7 @@ public class Player implements Subject {
     int obstacleCollisionCount = 0;
     private ArrayList<Observer> observers;
     private Client client;
+    private AudioPlayer audioPlayer = new AudioPlayer();
     private PlayerCommander commander = new PlayerCommander();
     private Boolean backwards = false;
     private Inventory inventory;
@@ -111,6 +114,7 @@ public class Player implements Subject {
     private boolean isCollidingWithObstacle(List<Obstacle> obstacles) {
         for (Obstacle obstacle : obstacles) {
             if (isCollidingWith(obstacle)) {
+
                 handleObstacleCollision(obstacle);
                 return true;
             }
@@ -163,7 +167,7 @@ public class Player implements Subject {
         if (obstacleCollisionCount % 25 == 0) {
             commander.execute(new DamageCommand(this, health));
             obstacleCollisionCount = 0;
-
+            audioPlayer.play("wav", "hurt.wav");
             if (data.getHealth() < 50) {
                 notifyObservers();
                 setHasNotifiedObservers(true);
@@ -357,11 +361,12 @@ public class Player implements Subject {
 
     @Override
     public void notifyObservers() {
-        for(Observer observer: observers) {
-            observer.update(new MoveTowardPlayer());
+        for (Observer observer: observers) {
+            EnemyStrategy enemyStrategy = new MoveTowardPlayer();
+            observer.update(enemyStrategy);
             ChangeEnemyStrategyPacket packet = new ChangeEnemyStrategyPacket();
             packet.id = ((Enemy) observer).getID();
-            packet.strategy = new MoveTowardPlayer();
+            packet.strategy = enemyStrategy;
             client.sendTCP(packet);
         }
     }
