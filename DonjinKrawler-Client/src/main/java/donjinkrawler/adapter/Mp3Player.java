@@ -15,7 +15,7 @@ public class Mp3Player implements AdvancedMediaPlayer {
             clip.open(audioInput);
             clip.start();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
