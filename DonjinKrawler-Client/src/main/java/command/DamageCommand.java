@@ -2,7 +2,7 @@ package command;
 
 import donjinkrawler.Player;
 
-public class DamageCommand implements Command{
+public class DamageCommand implements Command {
 
     Player controllerPlayer;
     double oldHealth;

@@ -57,7 +57,7 @@ public class Player implements Subject {
         }
         if (backwards) {
             commander.undo();
-        }else {
+        } else {
             commander.execute(new MoveCommand(this, dx, dy));
         }
 
@@ -68,7 +68,7 @@ public class Player implements Subject {
             if (isCollidingWith(door)) {
                 if (backwards) {
                     commander.undo();
-                }else {
+                } else {
                     commander.execute(new MoveCommand(this, dx, dy));
                 }
                 return true;
@@ -106,7 +106,7 @@ public class Player implements Subject {
         }
         if (backwards) {
             commander.undo();
-        }else {
+        } else {
             commander.execute(new MoveCommand(this, dx, dy));
         }
     }

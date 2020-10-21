@@ -2,7 +2,7 @@ package command;
 
 import donjinkrawler.Player;
 
-public class MoveCommand implements Command{
+public class MoveCommand implements Command {
 
     Player controllerPlayer;
     int oldY;
