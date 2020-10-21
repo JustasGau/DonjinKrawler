@@ -1,5 +1,6 @@
 package donjinkrawler;
 
+import command.*;
 import krawlercommon.PlayerData;
 import krawlercommon.enemies.Enemy;
 import krawlercommon.map.*;
@@ -27,6 +28,8 @@ public class Player implements Subject {
     int obstacleCollisionCount = 0;
     private ArrayList<Observer> observers;
     private Client client;
+    private PlayerCommander commander = new PlayerCommander();
+    private Boolean backwards = false;
 
     public Player(PlayerData playerData, Client client) {
         this.client = client;
@@ -52,16 +55,22 @@ public class Player implements Subject {
         if (isCollidingWithImmovableObject(walls) || isCollidingWithImmovableObject(decorations)) {
             return;
         }
-        data.setX(data.getX() + dx);
-        data.setY(data.getY() + dy);
+        if (backwards) {
+            commander.undo();
+        }else {
+            commander.execute(new MoveCommand(this, dx, dy));
+        }
 
     }
 
     private boolean isCollidingWithDoor(List<Door> doors) {
         for (Door door : doors) {
             if (isCollidingWith(door)) {
-                data.setX(data.getX() + dx);
-                data.setY(data.getY() + dy);
+                if (backwards) {
+                    commander.undo();
+                }else {
+                    commander.execute(new MoveCommand(this, dx, dy));
+                }
                 return true;
             }
         }
@@ -80,7 +89,6 @@ public class Player implements Subject {
     private boolean isCollidingWithObstacle(List<Obstacle> obstacles) {
         for (Obstacle obstacle : obstacles) {
             if (isCollidingWith(obstacle)) {
-
                 handleObstacleCollision(obstacle);
                 return true;
             }
@@ -96,8 +104,11 @@ public class Player implements Subject {
         } else if (obstacle.getObstacleType() == ObstacleType.SLIME) {
             reducePlayerSpeed();
         }
-        data.setX(data.getX() + dx);
-        data.setY(data.getY() + dy);
+        if (backwards) {
+            commander.undo();
+        }else {
+            commander.execute(new MoveCommand(this, dx, dy));
+        }
     }
 
     private void reducePlayerSpeed() {
@@ -153,6 +164,14 @@ public class Player implements Subject {
 
     public int getY() {
         return data.getY();
+    }
+
+    public void setX(int val) {
+        data.setX(val);
+    }
+
+    public void setY(int val) {
+        data.setY(val);
     }
 
     public int getBotX() {
@@ -231,6 +250,10 @@ public class Player implements Subject {
         if (key == KeyEvent.VK_DOWN) {
             dy = 2;
         }
+
+        if (key == KeyEvent.VK_U) {
+            backwards = true;
+        }
     }
 
     public void keyReleased(KeyEvent e) {
@@ -251,6 +274,10 @@ public class Player implements Subject {
 
         if (key == KeyEvent.VK_DOWN) {
             dy = 0;
+        }
+
+        if (key == KeyEvent.VK_U) {
+            backwards = false;
         }
     }
 
