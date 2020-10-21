@@ -1,5 +1,6 @@
 package donjinkrawler;
 
+import donjinkrawler.adapter.AudioPlayer;
 import donjinkrawler.logging.LoggerSingleton;
 import donjinkrawler.map.GameMap;
 import donjinkrawler.map.Room;
@@ -27,7 +28,7 @@ public class Game extends JPanel implements ActionListener {
     private GameMap gameMap;
     private final int delay = 10;
     private static Map<Integer, AbstractShell> shells = new ConcurrentHashMap<>();
-
+    private AudioPlayer audioPlayer = new AudioPlayer();
     private final JLabel label;
 
     public Game(com.esotericsoftware.kryonet.Client client,
@@ -141,6 +142,7 @@ public class Game extends JPanel implements ActionListener {
             player.detachAllObservers();
             player.setHasNotifiedObservers(false);
             newRoomObj.getRoomData().getEnemies().forEach(e -> player.attachObserver(e));
+            audioPlayer.play("wav", "times-up.wav");
         } else {
             newRoomObj = new Room(newRoom);
         }
@@ -202,17 +204,7 @@ public class Game extends JPanel implements ActionListener {
 
     public void updateEnemyStrategy(int id, EnemyStrategy strategy) {
         AbstractShell temp = shells.get(id);
-        if (strategy instanceof MoveTowardPlayer) {
-            temp.setInfo("MoveTowardPlayer");
-        } else if (strategy instanceof MoveAwayFromPlayer) {
-            temp.setInfo("MoveAwayFromPlayer");
-        } else if (strategy instanceof MoveRandomly) {
-            temp.setInfo("MoveRandomly");
-        } else if (strategy instanceof Attack) {
-            temp.setInfo("Attack");
-        } else {
-            temp.setInfo("RangeAttack");
-        }
+        temp.setInfo(strategy.getStrategy());
     }
 
     public void updateEnemyInfo(String enemyData) {

@@ -6,7 +6,7 @@ import krawlercommon.strategies.MoveRandomly;
 import krawlercommon.strategies.MoveTowardPlayer;
 
 public abstract class Chicken extends Enemy {
-    transient EnemyStrategy[] strategies = {new MoveAwayFromPlayer(), new MoveRandomly(), new MoveTowardPlayer()};
+    transient EnemyStrategy[] strategies = { new MoveAwayFromPlayer(), new MoveRandomly(), new MoveTowardPlayer() };
 
     public Chicken() {
         this.setInterval(3);

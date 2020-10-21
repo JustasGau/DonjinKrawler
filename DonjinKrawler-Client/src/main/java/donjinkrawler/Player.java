@@ -1,5 +1,6 @@
 package donjinkrawler;
 
+import donjinkrawler.adapter.AudioPlayer;
 import krawlercommon.PlayerData;
 import krawlercommon.enemies.Enemy;
 import krawlercommon.map.*;
@@ -13,6 +14,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import com.esotericsoftware.kryonet.Client;
 import krawlercommon.packets.ChangeEnemyStrategyPacket;
+import krawlercommon.strategies.EnemyStrategy;
 import krawlercommon.strategies.MoveTowardPlayer;
 
 public class Player implements Subject {
@@ -27,6 +29,7 @@ public class Player implements Subject {
     int obstacleCollisionCount = 0;
     private ArrayList<Observer> observers;
     private Client client;
+    private AudioPlayer audioPlayer = new AudioPlayer();
 
     public Player(PlayerData playerData, Client client) {
         this.client = client;
@@ -122,7 +125,7 @@ public class Player implements Subject {
         if (obstacleCollisionCount % 25 == 0) {
             data.setHealth(data.getHealth() - health);
             obstacleCollisionCount = 0;
-
+            audioPlayer.play("wav", "hurt.wav");
             if (data.getHealth() < 50) {
                 notifyObservers();
                 setHasNotifiedObservers(true);
@@ -271,11 +274,12 @@ public class Player implements Subject {
 
     @Override
     public void notifyObservers() {
-        for(Observer observer: observers) {
-            observer.update(new MoveTowardPlayer());
+        for (Observer observer: observers) {
+            EnemyStrategy enemyStrategy = new MoveTowardPlayer();
+            observer.update(enemyStrategy);
             ChangeEnemyStrategyPacket packet = new ChangeEnemyStrategyPacket();
             packet.id = ((Enemy) observer).getID();
-            packet.strategy = new MoveTowardPlayer();
+            packet.strategy = enemyStrategy;
             client.sendTCP(packet);
         }
     }

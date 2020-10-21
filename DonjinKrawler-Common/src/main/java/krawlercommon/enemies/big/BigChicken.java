@@ -1,9 +1,9 @@
 package krawlercommon.enemies.big;
 
-import krawlercommon.enemies.Enemy;
+import krawlercommon.enemies.Chicken;
 import krawlercommon.strategies.EnemyStrategy;
 
-public class BigChicken extends Enemy {
+public class BigChicken extends Chicken {
 
     public BigChicken() {
         this.setName("Big-Chicken");
@@ -12,6 +12,6 @@ public class BigChicken extends Enemy {
 
     @Override
     public void update(EnemyStrategy strategy) {
-        setCurrentStrategy(strategy);
+        strategy.init(this);
     }
 }

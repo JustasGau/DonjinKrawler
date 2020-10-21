@@ -12,6 +12,7 @@ public class BigSkeleton extends Enemy {
 
     @Override
     public void update(EnemyStrategy strategy) {
-        setCurrentStrategy(strategy);
+        strategy.init(this);
+        strategy.execute();
     }
 }
