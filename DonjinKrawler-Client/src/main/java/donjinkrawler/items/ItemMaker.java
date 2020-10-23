@@ -12,7 +12,7 @@ public class ItemMaker {
 
     public static BaseItem makeItem(ItemLocationData itemData) {
         if (itemData instanceof ArmorData) {
-            return new Armor((ArmorData) itemData, getTier());
+            return new Armor((ArmorData) itemData, getTier(), 10, 5, 5);
         } else if (itemData instanceof SpeedPotionData) {
             return new SpeedPotion((SpeedPotionData) itemData);
         } else if (itemData instanceof HealthPotionData) {
@@ -20,7 +20,7 @@ public class ItemMaker {
         } else if (itemData instanceof DamagePotionData) {
             return new DamagePotion((DamagePotionData) itemData);
         } else if (itemData instanceof WeaponData) {
-            return new Weapon((WeaponData) itemData, getTier());
+            return new Weapon((WeaponData) itemData, getTier(), 10, 5);
         }
         return null;
     }
