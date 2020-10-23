@@ -1,12 +1,18 @@
 package donjinkrawler.items;
 
+import donjinkrawler.items.tiers.CommonTier;
+import donjinkrawler.items.tiers.LegendaryTier;
+import donjinkrawler.items.tiers.RareTier;
+import donjinkrawler.items.tiers.Tier;
 import krawlercommon.items.*;
+
+import java.util.Random;
 
 public class ItemMaker {
 
     public static BaseItem makeItem(ItemLocationData itemData) {
         if (itemData instanceof ArmorData) {
-            return new Armor((ArmorData) itemData);
+            return new Armor((ArmorData) itemData, getTier());
         } else if (itemData instanceof SpeedPotionData) {
             return new SpeedPotion((SpeedPotionData) itemData);
         } else if (itemData instanceof HealthPotionData) {
@@ -14,8 +20,24 @@ public class ItemMaker {
         } else if (itemData instanceof DamagePotionData) {
             return new DamagePotion((DamagePotionData) itemData);
         } else if (itemData instanceof WeaponData) {
-            return new Weapon((WeaponData) itemData);
+            return new Weapon((WeaponData) itemData, getTier());
         }
         return null;
+    }
+
+    private static Tier getTier() {
+        Random random = new Random();
+
+        int luckyNumber = random.nextInt(1000);
+
+        if(luckyNumber >= 800 && luckyNumber <= 950) {
+            return new RareTier();
+        }
+
+        if(luckyNumber > 950) {
+            return new LegendaryTier();
+        }
+
+        return new CommonTier();
     }
 }
