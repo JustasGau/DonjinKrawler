@@ -2,7 +2,7 @@ package krawlercommon.map;
 
 public class Wall extends CollidableObject {
 
-    private int texture;
+    private String texture;
 
     public Wall() {
     }
@@ -12,18 +12,18 @@ public class Wall extends CollidableObject {
         this.y = y;
         this.width = width;
         this.height = height;
-        this.texture = 1;
+        this.texture = String.valueOf(1);
     }
 
-    public Wall(int x, int y, int width, int height, int texture) {
+    public Wall(int x, int y, int width, int height, String texture) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        if (texture != -1) {
+        if (!texture.equals("")) {
             this.texture = texture;
         } else {
-            this.texture = 1;
+            this.texture = "1";
         }
     }
 
@@ -59,11 +59,11 @@ public class Wall extends CollidableObject {
         this.height = height;
     }
 
-    public int getTexture() {
+    public String getTexture() {
         return texture;
     }
 
-    public void setTexture(int texture) {
+    public void setTexture(String texture) {
         this.texture = texture;
     }
 

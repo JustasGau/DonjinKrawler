@@ -134,7 +134,7 @@ public class GameMapGenerator {
         RoomDirector itemRoomDirector = new RoomDirector(new ItemRoomBuilder());
         RoomDirector bossRoomDirector = new RoomDirector(new BossRoomBuilder());
         SplittableRandom random = new SplittableRandom();
-        rooms.put(0, itemRoomDirector.constructRoom(0));
+        rooms.put(0, bossRoomDirector.constructRoom(0));
         for (int i = 1; i < adjacencyMatrix.size(); i++) {
             if (random.nextInt(10) == 0) {
                 rooms.put(i, itemRoomDirector.constructRoom(i));

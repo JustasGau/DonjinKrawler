@@ -24,3 +24,7 @@ https://opengameart.org/content/32x32-fantasy-tileset - Slime
 https://szadiart.itch.io/rogue-fantasy-catacombs - Spikes
 
 https://opengameart.org/content/modified-32x32-treasure-chest
+
+https://opengameart.org/content/lpc-imp - Boss image
+
+https://opengameart.org/content/lpc-dungeon-elements
