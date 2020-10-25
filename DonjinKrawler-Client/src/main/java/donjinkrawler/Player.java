@@ -3,6 +3,7 @@ package donjinkrawler;
 import command.*;
 import krawlercommon.PlayerData;
 import krawlercommon.enemies.Enemy;
+import krawlercommon.items.ItemLocationData;
 import krawlercommon.map.*;
 import krawlercommon.observer.Observer;
 import krawlercommon.observer.Subject;
@@ -10,6 +11,7 @@ import krawlercommon.observer.Subject;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.swing.ImageIcon;
 import com.esotericsoftware.kryonet.Client;
@@ -48,7 +50,8 @@ public class Player implements Subject {
         width = image.getWidth(null);
     }
 
-    public void move(List<Wall> walls, List<Door> doors, List<Obstacle> obstacles, List<Decoration> decorations) {
+    public void move(List<Wall> walls, List<Door> doors, List<Obstacle> obstacles, List<Decoration> decorations,
+                     HashMap<Integer, ItemLocationData> items) {
         if (isCollidingWithObstacle(obstacles)) {
             return;
         }
@@ -58,12 +61,14 @@ public class Player implements Subject {
         if (isCollidingWithImmovableObject(walls) || isCollidingWithImmovableObject(decorations)) {
             return;
         }
+        if(isCollidingWithItem(items)) {
+            return;
+        }
         if (backwards) {
             commander.undo();
         } else {
             commander.execute(new MoveCommand(this, dx, dy));
         }
-
     }
 
     private boolean isCollidingWithDoor(List<Door> doors) {
@@ -87,6 +92,16 @@ public class Player implements Subject {
             }
         }
         return false;
+    }
+
+    private boolean isCollidingWithItem(HashMap<Integer, ItemLocationData> objects) {
+        for (HashMap.Entry<Integer, ItemLocationData> itemData : objects.entrySet()) {
+            if (isCollidingWith(itemData.getValue())) {
+                return true;
+            }
+        }
+        return false;
+
     }
 
     private boolean isCollidingWithObstacle(List<Obstacle> obstacles) {
@@ -159,6 +174,25 @@ public class Player implements Subject {
         int botCornerX = data.getX() + width + dx;
         int botCornerY = data.getY() + height + dy;
         return door.checkCollision(topCornerX, topCornerY, botCornerX, botCornerY, width, height);
+    }
+
+    private boolean isCollidingWith(ItemLocationData obj) {
+
+        int playerX = data.getX() + dx;
+        int playerY = data.getY() + dy;
+
+        int x1 = playerX - 4;
+        int y1 = playerY - 4;
+        int x2 = playerX + 4;
+        int y2 = playerY + 4;
+
+        int objX = obj.getX();
+        int objY = obj.getY();
+
+        return objX > x1
+                && objX < x2
+                && objY > y1
+                && objY < y2;
     }
 
     public int getX() {

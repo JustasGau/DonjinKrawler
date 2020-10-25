@@ -172,6 +172,10 @@ public class Room implements Cloneable {
         return roomData.getDecorations();
     }
 
+    public HashMap<Integer, ItemLocationData> getItems() {
+        return roomData.getItems();
+    }
+
     public Room deepCopy() throws CloneNotSupportedException {
         Room clone = (Room) super.clone();
         clone.setRoomData(roomData.deepCopy());
