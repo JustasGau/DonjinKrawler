@@ -30,10 +30,13 @@ public class Player implements Subject {
     private Client client;
     private PlayerCommander commander = new PlayerCommander();
     private Boolean backwards = false;
+    private Inventory inventory;
 
     public Player(PlayerData playerData, Client client) {
         this.client = client;
         this.observers = new ArrayList<>();
+        this.inventory = new Inventory();
+
         data = playerData;
         loadImage();
     }
@@ -236,8 +239,14 @@ public class Player implements Subject {
     }
 
     public void keyPressed(KeyEvent e) {
-        hasChangedPosition = true;
         int key = e.getKeyCode();
+
+        if(key == KeyEvent.VK_I) {
+            this.inventory.open();
+            return;
+        }
+
+        hasChangedPosition = true;
 
         if (key == KeyEvent.VK_LEFT) {
             dx = -2;
