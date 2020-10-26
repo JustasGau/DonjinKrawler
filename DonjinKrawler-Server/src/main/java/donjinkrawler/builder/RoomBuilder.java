@@ -20,16 +20,15 @@ public abstract class RoomBuilder {
     }
 
     public RoomBuilder buildWalls() {
-        buildWalls(-1);
-        return this;
+        return buildWalls("");
     }
 
-    public RoomBuilder buildWalls(int texture) {
+    public RoomBuilder buildWalls(String texture) {
         buildWallsAroundMap(texture);
         return this;
     }
 
-    private void buildWallsAroundMap(int texture) {
+    private void buildWallsAroundMap(String texture) {
         // TODO: refactor to configurable window size
         Wall wall = new Wall(0, 0, 20, MAP_HEIGHT - 20, texture); // LEFT WALL
         roomData.getWalls().add(wall);

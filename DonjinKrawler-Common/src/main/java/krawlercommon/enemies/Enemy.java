@@ -60,6 +60,14 @@ public abstract class Enemy implements Observer {
         return y;
     }
 
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
     public void incrementTick(int fps) {
         if (tick == updateIntervalSeconds * fps) {
             tick = 0;

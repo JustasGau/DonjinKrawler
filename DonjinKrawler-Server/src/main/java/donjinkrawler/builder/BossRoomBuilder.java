@@ -1,11 +1,7 @@
 package donjinkrawler.builder;
 
-import krawlercommon.enemies.Enemy;
-import krawlercommon.enemies.EnemyGenerator;
-import krawlercommon.enemies.big.BigEnemyFactory;
-import krawlercommon.map.RoomType;
-
-import java.util.ArrayList;
+import krawlercommon.enemies.Boss;
+import krawlercommon.map.*;
 
 public class BossRoomBuilder extends RoomBuilder {
 
@@ -22,7 +18,11 @@ public class BossRoomBuilder extends RoomBuilder {
 
     @Override
     public RoomBuilder buildWalls() {
-        super.buildWalls(100);
+        super.buildWalls("100");
+        Wall wall = new Wall(20, 160, 160, 20, "300");
+        roomData.getWalls().add(wall);
+        wall = new Wall(179, 20, 4, 160, "300-side");
+        roomData.getWalls().add(wall);
         return this;
     }
 
@@ -39,19 +39,41 @@ public class BossRoomBuilder extends RoomBuilder {
 
     @Override
     public RoomBuilder buildObstacles() {
+        Obstacle obstacle = new Obstacle();
+        obstacle.setObstacleType(ObstacleType.LAVA);
+        obstacle.setX(50);
+        obstacle.setY(380);
+        obstacle.setWidth(150);
+        obstacle.setHeight(50);
+        roomData.getObstacles().add(obstacle);
+
+        obstacle = new Obstacle();
+        obstacle.setObstacleType(ObstacleType.LAVA);
+        obstacle.setX(300);
+        obstacle.setY(100);
+        obstacle.setWidth(150);
+        obstacle.setHeight(50);
+        roomData.getObstacles().add(obstacle);
+
         return this;
     }
 
     @Override
     public RoomBuilder buildDecorations() {
+        Decoration decoration = new Decoration();
+        decoration.setX(40);
+        decoration.setY(40);
+        decoration.setImageNumber(300);
+        decoration.setHeight(128);
+        decoration.setWidth(128);
+        roomData.getDecorations().add(decoration);
         return this;
     }
 
     @Override
     RoomBuilder buildEnemies() {
-        EnemyGenerator bigEnemyGenerator = new EnemyGenerator(new BigEnemyFactory());
-        ArrayList<Enemy> bigEnemies = bigEnemyGenerator.generateRandomEnemies(1);
-        roomData.getEnemies().addAll(bigEnemies);
+        Boss boss = new Boss();
+        roomData.getEnemies().add(boss);
         return this;
     }
 }
