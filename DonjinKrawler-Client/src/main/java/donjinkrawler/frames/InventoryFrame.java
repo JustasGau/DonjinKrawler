@@ -18,6 +18,7 @@ public class InventoryFrame extends JFrame {
     private final JList<String> inventoryList;
     private Weapon weapon;
     private Armor armor;
+    JTextArea infoField;
 
     public InventoryFrame() {
         this.setup();
@@ -29,11 +30,11 @@ public class InventoryFrame extends JFrame {
         inventoryList = new JList<>(listModel);
         inventoryList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        JTextArea infoField = new JTextArea();
+        this.infoField = new JTextArea();
 
         infoField.setPreferredSize(new Dimension(200, 200));
 
-        JPanel infoFieldPanel =new JPanel();
+        JPanel infoFieldPanel = new JPanel();
         infoFieldPanel.add(infoField);
 
         JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL, new JScrollPane(inventoryList), infoFieldPanel);
@@ -79,10 +80,12 @@ public class InventoryFrame extends JFrame {
 
     public void setWeapon(Weapon weapon) {
         this.weapon = weapon;
+        this.infoField.setText(getItemStats("Weapon"));
     }
 
     public void setArmor(Armor armor) {
         this.armor = armor;
+        this.infoField.setText(getItemStats("Armor"));
     }
 
     private void setup() {
