@@ -172,6 +172,7 @@ public class Game extends JPanel implements ActionListener {
             player.detachAllObservers();
             player.setHasNotifiedObservers(false);
             newRoomObj.getRoomData().getEnemies().forEach(e -> player.attachObserver(e));
+            audioPlayer.play("wav", "times-up.wav");
         } else {
             newRoomObj = new Room(newRoom);
         }
