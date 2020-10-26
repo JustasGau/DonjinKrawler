@@ -193,10 +193,10 @@ public class Player implements Subject {
         int playerX = data.getX() + dx;
         int playerY = data.getY() + dy;
 
-        int x1 = playerX - 4;
-        int y1 = playerY - 4;
-        int x2 = playerX + 4;
-        int y2 = playerY + 4;
+        int x1 = playerX - 8;
+        int y1 = playerY - 8;
+        int x2 = playerX + 8;
+        int y2 = playerY + 8;
 
         int objX = obj.getData().getX();
         int objY = obj.getData().getY();
