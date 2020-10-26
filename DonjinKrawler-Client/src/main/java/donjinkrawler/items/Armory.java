@@ -9,4 +9,8 @@ public abstract class Armory extends BaseItem {
     public Armory(Tier tier) {
         this.tier = tier;
     }
+
+    protected double roundStat(double stat) {
+        return (double) Math.round(stat * 100.0) / 100.0;
+    }
 }

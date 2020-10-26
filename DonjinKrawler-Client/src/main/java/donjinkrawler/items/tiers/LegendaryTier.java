@@ -5,6 +5,11 @@ import java.util.Random;
 public class LegendaryTier implements Tier {
 
     @Override
+    public String getName() {
+        return "Legendary";
+    }
+
+    @Override
     public double getDamageBonus() {
         return (getLastDigitOfTime() + 1) * getRandomDoubleInRange(3,4);
     }

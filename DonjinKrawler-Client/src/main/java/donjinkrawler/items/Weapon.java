@@ -23,10 +23,17 @@ public class Weapon extends Armory {
     }
 
     public double getDamage() {
-        return damage + this.tier.getDamageBonus();
+        return this.roundStat(damage + this.tier.getDamageBonus());
     }
 
     public double getSpeed() {
-        return speed + this.tier.getSpeedBonus();
+        return this.roundStat(speed + this.tier.getSpeedBonus());
+    }
+
+    @Override
+    public String getDescription() {
+        return "Tier: " + this.tier.getName() + "\n" +
+                "Damage: " + this.getDamage() + "\n" +
+                "Speed: " + this.getSpeed();
     }
 }

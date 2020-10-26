@@ -24,15 +24,23 @@ public class Armor extends Armory {
         return (ArmorData) itemData;
     }
 
+    @Override
+    public String getDescription() {
+        return "Tier: " + this.tier.getName() + "\n" +
+                "Defense: " + this.getDefense() + "\n" +
+                "HP: " + this.getHp() + "\n" +
+                "Mana: " + this.getMana();
+    }
+
     public double getDefense() {
-        return defense + this.tier.getDefenseBonus();
+        return this.roundStat(defense + this.tier.getDefenseBonus());
     }
 
     public double getHp() {
-        return hp + this.tier.getHpBonus();
+        return this.roundStat(hp + this.tier.getHpBonus());
     }
 
     public double getMana() {
-        return mana + this.tier.getManaBonus();
+        return this.roundStat(mana + this.tier.getManaBonus());
     }
 }

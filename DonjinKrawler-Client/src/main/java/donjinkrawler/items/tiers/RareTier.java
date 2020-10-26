@@ -9,6 +9,11 @@ public class RareTier implements Tier {
     private static final double MANA_MULTIPLIER = 1.2;
 
     @Override
+    public String getName() {
+        return "Rare";
+    }
+
+    @Override
     public double getDamageBonus() {
         return (getLastDigitOfTime() + 1) * DAMAGE_MULTIPLIER;
     }

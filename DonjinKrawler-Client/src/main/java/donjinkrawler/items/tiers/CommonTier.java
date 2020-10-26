@@ -5,6 +5,11 @@ import java.util.Random;
 public class CommonTier implements Tier {
 
     @Override
+    public String getName() {
+        return "Common";
+    }
+
+    @Override
     public double getDamageBonus() {
         return this.getRandomDoubleInRange(1,5);
     }

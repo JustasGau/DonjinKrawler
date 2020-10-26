@@ -67,14 +67,14 @@ public class InventoryFrame extends JFrame {
         if(this.weapon == null) {
             return "No weapon acquired.";
         }
-        return this.weapon.toString();
+        return this.weapon.getDescription();
     }
 
     private String getArmorStats() {
         if(this.armor == null) {
             return "No armor acquired.";
         }
-        return this.armor.toString();
+        return this.armor.getDescription();
     }
 
     public void setWeapon(Weapon weapon) {

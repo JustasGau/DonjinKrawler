@@ -13,4 +13,9 @@ public class DamagePotion extends BaseItem {
     public DamagePotionData getData() {
         return (DamagePotionData) itemData;
     }
+
+    @Override
+    public String getDescription() {
+        return "Adds some damage buff.";
+    }
 }
