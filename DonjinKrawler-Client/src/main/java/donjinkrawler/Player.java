@@ -1,6 +1,7 @@
 package donjinkrawler;
 
 import command.*;
+import donjinkrawler.items.BaseItem;
 import krawlercommon.PlayerData;
 import krawlercommon.enemies.Enemy;
 import krawlercommon.items.ItemLocationData;
@@ -51,7 +52,7 @@ public class Player implements Subject {
     }
 
     public void move(List<Wall> walls, List<Door> doors, List<Obstacle> obstacles, List<Decoration> decorations,
-                     HashMap<Integer, ItemLocationData> items) {
+                     HashMap<Integer, BaseItem> items) {
         if (isCollidingWithObstacle(obstacles)) {
             return;
         }
@@ -94,8 +95,8 @@ public class Player implements Subject {
         return false;
     }
 
-    private boolean isCollidingWithItem(HashMap<Integer, ItemLocationData> objects) {
-        for (HashMap.Entry<Integer, ItemLocationData> itemData : objects.entrySet()) {
+    private boolean isCollidingWithItem(HashMap<Integer, BaseItem> objects) {
+        for (HashMap.Entry<Integer, BaseItem> itemData : objects.entrySet()) {
             if (isCollidingWith(itemData.getValue())) {
                 return true;
             }
@@ -176,7 +177,7 @@ public class Player implements Subject {
         return door.checkCollision(topCornerX, topCornerY, botCornerX, botCornerY, width, height);
     }
 
-    private boolean isCollidingWith(ItemLocationData obj) {
+    private boolean isCollidingWith(BaseItem obj) {
 
         int playerX = data.getX() + dx;
         int playerY = data.getY() + dy;
@@ -186,8 +187,8 @@ public class Player implements Subject {
         int x2 = playerX + 4;
         int y2 = playerY + 4;
 
-        int objX = obj.getX();
-        int objY = obj.getY();
+        int objX = obj.getData().getX();
+        int objY = obj.getData().getY();
 
         return objX > x1
                 && objX < x2
