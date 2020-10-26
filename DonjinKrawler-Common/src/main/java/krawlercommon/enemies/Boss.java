@@ -15,6 +15,6 @@ public class Boss extends Enemy {
 
     @Override
     public void update(EnemyStrategy strategy) {
-        setCurrentStrategy(strategy);
+        strategy.init(this);
     }
 }
