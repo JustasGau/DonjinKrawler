@@ -29,6 +29,8 @@ public class Game extends JPanel implements ActionListener {
     private final Player player;
     private GameMap gameMap;
     private final int delay = 10;
+    private static int TARGET_FPS = 60;
+    private static long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
     private static Map<Integer, AbstractShellInterface> shells = new ConcurrentHashMap<>();
 
     private final JLabel label;
@@ -49,6 +51,7 @@ public class Game extends JPanel implements ActionListener {
 
         timer = new Timer(delay, this);
         timer.start();
+        new gameLoop();
     }
 
     @Override
@@ -91,6 +94,33 @@ public class Game extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         gameUpdate();
+    }
+
+    public static class gameLoop extends Thread {
+        long now;
+        long updateTime;
+        long wait;
+
+        public gameLoop() {
+            start();
+        }
+
+        public void run() {
+            //Main loop to space out updates and entity checking
+            while (true) {
+                now = System.nanoTime();
+                System.out.println("1/60");
+
+                updateTime = System.nanoTime() - now;
+                wait = (OPTIMAL_TIME - updateTime) / 1000000;
+
+                try {
+                    Thread.sleep(wait);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     private void gameUpdate() {
@@ -226,6 +256,14 @@ public class Game extends JPanel implements ActionListener {
         AbstractShellInterface temp = shells.get(tempID);
         if (temp != null) {
             temp.setInfo(tempInfo);
+        }
+    }
+
+    public void updateEnemies(List<Enemy> enemies) {
+        for (Enemy enemy : enemies) {
+            AbstractShellInterface updatedEnemy = shells.get(enemy.getID());
+            updatedEnemy.setX(enemy.getX());
+            updatedEnemy.setY(enemy.getY());
         }
     }
 

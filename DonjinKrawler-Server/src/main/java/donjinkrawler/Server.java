@@ -3,12 +3,14 @@ package donjinkrawler;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
+import krawlercommon.ConnectionManager;
 import krawlercommon.PlayerData;
 import krawlercommon.enemies.*;
 import donjinkrawler.logging.LoggerSingleton;
 import krawlercommon.RegistrationManager;
 import krawlercommon.map.RoomData;
 import krawlercommon.packets.*;
+import krawlercommon.strategies.MoveTowardPlayer;
 
 import java.io.IOException;
 import java.util.*;
@@ -17,7 +19,7 @@ import java.util.*;
 public class Server {
     private static final com.esotericsoftware.kryonet.Server server =
             new com.esotericsoftware.kryonet.Server(16384 * 64, 16384 * 64);
-    private static final Map<Integer, PlayerData> playerConnectionMap = new HashMap<>();
+    public static final Map<Integer, PlayerData> playerConnectionMap = new HashMap<>();
 
     private static final int mapSize = 10;
 
@@ -38,6 +40,7 @@ public class Server {
         server.start();
         server.bind(54555, 54777);
         RegistrationManager.registerKryo(server.getKryo());
+        ConnectionManager.init(playerConnectionMap);
         server.addListener(new Listener() {
             public void received(Connection connection, Object object) {
                 if (object instanceof LoginPacket) {
@@ -58,7 +61,6 @@ public class Server {
             }
 
         });
-        new Timer();
         initMap();
         logger.info("Server is running");
     }
@@ -66,7 +68,9 @@ public class Server {
     private static void initMap() {
         GameMapGenerator generator = new GameMapGenerator(mapSize);
         List<String> gameMapString = generator.generate();
+
         rooms = generator.generateRoomsFromString(gameMapString);
+        new Timer();
     }
 
     private static void handleLogin(Connection connection, LoginPacket object) {
@@ -91,7 +95,7 @@ public class Server {
 
     private static void handleRoomChange(Connection connection, RoomPacket roomPacket) {
         currentRoom = roomPacket.id;
-        sendEnemies();
+        sendEnemies(true);
         server.sendToAllExceptUDP(connection.getID(), roomPacket);
     }
 
@@ -180,7 +184,6 @@ public class Server {
             //Main loop to space out updates and entity checking
             while (true) {
                 now = System.nanoTime();
-
                 update();
 
                 updateTime = System.nanoTime() - now;
@@ -196,18 +199,18 @@ public class Server {
     }
 
     private static void update() {
-//        for (Enemy enemy : smallEnemies) {
-//            enemy.incrementTick(TARGET_FPS);
-//        }
-//        for (Enemy enemy : bigEnemies) {
-//            enemy.incrementTick(TARGET_FPS);
-//        }
-//        sendEnemyInfo(smallEnemies);
-//        sendEnemyInfo(bigEnemies);
+        if (rooms.get(currentRoom).getEnemies().size() > 0) {
+            for (Enemy enemy : rooms.get(currentRoom).getEnemies()) {
+                enemy.incrementTick(TARGET_FPS, server);
+                sendEnemies(false);
+            }
+        }
     }
 
-    private static void sendEnemies() {
+    private static void sendEnemies(Boolean create) {
         EnemyPacket enemyPacket = new EnemyPacket();
+        if (create)
+            enemyPacket.setCreate();
         enemyPacket.getEnemies().addAll(rooms.get(currentRoom).getEnemies());
         server.sendToAllTCP(enemyPacket);
     }

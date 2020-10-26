@@ -55,7 +55,10 @@ public class Client {
                 } else if (object instanceof MoveCharacter msg && game != null) {
                     game.changeShellPosition(msg);
                 } else if (object instanceof EnemyPacket enemyPacket && game != null) {
-                    game.addEnemies(enemyPacket.getEnemies());
+                    if (enemyPacket.isUpdate())
+                        game.updateEnemies(enemyPacket.getEnemies());
+                    else
+                        game.addEnemies(enemyPacket.getEnemies());
                 } else if (object instanceof CreatePlayerPacket packet && game != null) {
                     game.addPlayerShell(packet.player);
                 } else if (object instanceof DisconnectPacket dcPacket && game != null) {

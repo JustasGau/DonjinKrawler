@@ -7,6 +7,7 @@ import java.util.List;
 
 public class EnemyPacket {
     public int roomId;
+    public Boolean update = true;
 
     private List<Enemy> enemies;
 
@@ -29,5 +30,13 @@ public class EnemyPacket {
 
     public void setEnemies(List<Enemy> enemies) {
         this.enemies = enemies;
+    }
+
+    public void setCreate() {
+        update = false;
+    }
+
+    public Boolean isUpdate() {
+        return update;
     }
 }

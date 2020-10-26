@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class EnemyShell extends AbstractShell {
 
     private int id;
-    private String info = "empty";
+    private String info = "No strategy";
     private ArrayList<ImageIcon> clothes = new ArrayList<>();
 
     public EnemyShell(String name, int id, int x, int y) {
