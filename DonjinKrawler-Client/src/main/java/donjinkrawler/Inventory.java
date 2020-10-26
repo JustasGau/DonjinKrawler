@@ -16,24 +16,26 @@ public class Inventory {
     }
 
     public void open() {
-        this.frame.setArmor(this.armor);
-        this.frame.setWeapon(this.weapon);
         this.frame.setVisible(true);
     }
 
     public void addWeapon(Weapon weapon) {
         this.weapon = weapon;
+        this.frame.setWeapon(this.weapon);
     }
 
     public void addArmor(Armor armor) {
         this.armor = armor;
+        this.frame.setArmor(this.armor);
     }
 
     public void removeWeapon() {
         this.weapon = null;
+        this.frame.setWeapon(null);
     }
 
     public void removeArmor() {
         this.armor = null;
+        this.frame.setArmor(null);
     }
 }

@@ -93,26 +93,6 @@ public class InventoryFrame extends JFrame {
         this.setResizable(false);
         this.setSize(INVENTORY_WIDTH, INVENTORY_HEIGHT);
         this.setLocationRelativeTo(null);
-        this.addWindowFocusListener(this.closeOnOutsideClick());
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-    }
-
-    private WindowFocusListener closeOnOutsideClick() {
-        Frame frame = this;
-
-        return new WindowFocusListener() {
-            private boolean gained = false;
-            @Override
-            public void windowGainedFocus(WindowEvent windowEvent) {
-                gained = true;
-            }
-
-            @Override
-            public void windowLostFocus(WindowEvent windowEvent) {
-                if ( gained ){
-                    frame.dispose();
-                }
-            }
-        };
     }
 }
