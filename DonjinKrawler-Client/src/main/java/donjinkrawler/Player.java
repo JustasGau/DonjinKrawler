@@ -1,10 +1,11 @@
 package donjinkrawler;
 
 import command.*;
+import donjinkrawler.items.Armor;
 import donjinkrawler.items.BaseItem;
+import donjinkrawler.items.Weapon;
 import krawlercommon.PlayerData;
 import krawlercommon.enemies.Enemy;
-import krawlercommon.items.ItemLocationData;
 import krawlercommon.map.*;
 import krawlercommon.observer.Observer;
 import krawlercommon.observer.Subject;
@@ -98,6 +99,7 @@ public class Player implements Subject {
     private boolean isCollidingWithItem(HashMap<Integer, BaseItem> objects) {
         for (HashMap.Entry<Integer, BaseItem> itemData : objects.entrySet()) {
             if (isCollidingWith(itemData.getValue())) {
+                handleItemCollision(itemData.getValue());
                 return true;
             }
         }
@@ -127,6 +129,14 @@ public class Player implements Subject {
             commander.undo();
         } else {
             commander.execute(new MoveCommand(this, dx, dy));
+        }
+    }
+
+    private void handleItemCollision(BaseItem item) {
+        if(item instanceof Armor) {
+            this.inventory.addArmor((Armor) item);
+        } else if( item instanceof Weapon) {
+            this.inventory.addWeapon((Weapon) item);
         }
     }
 

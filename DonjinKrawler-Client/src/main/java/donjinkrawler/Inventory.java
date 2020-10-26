@@ -22,15 +22,11 @@ public class Inventory {
     }
 
     public void addWeapon(Weapon weapon) {
-        if(this.weapon == null) {
-            this.weapon = weapon;
-        }
+        this.weapon = weapon;
     }
 
     public void addArmor(Armor armor) {
-        if(this.armor == null) {
-            this.armor = armor;
-        }
+        this.armor = armor;
     }
 
     public void removeWeapon() {
