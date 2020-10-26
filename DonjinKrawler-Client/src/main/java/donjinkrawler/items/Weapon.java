@@ -13,8 +13,8 @@ public class Weapon extends Armory {
         this.itemData = weaponData;
         loadImage("items/weapon.png");
 
-        this.damage = damage;
-        this.speed  = speed;
+        this.damage = this.roundStat(damage + this.tier.getDamageBonus());
+        this.speed  = this.roundStat(speed + this.tier.getSpeedBonus());
     }
 
     @Override
@@ -23,11 +23,11 @@ public class Weapon extends Armory {
     }
 
     public double getDamage() {
-        return this.roundStat(damage + this.tier.getDamageBonus());
+        return this.damage;
     }
 
     public double getSpeed() {
-        return this.roundStat(speed + this.tier.getSpeedBonus());
+        return this.speed;
     }
 
     @Override
