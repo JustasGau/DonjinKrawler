@@ -159,6 +159,11 @@ public class Room implements Cloneable {
         }
     }
 
+    public void removeItem(Integer itemId) {
+        this.items.remove(itemId);
+        this.roomData.removeItem(itemId);
+    }
+
     public ArrayList<Wall> getWalls() {
         return roomData.getWalls();
     }

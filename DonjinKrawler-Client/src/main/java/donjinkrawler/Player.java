@@ -52,25 +52,27 @@ public class Player implements Subject {
         width = image.getWidth(null);
     }
 
-    public void move(List<Wall> walls, List<Door> doors, List<Obstacle> obstacles, List<Decoration> decorations,
+    public Integer move(List<Wall> walls, List<Door> doors, List<Obstacle> obstacles, List<Decoration> decorations,
                      HashMap<Integer, BaseItem> items) {
         if (isCollidingWithObstacle(obstacles)) {
-            return;
+            return null;
         }
         if (isCollidingWithDoor(doors)) {
-            return;
+            return null;
         }
         if (isCollidingWithImmovableObject(walls) || isCollidingWithImmovableObject(decorations)) {
-            return;
+            return null;
         }
-        if(isCollidingWithItem(items)) {
-            return;
+        Integer itemId = isCollidingWithItem(items);
+        if(itemId != null) {
+            return itemId;
         }
         if (backwards) {
             commander.undo();
         } else {
             commander.execute(new MoveCommand(this, dx, dy));
         }
+        return null;
     }
 
     private boolean isCollidingWithDoor(List<Door> doors) {
@@ -96,15 +98,14 @@ public class Player implements Subject {
         return false;
     }
 
-    private boolean isCollidingWithItem(HashMap<Integer, BaseItem> objects) {
+    private Integer isCollidingWithItem(HashMap<Integer, BaseItem> objects) {
         for (HashMap.Entry<Integer, BaseItem> itemData : objects.entrySet()) {
             if (isCollidingWith(itemData.getValue())) {
                 handleItemCollision(itemData.getValue());
-                return true;
+                return itemData.getKey();
             }
         }
-        return false;
-
+        return null;
     }
 
     private boolean isCollidingWithObstacle(List<Obstacle> obstacles) {

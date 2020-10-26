@@ -118,11 +118,18 @@ public class Game extends JPanel implements ActionListener {
             sendPositionUpdate();
         }
 
-        player.move(gameMap.getCurrentRoom().getWalls(),
+        Integer itemId = player.move(
+                gameMap.getCurrentRoom().getWalls(),
                 gameMap.getCurrentRoom().getDoors(),
                 gameMap.getCurrentRoom().getObstacles(),
                 gameMap.getCurrentRoom().getDecorations(),
-                gameMap.getCurrentRoom().getItems());
+                gameMap.getCurrentRoom().getItems()
+        );
+
+        if(itemId != null) {
+            this.gameMap.getCurrentRoom().removeItem(itemId);
+        }
+
         repaint();
     }
 
