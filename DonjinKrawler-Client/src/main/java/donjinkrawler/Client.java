@@ -48,21 +48,27 @@ public class Client {
             public void received(Connection connection, Object object) {
                 if (object instanceof MessagePacket) {
                     handleMessagePacket((MessagePacket) object);
-                } else if (object instanceof MapPacket mapPacket) {
+                } else if (object instanceof MapPacket) {
+                    MapPacket mapPacket = (MapPacket) object;
                     rooms = mapPacket.rooms;
                 } else if (object instanceof IdPacket) {
                     handleIdPacket((IdPacket) object);
-                } else if (object instanceof MoveCharacter msg && game != null) {
+                } else if (object instanceof MoveCharacter && game != null) {
+                    MoveCharacter msg = (MoveCharacter) object;
                     game.changeShellPosition(msg);
-                } else if (object instanceof EnemyPacket enemyPacket && game != null) {
+                } else if (object instanceof EnemyPacket && game != null) {
+                    EnemyPacket enemyPacket = (EnemyPacket) object;
                     game.addEnemies(enemyPacket.getEnemies());
-                } else if (object instanceof CreatePlayerPacket packet && game != null) {
+                } else if (object instanceof CreatePlayerPacket && game != null) {
+                    CreatePlayerPacket packet = (CreatePlayerPacket) object;
                     game.addPlayerShell(packet.player);
-                } else if (object instanceof DisconnectPacket dcPacket && game != null) {
+                } else if (object instanceof DisconnectPacket && game != null) {
+                    DisconnectPacket dcPacket = (DisconnectPacket) object;
                     game.deletePlayerShell(dcPacket.id);
                 } else if (object instanceof RoomPacket && game != null) {
                     game.changeRoom((RoomPacket) object);
-                } else if (object instanceof ChangeEnemyStrategyPacket enemy && game != null) {
+                } else if (object instanceof ChangeEnemyStrategyPacket && game != null) {
+                    ChangeEnemyStrategyPacket enemy = (ChangeEnemyStrategyPacket) object;
                     game.updateEnemyStrategy(enemy.id, enemy.strategy);
                 }
             }

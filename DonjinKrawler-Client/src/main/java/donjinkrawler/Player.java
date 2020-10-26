@@ -1,6 +1,9 @@
 package donjinkrawler;
 
 import command.*;
+import donjinkrawler.items.Armor;
+import donjinkrawler.items.BaseItem;
+import donjinkrawler.items.Weapon;
 import krawlercommon.PlayerData;
 import krawlercommon.enemies.Enemy;
 import krawlercommon.map.*;
@@ -10,6 +13,7 @@ import krawlercommon.observer.Subject;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.swing.ImageIcon;
 import com.esotericsoftware.kryonet.Client;
@@ -30,10 +34,13 @@ public class Player implements Subject {
     private Client client;
     private PlayerCommander commander = new PlayerCommander();
     private Boolean backwards = false;
+    private Inventory inventory;
 
     public Player(PlayerData playerData, Client client) {
         this.client = client;
         this.observers = new ArrayList<>();
+        this.inventory = new Inventory();
+
         data = playerData;
         loadImage();
     }
@@ -45,22 +52,27 @@ public class Player implements Subject {
         width = image.getWidth(null);
     }
 
-    public void move(List<Wall> walls, List<Door> doors, List<Obstacle> obstacles, List<Decoration> decorations) {
+    public Integer move(List<Wall> walls, List<Door> doors, List<Obstacle> obstacles, List<Decoration> decorations,
+                     HashMap<Integer, BaseItem> items) {
         if (isCollidingWithObstacle(obstacles)) {
-            return;
+            return null;
         }
         if (isCollidingWithDoor(doors)) {
-            return;
+            return null;
         }
         if (isCollidingWithImmovableObject(walls) || isCollidingWithImmovableObject(decorations)) {
-            return;
+            return null;
+        }
+        Integer itemId = isCollidingWithItem(items);
+        if(itemId != null) {
+            return itemId;
         }
         if (backwards) {
             commander.undo();
         } else {
             commander.execute(new MoveCommand(this, dx, dy));
         }
-
+        return null;
     }
 
     private boolean isCollidingWithDoor(List<Door> doors) {
@@ -86,6 +98,16 @@ public class Player implements Subject {
         return false;
     }
 
+    private Integer isCollidingWithItem(HashMap<Integer, BaseItem> objects) {
+        for (HashMap.Entry<Integer, BaseItem> itemData : objects.entrySet()) {
+            if (isCollidingWith(itemData.getValue())) {
+                handleItemCollision(itemData.getValue());
+                return itemData.getKey();
+            }
+        }
+        return null;
+    }
+
     private boolean isCollidingWithObstacle(List<Obstacle> obstacles) {
         for (Obstacle obstacle : obstacles) {
             if (isCollidingWith(obstacle)) {
@@ -108,6 +130,14 @@ public class Player implements Subject {
             commander.undo();
         } else {
             commander.execute(new MoveCommand(this, dx, dy));
+        }
+    }
+
+    private void handleItemCollision(BaseItem item) {
+        if(item instanceof Armor) {
+            this.inventory.addArmor((Armor) item);
+        } else if( item instanceof Weapon) {
+            this.inventory.addWeapon((Weapon) item);
         }
     }
 
@@ -156,6 +186,25 @@ public class Player implements Subject {
         int botCornerX = data.getX() + width + dx;
         int botCornerY = data.getY() + height + dy;
         return door.checkCollision(topCornerX, topCornerY, botCornerX, botCornerY, width, height);
+    }
+
+    private boolean isCollidingWith(BaseItem obj) {
+
+        int playerX = data.getX() + dx;
+        int playerY = data.getY() + dy;
+
+        int x1 = playerX - 8;
+        int y1 = playerY - 8;
+        int x2 = playerX + 8;
+        int y2 = playerY + 8;
+
+        int objX = obj.getData().getX();
+        int objY = obj.getData().getY();
+
+        return objX > x1
+                && objX < x2
+                && objY > y1
+                && objY < y2;
     }
 
     public int getX() {
@@ -236,8 +285,14 @@ public class Player implements Subject {
     }
 
     public void keyPressed(KeyEvent e) {
-        hasChangedPosition = true;
         int key = e.getKeyCode();
+
+        if(key == KeyEvent.VK_I) {
+            this.inventory.open();
+            return;
+        }
+
+        hasChangedPosition = true;
 
         if (key == KeyEvent.VK_LEFT) {
             dx = -2;

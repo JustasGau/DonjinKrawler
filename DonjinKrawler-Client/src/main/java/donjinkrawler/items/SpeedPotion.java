@@ -13,4 +13,9 @@ public class SpeedPotion extends BaseItem {
     public SpeedPotionData getData() {
         return (SpeedPotionData) itemData;
     }
+
+    @Override
+    public String getDescription() {
+        return "Adds some speed buff.";
+    }
 }
