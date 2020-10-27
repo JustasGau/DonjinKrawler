@@ -12,6 +12,9 @@ abstract public class AbstractShell implements AbstractShellInterface {
     protected int y = 250;
     protected String name;
     protected Image image;
+    protected Image attackIMG;
+    protected boolean attack;
+    protected double health = 100;
 
     abstract public void loadImage();
 
@@ -48,5 +51,19 @@ abstract public class AbstractShell implements AbstractShellInterface {
     public abstract void drawClothes(Graphics2D g2d, Game game);
 
     public abstract ArrayList<ImageIcon> addClothing();
+
+    public double getHealth() {
+        return health;
+    }
+
+    public void setHealth(double val) {
+        health = val;
+    }
+
+    abstract public Image getAttackImage();
+
+    public void isAttacing(boolean attack) {
+        this.attack = attack;
+    }
 
 }

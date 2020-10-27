@@ -55,13 +55,15 @@ public class MoveTowardPlayer implements EnemyStrategy {
     private PlayerData calculateClosest() {
         PlayerData closest = null;
         double distance = Double.MAX_VALUE;
-        for (PlayerData player : ConnectionManager.getConnectionMap().values()) {
-            int x = enemy.getX() - player.getX();
-            int y = enemy.getY() - player.getY();
-            double tmpDist = Math.sqrt(x*x + y*y);
-            if (tmpDist < distance) {
-                distance = tmpDist;
-                closest = player;
+        if (ConnectionManager.getConnectionMap() != null) {
+            for (PlayerData player : ConnectionManager.getConnectionMap().values()) {
+                int x = enemy.getX() - player.getX();
+                int y = enemy.getY() - player.getY();
+                double tmpDist = Math.sqrt(x * x + y * y);
+                if (tmpDist < distance) {
+                    distance = tmpDist;
+                    closest = player;
+                }
             }
         }
         return closest;

@@ -12,7 +12,12 @@ public class SwingUtils {
         g2d.setColor(Color.BLACK);
         Rectangle2D.Double healthBarOutline = new Rectangle2D.Double(x - 1, y - 14, width + 2, height + 2);
         g2d.fill(healthBarOutline);
-        g2d.setColor(Color.GREEN);
+        if (health >= 70)
+            g2d.setColor(Color.GREEN);
+        else if (health >= 40)
+            g2d.setColor(Color.YELLOW);
+        else
+            g2d.setColor(Color.RED);
         Rectangle2D.Double healthBar = new Rectangle2D.Double(x, y - 13.5, health * width / 100, height);
         g2d.fill(healthBar);
     }

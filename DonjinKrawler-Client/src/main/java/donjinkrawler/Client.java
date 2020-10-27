@@ -67,6 +67,8 @@ public class Client {
                     game.changeRoom((RoomPacket) object);
                 } else if (object instanceof ChangeEnemyStrategyPacket enemy && game != null) {
                     game.updateEnemyStrategy(enemy.id, enemy.strategy);
+                } else if (object instanceof CharacterAttackPacket character && game != null) {
+                    game.drawPlayerAttack(character.id);
                 }
             }
         });

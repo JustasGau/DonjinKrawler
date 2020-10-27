@@ -1,6 +1,6 @@
 package donjinkrawler;
 
-import command.*;
+import donjinkrawler.command.*;
 import krawlercommon.PlayerData;
 import krawlercommon.enemies.Enemy;
 import krawlercommon.map.*;
@@ -14,7 +14,11 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import com.esotericsoftware.kryonet.Client;
 import krawlercommon.packets.ChangeEnemyStrategyPacket;
+import krawlercommon.packets.CharacterAttackPacket;
+import krawlercommon.packets.DamageEnemyPacket;
 import krawlercommon.strategies.MoveTowardPlayer;
+
+import static donjinkrawler.Game.shells;
 
 public class Player implements Subject {
     private final PlayerData data;
@@ -30,6 +34,11 @@ public class Player implements Subject {
     private Client client;
     private PlayerCommander commander = new PlayerCommander();
     private Boolean backwards = false;
+    private Image attackIMG;
+    private double damage = 20;
+    private Boolean attack = false;
+    private Boolean canAttack = false;
+    private int attackTimer = 0;
 
     public Player(PlayerData playerData, Client client) {
         this.client = client;
@@ -43,6 +52,8 @@ public class Player implements Subject {
         image = ii.getImage();
         height = image.getHeight(null);
         width = image.getWidth(null);
+        ii = new ImageIcon(ClassLoader.getSystemResource("attack.png").getFile());
+        attackIMG = ii.getImage();
     }
 
     public void move(List<Wall> walls, List<Door> doors, List<Obstacle> obstacles, List<Decoration> decorations) {
@@ -203,6 +214,16 @@ public class Player implements Subject {
         return image;
     }
 
+    public Image getAttackImage() {
+        if (attack == true || attackTimer < 10) {
+            CharacterAttackPacket packet = new CharacterAttackPacket();
+            packet.id = getId();
+            client.sendTCP(packet);
+            return attackIMG;
+        } else
+            return null;
+    }
+
     public int getId() {
         return data.getId();
     }
@@ -235,6 +256,15 @@ public class Player implements Subject {
         this.hasNotifiedObservers = hasNotifiedObservers;
     }
 
+    public void incrementTimer() {
+        if (attackTimer == 60)
+            canAttack = true;
+        else {
+            attackTimer++;
+            attack = false;
+        }
+    }
+
     public void keyPressed(KeyEvent e) {
         hasChangedPosition = true;
         int key = e.getKeyCode();
@@ -257,6 +287,34 @@ public class Player implements Subject {
 
         if (key == KeyEvent.VK_U) {
             backwards = true;
+        }
+
+        if (key == KeyEvent.VK_SPACE) {
+            if (canAttack) {
+                attack = true;
+                canAttack = false;
+                attackTimer = 0;
+                findTarget();
+            }
+
+        }
+    }
+
+    public double getDamage() {
+        return damage;
+    }
+
+    public void findTarget() {
+        if (attack == true) {
+            for (AbstractShellInterface enemy : shells.values()) {
+                if ((enemy.getX() >= (data.getX()-10)) && enemy.getX() <= (data.getX()+10) &&
+                        enemy.getY() >= (data.getY() -10) && enemy.getY() < (data.getY()+10)) {
+                    DamageEnemyPacket packet = new DamageEnemyPacket();
+                    packet.id = enemy.getID();
+                    packet.damage = getDamage();
+                    client.sendTCP(packet);
+                }
+            }
         }
     }
 

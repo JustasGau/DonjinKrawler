@@ -68,8 +68,18 @@ public class EnemyShell extends AbstractShell {
     }
 
     @Override
+    public void damage(double damage) {
+
+    }
+
+    @Override
     public ArrayList<ImageIcon> addClothing() {
         return clothes;
+    }
+
+    @Override
+    public Image getAttackImage() {
+        return null;
     }
 
 }

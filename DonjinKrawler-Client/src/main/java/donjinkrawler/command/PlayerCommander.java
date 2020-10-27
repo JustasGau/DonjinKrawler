@@ -1,4 +1,4 @@
-package command;
+package donjinkrawler.command;
 
 import java.util.LinkedList;
 

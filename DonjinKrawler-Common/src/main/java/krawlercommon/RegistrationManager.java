@@ -11,6 +11,7 @@ import krawlercommon.enemies.big.BigZombie;
 import krawlercommon.enemies.small.SmallChicken;
 import krawlercommon.enemies.small.SmallSkeleton;
 import krawlercommon.enemies.small.SmallZombie;
+import krawlercommon.enemies.Enemy.Phases;
 import krawlercommon.items.*;
 import krawlercommon.map.*;
 import krawlercommon.packets.*;
@@ -36,6 +37,8 @@ public class RegistrationManager {
         kryo.register(DisconnectPacket.class);
         kryo.register(RoomPacket.class);
         kryo.register(ChangeEnemyStrategyPacket.class);
+        kryo.register(CharacterAttackPacket.class);
+        kryo.register(DamageEnemyPacket.class);
 
         // DonjinKrawler classes
         kryo.register(PlayerData.class);
@@ -68,6 +71,7 @@ public class RegistrationManager {
         kryo.register(MoveRandomly.class);
         kryo.register(MoveTowardPlayer.class);
         kryo.register(RangeAttack.class);
+        kryo.register(Enemy.Phases.class);
 
         // jdk classes
         kryo.register(ArrayList.class);

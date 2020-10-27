@@ -8,10 +8,19 @@ import krawlercommon.strategies.MoveAwayFromPlayer;
 import krawlercommon.strategies.MoveRandomly;
 import krawlercommon.strategies.MoveTowardPlayer;
 
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
 public abstract class Enemy implements Observer {
+
+    public enum Phases {
+        RANDOM,
+        TOWARDS,
+        AWAY,
+        ATTACK,
+        RANGED
+    }
 
     private String name;
     private double damage;
@@ -21,8 +30,15 @@ public abstract class Enemy implements Observer {
     private int y = random.nextInt(450);
     private int dx;
     private int dy;
+    private Phases strategyPhase = Phases.RANDOM;
+    private double health = 100;
+    private boolean updateStatus = false;
 
-    transient EnemyStrategy[] strategies = {new MoveAwayFromPlayer(), new MoveRandomly(), new MoveTowardPlayer()};
+    transient Map<Phases, EnemyStrategy> strategies = Map.of(
+            Phases.AWAY, new MoveAwayFromPlayer(),
+            Phases.RANDOM, new MoveRandomly(),
+            Phases.TOWARDS, new MoveTowardPlayer()
+            );
     transient EnemyStrategy currentStrategy;
     int updateIntervalSeconds = 2;
     int tick = 0;
@@ -44,7 +60,7 @@ public abstract class Enemy implements Observer {
         updateIntervalSeconds = interval;
     }
 
-    public void setStrategies(EnemyStrategy[] strat) {
+    public void setStrategies(Map<Phases, EnemyStrategy> strat) {
         strategies = strat;
     }
 
@@ -72,23 +88,43 @@ public abstract class Enemy implements Observer {
         y = val;
     }
 
-
     public void incrementTick(int fps, Server server) {
-        if (tick == updateIntervalSeconds * fps) {
-            tick = 0;
-            nextStrategy(server);
+        checkStrategyCondition(server);
+        if (updateStatus) {
+            ChangeEnemyStrategyPacket packet = new ChangeEnemyStrategyPacket();
+            packet.id = id;
+            packet.strategy = currentStrategy;
+            server.sendToAllTCP(packet);
+            updateStatus = false;
+        }
 
-        } else {
-            tick++;
-            if (currentStrategy != null) {
-                currentStrategy.execute();
-            }
+        if (currentStrategy != null) {
+            currentStrategy.execute();
         }
     }
 
+    private void checkStrategyCondition(Server server) {
+        if (strategyPhase == Phases.RANDOM) {
+            currentStrategy = strategies.get(strategyPhase);
+            nextStrategy(server);
+        }
+        if (strategyPhase != Phases.TOWARDS && health < 100) {
+            strategyPhase = Phases.TOWARDS;
+            currentStrategy = strategies.get(strategyPhase);
+            nextStrategy(server);
+        }
+        if (strategyPhase != Phases.AWAY && health < 30) {
+            strategyPhase = Phases.AWAY;
+            currentStrategy = strategies.get(strategyPhase);
+            nextStrategy(server);
+        }
+    }
+
+    public void setPhase(Phases phase) {
+        strategyPhase = phase;
+    }
+
     private void nextStrategy(Server server) {
-        int strategyID = random.nextInt(strategies.length);
-        currentStrategy = strategies[strategyID];
         currentStrategy.init(this);
 
         ChangeEnemyStrategyPacket packet = new ChangeEnemyStrategyPacket();
@@ -98,7 +134,12 @@ public abstract class Enemy implements Observer {
     }
 
     public void setCurrentStrategy(EnemyStrategy strategy) {
-        this.currentStrategy = strategy;
+        if (strategy instanceof MoveTowardPlayer) {
+            strategyPhase = Phases.TOWARDS;
+            currentStrategy = strategies.get(strategyPhase);
+            currentStrategy.init(this);
+            updateStatus = true;
+        }
     }
 
     public void setInfo(String info) {
@@ -120,5 +161,8 @@ public abstract class Enemy implements Observer {
 
     public void setDy(int val) { dy = val; }
 
+    public void damage(double val) { health -= val; }
+
+    public double getHealth() { return health; }
 
 }

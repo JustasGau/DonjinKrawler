@@ -27,4 +27,14 @@ public interface AbstractShellInterface {
     void setInfo(String info);
 
     void drawClothes(Graphics2D g2d, Game game);
+
+    double getHealth();
+
+    void damage(double damage);
+
+    void setHealth(double val);
+
+    Image getAttackImage();
+
+    void isAttacing(boolean attack);
 }

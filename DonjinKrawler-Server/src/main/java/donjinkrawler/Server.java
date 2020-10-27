@@ -53,6 +53,10 @@ public class Server {
                     handleRoomChange(connection, (RoomPacket) object);
                 } else if (object instanceof ChangeEnemyStrategyPacket) {
                     handleEnemyStrategyChange(connection, (ChangeEnemyStrategyPacket) object);
+                } else if (object instanceof CharacterAttackPacket) {
+                    handlePlayerAttack(connection, (CharacterAttackPacket) object);
+                } else if (object instanceof DamageEnemyPacket) {
+                    handlePlayerDamageEnemy(connection, (DamageEnemyPacket) object);
                 }
             }
 
@@ -113,7 +117,25 @@ public class Server {
     }
 
     private static void handleEnemyStrategyChange(Connection connection, ChangeEnemyStrategyPacket packet) {
-        server.sendToAllTCP(packet);
+        for (Enemy enemy : rooms.get(currentRoom).getEnemies()) {
+            if (enemy.getID() == packet.id) {
+                enemy.setCurrentStrategy(packet.strategy);
+                break;
+            }
+        }
+    }
+
+    private static void handlePlayerAttack(Connection connection, CharacterAttackPacket packet) {
+        server.sendToAllExceptUDP(connection.getID(), packet);
+    }
+
+    private static void handlePlayerDamageEnemy(Connection connection, DamageEnemyPacket packet) {
+        for (Enemy enemy : rooms.get(currentRoom).getEnemies()) {
+            if (enemy.getID() == packet.id) {
+                enemy.damage(packet.damage);
+                break;
+            }
+        }
     }
 
     private static void createNewPlayer(Connection connection, LoginPacket loginPacket) {
@@ -219,14 +241,6 @@ public class Server {
         EnemyPacket enemyPacket = new EnemyPacket();
         enemyPacket.getEnemies().addAll(rooms.get(currentRoom).getEnemies());
         server.sendToTCP(connection.getID(), enemyPacket);
-    }
-
-    public static void sendEnemyInfo(ArrayList<Enemy> enemies) {
-        for (Enemy enemy : enemies) {
-            MessagePacket messagePacket = new MessagePacket();
-            messagePacket.message = "ENI " + enemy.getID() + " " + enemy.getInfo();
-            server.sendToAllTCP(messagePacket);
-        }
     }
 
 }
