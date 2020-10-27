@@ -2,6 +2,7 @@ package donjinkrawler;
 
 import donjinkrawler.adapter.AudioPlayer;
 import command.*;
+import donjinkrawler.facade.MusicMaker;
 import donjinkrawler.items.Armor;
 import donjinkrawler.items.BaseItem;
 import donjinkrawler.items.Weapon;
@@ -317,6 +318,11 @@ public class Player implements Subject {
         if (key == KeyEvent.VK_U) {
             backwards = true;
         }
+
+        if (key == KeyEvent.VK_M) {
+            MusicMaker musicMaker = new MusicMaker();
+            musicMaker.playBackgroundMusic();
+        }
     }
 
     public void keyReleased(KeyEvent e) {
@@ -362,12 +368,14 @@ public class Player implements Subject {
     @Override
     public void notifyObservers() {
         for (Observer observer: observers) {
-            EnemyStrategy enemyStrategy = new MoveTowardPlayer();
-            observer.update(enemyStrategy);
-            ChangeEnemyStrategyPacket packet = new ChangeEnemyStrategyPacket();
-            packet.id = ((Enemy) observer).getID();
-            packet.strategy = enemyStrategy;
-            client.sendTCP(packet);
+            if (observer != null) {
+                EnemyStrategy enemyStrategy = new MoveTowardPlayer();
+                observer.update(enemyStrategy);
+                ChangeEnemyStrategyPacket packet = new ChangeEnemyStrategyPacket();
+                packet.id = ((Enemy) observer).getID();
+                packet.strategy = enemyStrategy;
+                client.sendTCP(packet);
+            }
         }
     }
 }
