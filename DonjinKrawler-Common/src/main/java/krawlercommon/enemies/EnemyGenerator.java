@@ -1,6 +1,7 @@
 package krawlercommon.enemies;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public final class EnemyGenerator {
@@ -12,9 +13,9 @@ public final class EnemyGenerator {
     }
 
     public Enemy generateRandomEnemy() {
-        EnemyType[] types = EnemyType.values();
-        int rnd = new Random().nextInt(types.length);
-        return this.enemyFactory.make(types[rnd]);
+        List<EnemyType> types = EnemyType.getSimpleEnemyTypes();
+        int rnd = new Random().nextInt(types.size());
+        return this.enemyFactory.make(types.get(rnd));
     }
 
     public ArrayList<Enemy> generateRandomEnemies(int number) {
