@@ -30,11 +30,11 @@ public class ItemMaker {
 
         int luckyNumber = random.nextInt(1000);
 
-        if(luckyNumber >= 800 && luckyNumber <= 950) {
+        if (luckyNumber >= 800 && luckyNumber <= 950) {
             return new RareTier();
         }
 
-        if(luckyNumber > 950) {
+        if (luckyNumber > 950) {
             return new LegendaryTier();
         }
 

@@ -16,7 +16,7 @@ public class PlayerCommander {
     }
 
     public void undo() {
-        if(history.size() > 0) {
+        if (history.size() > 0) {
             Command oldCommand = history.removeLast();
             oldCommand.undo();
         }

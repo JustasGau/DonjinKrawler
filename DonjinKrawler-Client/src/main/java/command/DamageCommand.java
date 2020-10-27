@@ -13,6 +13,7 @@ public class DamageCommand implements Command {
         oldHealth = controllerPlayer.getHealth();
         this.damage = damage;
     }
+
     @Override
     public void execute() {
         controllerPlayer.setHealth(oldHealth - damage);

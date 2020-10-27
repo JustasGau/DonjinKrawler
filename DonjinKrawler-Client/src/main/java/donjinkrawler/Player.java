@@ -1,7 +1,10 @@
 package donjinkrawler;
 
+import com.esotericsoftware.kryonet.Client;
+import command.DamageCommand;
+import command.MoveCommand;
+import command.PlayerCommander;
 import donjinkrawler.adapter.AudioPlayer;
-import command.*;
 import donjinkrawler.items.Armor;
 import donjinkrawler.items.BaseItem;
 import donjinkrawler.items.Weapon;
@@ -10,17 +13,16 @@ import krawlercommon.enemies.Enemy;
 import krawlercommon.map.*;
 import krawlercommon.observer.Observer;
 import krawlercommon.observer.Subject;
+import krawlercommon.packets.ChangeEnemyStrategyPacket;
+import krawlercommon.strategies.EnemyStrategy;
+import krawlercommon.strategies.MoveTowardPlayer;
 
-import java.awt.Image;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import javax.swing.ImageIcon;
-import com.esotericsoftware.kryonet.Client;
-import krawlercommon.packets.ChangeEnemyStrategyPacket;
-import krawlercommon.strategies.EnemyStrategy;
-import krawlercommon.strategies.MoveTowardPlayer;
 
 public class Player implements Subject {
     private final PlayerData data;
@@ -56,7 +58,7 @@ public class Player implements Subject {
     }
 
     public Integer move(List<Wall> walls, List<Door> doors, List<Obstacle> obstacles, List<Decoration> decorations,
-                     HashMap<Integer, BaseItem> items) {
+                        HashMap<Integer, BaseItem> items) {
         if (isCollidingWithObstacle(obstacles)) {
             return null;
         }
@@ -67,7 +69,7 @@ public class Player implements Subject {
             return null;
         }
         Integer itemId = isCollidingWithItem(items);
-        if(itemId != null) {
+        if (itemId != null) {
             return itemId;
         }
         if (backwards) {
@@ -138,9 +140,9 @@ public class Player implements Subject {
     }
 
     private void handleItemCollision(BaseItem item) {
-        if(item instanceof Armor) {
+        if (item instanceof Armor) {
             this.inventory.addArmor((Armor) item);
-        } else if( item instanceof Weapon) {
+        } else if (item instanceof Weapon) {
             this.inventory.addWeapon((Weapon) item);
         }
     }
@@ -291,7 +293,7 @@ public class Player implements Subject {
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
-        if(key == KeyEvent.VK_I) {
+        if (key == KeyEvent.VK_I) {
             this.inventory.open();
             return;
         }
@@ -361,7 +363,7 @@ public class Player implements Subject {
 
     @Override
     public void notifyObservers() {
-        for (Observer observer: observers) {
+        for (Observer observer : observers) {
             EnemyStrategy enemyStrategy = new MoveTowardPlayer();
             observer.update(enemyStrategy);
             ChangeEnemyStrategyPacket packet = new ChangeEnemyStrategyPacket();

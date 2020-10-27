@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public abstract class EnemyClothingDecorator implements AbstractShellInterface {
 
     protected AbstractShellInterface wrappee;
+
     EnemyClothingDecorator(AbstractShellInterface source) {
         this.wrappee = source;
     }

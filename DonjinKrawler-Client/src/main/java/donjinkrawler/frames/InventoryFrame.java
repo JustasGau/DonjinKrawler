@@ -7,8 +7,6 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
 
 public class InventoryFrame extends JFrame {
 
@@ -38,7 +36,7 @@ public class InventoryFrame extends JFrame {
         infoFieldPanel.add(infoField);
 
         JSplitPane splitPane = new JSplitPane(SwingConstants.VERTICAL, new JScrollPane(inventoryList), infoFieldPanel);
-        splitPane.setEnabled( false );
+        splitPane.setEnabled(false);
         splitPane.setResizeWeight(.5d);
 
         inventoryList.addListSelectionListener(new ListSelectionListener() {
@@ -55,9 +53,9 @@ public class InventoryFrame extends JFrame {
     }
 
     private String getItemStats(String selectedValue) {
-        if(selectedValue.equals("Armor")) {
+        if (selectedValue.equals("Armor")) {
             return this.getArmorStats();
-        } else if(selectedValue.equals("Weapon")) {
+        } else if (selectedValue.equals("Weapon")) {
             return this.getWeaponStats();
         }
 
@@ -65,14 +63,14 @@ public class InventoryFrame extends JFrame {
     }
 
     private String getWeaponStats() {
-        if(this.weapon == null) {
+        if (this.weapon == null) {
             return "No weapon acquired.";
         }
         return this.weapon.getDescription();
     }
 
     private String getArmorStats() {
-        if(this.armor == null) {
+        if (this.armor == null) {
             return "No armor acquired.";
         }
         return this.armor.getDescription();
