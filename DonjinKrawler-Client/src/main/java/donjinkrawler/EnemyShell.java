@@ -23,44 +23,51 @@ public class EnemyShell extends AbstractShell {
         image = ii.getImage();
     }
 
-    public int getID() { return id; }
+    public int getID() {
+        return id;
+    }
 
-    public String getInfo() { return info; }
+    public String getInfo() {
+        return info;
+    }
 
-    public void setInfo(String info){
+    public void setInfo(String info) {
         this.info = info;
     }
 
-    private String resolveImageName()
-    {
-        if(this.getName().equals("Small-Zombie")) {
+    private String resolveImageName() {
+        if (this.getName().equals("Small-Zombie")) {
             return "zombie.png";
         }
 
-        if(this.getName().equals("Big-Zombie")) {
+        if (this.getName().equals("Big-Zombie")) {
             return "zombie-big.png";
         }
 
-        if(this.getName().equals("Small-Skeleton")) {
+        if (this.getName().equals("Small-Skeleton")) {
             return "skeleton.png";
         }
 
-        if(this.getName().equals("Big-Skeleton")) {
+        if (this.getName().equals("Big-Skeleton")) {
             return "skeleton-big.png";
         }
 
-        if(this.getName().equals("Small-Chicken")) {
+        if (this.getName().equals("Small-Chicken")) {
             return "chicken.png";
         }
 
-        if(this.getName().equals("Big-Chicken")) {
+        if (this.getName().equals("Big-Chicken")) {
             return "chicken-big.png";
+        }
+
+        if (this.getName().equals("Boss")) {
+            return "boss.png";
         }
 
         return "zombie.png";
     }
 
-    public void drawClothes(Graphics2D g2d, Game g){
+    public void drawClothes(Graphics2D g2d, Game g) {
         for (ImageIcon ii : clothes) {
             Image clothImage = ii.getImage();
             g2d.drawImage(clothImage, getX(), getY(), g);

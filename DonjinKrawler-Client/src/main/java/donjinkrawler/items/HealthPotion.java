@@ -13,4 +13,9 @@ public class HealthPotion extends BaseItem {
     public HealthPotionData getData() {
         return (HealthPotionData) itemData;
     }
+
+    @Override
+    public String getDescription() {
+        return "Restore some HP.";
+    }
 }

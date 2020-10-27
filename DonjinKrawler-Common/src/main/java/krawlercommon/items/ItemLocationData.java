@@ -31,6 +31,10 @@ public abstract class ItemLocationData implements Cloneable {
         this.y = y;
     }
 
+    public int getId() {
+        return this.id;
+    }
+
     @Override
     public ItemLocationData clone() throws CloneNotSupportedException {
         return (ItemLocationData) super.clone();

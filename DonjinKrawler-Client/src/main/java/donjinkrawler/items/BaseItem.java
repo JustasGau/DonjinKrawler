@@ -21,4 +21,5 @@ public abstract class BaseItem {
 
     public abstract ItemLocationData getData();
 
+    public abstract String getDescription();
 }

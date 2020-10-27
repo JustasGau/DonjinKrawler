@@ -12,6 +12,6 @@ public class SmallChicken extends Chicken {
 
     @Override
     public void update(EnemyStrategy strategy) {
-        setCurrentStrategy(strategy);
+        strategy.init(this);
     }
 }

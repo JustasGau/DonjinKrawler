@@ -1,5 +1,7 @@
 package donjinkrawler;
 
+import donjinkrawler.adapter.AudioPlayer;
+import donjinkrawler.decorator.EnemyClothingDecorator;
 import donjinkrawler.decorator.MaracasEnemy;
 import donjinkrawler.decorator.PonchosEnemy;
 import donjinkrawler.decorator.SombrerosEnemy;
@@ -19,6 +21,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.swing.*;
 
@@ -33,6 +36,7 @@ public class Game extends JPanel implements ActionListener {
     private static long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
     public static Map<Integer, AbstractShellInterface> shells = new ConcurrentHashMap<>();
 
+    private AudioPlayer audioPlayer = new AudioPlayer();
     private final JLabel label;
 
     public Game(com.esotericsoftware.kryonet.Client client,
@@ -40,6 +44,15 @@ public class Game extends JPanel implements ActionListener {
                 Player newPlayer,
                 Map<Integer, RoomData> rooms,
                 int currentRoom) {
+        this(client, label, player, rooms, currentRoom, true);
+    }
+
+    public Game(com.esotericsoftware.kryonet.Client client,
+                JLabel label,
+                Player newPlayer,
+                Map<Integer, RoomData> rooms,
+                int currentRoom,
+                boolean shouldAddTimer) {
         this.label = label;
         player = newPlayer;
         this.gameMap = new GameMap(new Room(rooms.get(currentRoom)));
@@ -48,10 +61,13 @@ public class Game extends JPanel implements ActionListener {
         addKeyListener(new Game.TAdapter());
         setBackground(Color.black);
         setFocusable(true);
-
         timer = new Timer(delay, this);
         timer.start();
         new gameLoop();
+
+        if (shouldAddTimer) {
+            timer.start();
+        }
     }
 
     @Override
@@ -87,11 +103,14 @@ public class Game extends JPanel implements ActionListener {
     private void drawShell(Graphics2D g2d, AbstractShellInterface pl) {
         g2d.drawImage(pl.getImage(), pl.getX(), pl.getY(), this);
         g2d.setColor(Color.BLUE);
-        g2d.drawString(pl.getName() + " " + pl.getID(), pl.getX(), pl.getY() + 30);
+        int offset = 30;
+        if (pl.getName().equals("Boss")) {
+            offset = 60;
+        }
+        g2d.drawString(pl.getName() + " " + pl.getID(), pl.getX(), pl.getY() + offset);
         g2d.drawImage(pl.getAttackImage(), pl.getX()-10, pl.getY()-10, this);
         g2d.setColor(Color.YELLOW);
-        g2d.drawString(pl.getInfo(), pl.getX(), pl.getY() + 50);
-        SwingUtils.drawHealthBar(g2d, pl.getX(), pl.getY(), 20, 5, pl.getHealth());
+        g2d.drawString(pl.getInfo(), pl.getX(), pl.getY() + offset + 20);
     }
 
     @Override
@@ -152,10 +171,18 @@ public class Game extends JPanel implements ActionListener {
 //            sendPositionUpdate();
 //        }
 
-        player.move(gameMap.getCurrentRoom().getWalls(),
-                gameMap.getCurrentRoom().getDoors(),
-                gameMap.getCurrentRoom().getObstacles(),
-                gameMap.getCurrentRoom().getDecorations());
+        Integer itemId = player.move(
+            gameMap.getCurrentRoom().getWalls(),
+            gameMap.getCurrentRoom().getDoors(),
+            gameMap.getCurrentRoom().getObstacles(),
+            gameMap.getCurrentRoom().getDecorations(),
+            gameMap.getCurrentRoom().getItems()
+        );
+
+        if (itemId != null) {
+            this.gameMap.getCurrentRoom().removeItem(itemId);
+        }
+
         repaint();
     }
 
@@ -179,6 +206,7 @@ public class Game extends JPanel implements ActionListener {
             player.detachAllObservers();
             player.setHasNotifiedObservers(false);
             newRoomObj.getRoomData().getEnemies().forEach(e -> player.attachObserver(e));
+            audioPlayer.play("wav", "times-up.wav");
         } else {
             newRoomObj = new Room(newRoom);
         }
@@ -240,17 +268,7 @@ public class Game extends JPanel implements ActionListener {
 
     public void updateEnemyStrategy(int id, EnemyStrategy strategy) {
         AbstractShellInterface temp = shells.get(id);
-        if (strategy instanceof MoveTowardPlayer) {
-            temp.setInfo("MoveTowardPlayer");
-        } else if (strategy instanceof MoveAwayFromPlayer) {
-            temp.setInfo("MoveAwayFromPlayer");
-        } else if (strategy instanceof MoveRandomly) {
-            temp.setInfo("MoveRandomly");
-        } else if (strategy instanceof Attack) {
-            temp.setInfo("Attack");
-        } else {
-            temp.setInfo("RangeAttack");
-        }
+        temp.setInfo(strategy.getStrategy());
     }
 
     public void updateEnemyInfo(String enemyData) {
@@ -273,20 +291,39 @@ public class Game extends JPanel implements ActionListener {
     }
 
     public void addEnemies(List<Enemy> enemies) {
-        shells.values().removeIf(abstractShell -> abstractShell instanceof EnemyShell);
-        enemies.forEach(e -> shells.put(e.getID(),
-                new MaracasEnemy(
-                    new PonchosEnemy(
-                            new SombrerosEnemy(
-                                new EnemyShell(e.getName(), e.getID(), e.getX(), e.getY())
-                            )
-                    )
-                ))
-        );
+        shells.values().removeIf(this::isEnemyShell);
+        enemies.stream().filter(Objects::nonNull).forEach(this::addEnemy);
 
         for (AbstractShellInterface pl : shells.values()) {
             pl.addClothing();
         }
+    }
+
+    private void addEnemy(Enemy e) {
+        if (e.getName().equals("Boss")) {
+            addBoss(e);
+        } else {
+            addDecoratedEnemy(e);
+        }
+    }
+
+    private void addBoss(Enemy e) {
+        shells.put(e.getID(), new EnemyShell(e.getName(), e.getID(), e.getX(), e.getY()));
+    }
+
+    private void addDecoratedEnemy(Enemy e) {
+        shells.put(e.getID(),
+                new MaracasEnemy(
+                        new PonchosEnemy(
+                                new SombrerosEnemy(
+                                        new EnemyShell(e.getName(), e.getID(), e.getX(), e.getY())
+                                )
+                        )
+                ));
+    }
+
+    public boolean isEnemyShell(AbstractShellInterface shell) {
+        return shell instanceof EnemyShell || shell instanceof EnemyClothingDecorator;
     }
 
     public void changeShellPosition(MoveCharacter packet) {
@@ -304,7 +341,11 @@ public class Game extends JPanel implements ActionListener {
     public void drawPlayerAttack(int id) {
         AbstractShellInterface temp = shells.get(id);
         temp.isAttacing(true);
+    }
 
+    // used in testing
+    public Map<Integer, AbstractShellInterface> getShells() {
+        return shells;
     }
 
 }

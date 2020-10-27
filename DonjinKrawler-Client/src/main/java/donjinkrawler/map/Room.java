@@ -26,6 +26,8 @@ public class Room implements Cloneable {
     private Map<String, BufferedImage> obstacleImages = new HashMap<>();
     private Map<String, BufferedImage> decorationImages = new HashMap<>();
 
+    private HashMap<Integer, BaseItem> items = new HashMap<>();
+
     public Room(RoomData roomData) {
         this.roomData = roomData;
         initDoors();
@@ -150,10 +152,16 @@ public class Room implements Cloneable {
     private void drawItems(Graphics2D g2d) {
         for (ItemLocationData item : getRoomData().getItems().values()) {
             BaseItem gameItem = ItemMaker.makeItem(item);
+            items.put(item.getId(), gameItem);
             if (gameItem != null) {
                 g2d.drawImage(gameItem.getImage(), gameItem.getData().getX(), gameItem.getData().getY(), null);
             }
         }
+    }
+
+    public void removeItem(Integer itemId) {
+        this.items.remove(itemId);
+        this.roomData.removeItem(itemId);
     }
 
     public ArrayList<Wall> getWalls() {
@@ -170,6 +178,10 @@ public class Room implements Cloneable {
 
     public ArrayList<Decoration> getDecorations() {
         return roomData.getDecorations();
+    }
+
+    public HashMap<Integer, BaseItem> getItems() {
+        return this.items;
     }
 
     public Room deepCopy() throws CloneNotSupportedException {

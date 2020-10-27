@@ -174,4 +174,8 @@ public class RoomData implements Cloneable {
     public RoomData clone() throws CloneNotSupportedException {
         return (RoomData) super.clone();
     }
+
+    public void removeItem(Integer itemId) {
+        this.items.remove(itemId);
+    }
 }

@@ -12,6 +12,7 @@ public class SmallZombie extends Zombie {
 
     @Override
     public void update(EnemyStrategy strategy) {
-        setCurrentStrategy(strategy);
+        strategy.init(this);
+        strategy.execute();
     }
 }

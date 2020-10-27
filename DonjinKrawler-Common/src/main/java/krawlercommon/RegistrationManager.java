@@ -1,10 +1,7 @@
 package krawlercommon;
 
 import com.esotericsoftware.kryo.Kryo;
-import krawlercommon.enemies.Chicken;
-import krawlercommon.enemies.Enemy;
-import krawlercommon.enemies.Skeleton;
-import krawlercommon.enemies.Zombie;
+import krawlercommon.enemies.*;
 import krawlercommon.enemies.big.BigChicken;
 import krawlercommon.enemies.big.BigSkeleton;
 import krawlercommon.enemies.big.BigZombie;
@@ -17,10 +14,7 @@ import krawlercommon.map.*;
 import krawlercommon.packets.*;
 import krawlercommon.strategies.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class RegistrationManager {
@@ -72,12 +66,14 @@ public class RegistrationManager {
         kryo.register(MoveTowardPlayer.class);
         kryo.register(RangeAttack.class);
         kryo.register(Enemy.Phases.class);
+        kryo.register(Boss.class);
 
         // jdk classes
         kryo.register(ArrayList.class);
         kryo.register(UUID.class);
         kryo.register(Random.class);
         kryo.register(AtomicLong.class);
+        kryo.register(Map.class);
         // TODO: check if needed
         kryo.register(HashMap.class);
     }
