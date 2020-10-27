@@ -30,11 +30,11 @@ public class Game extends JPanel implements ActionListener {
     com.esotericsoftware.kryonet.Client client;
     private final Timer timer;
     private final Player player;
-    private GameMap gameMap;
-    private final int delay = 10;
+    private final GameMap gameMap;
+    private final int DELAY = 10;
     private static final Map<Integer, AbstractShellInterface> shells = new ConcurrentHashMap<>();
 
-    private AudioPlayer audioPlayer = new AudioPlayer();
+    private final AudioPlayer audioPlayer = new AudioPlayer();
     private final JLabel label;
 
     public Game(com.esotericsoftware.kryonet.Client client,
@@ -59,7 +59,7 @@ public class Game extends JPanel implements ActionListener {
         addKeyListener(new Game.TAdapter());
         setBackground(Color.black);
         setFocusable(true);
-        timer = new Timer(delay, this);
+        timer = new Timer(DELAY, this);
 
         if (shouldAddTimer) {
             timer.start();
@@ -171,7 +171,7 @@ public class Game extends JPanel implements ActionListener {
             newRoomObj.initDoors();
             player.detachAllObservers();
             player.setHasNotifiedObservers(false);
-            newRoomObj.getRoomData().getEnemies().forEach(e -> player.attachObserver(e));
+            newRoomObj.getRoomData().getEnemies().forEach(player::attachObserver);
             audioPlayer.play("wav", "times-up.wav");
         } else {
             newRoomObj = new Room(newRoom);
@@ -221,14 +221,12 @@ public class Game extends JPanel implements ActionListener {
         RoomData currentRoomData = gameMap.getCurrentRoom().getRoomFromDirection(doorDirection);
         gameMap.setCurrentRoom(new Room(currentRoomData));
 
-        if (direction.equals("LEFT")) {
-            player.setCoordinates(400, 250);
-        } else if (direction.equals("TOP")) {
-            player.setCoordinates(250, 400);
-        } else if (direction.equals("RIGHT")) {
-            player.setCoordinates(40, 250);
-        } else if (direction.equals("BOTTOM")) {
-            player.setCoordinates(250, 40);
+        switch (direction) {
+            case "LEFT" -> player.setCoordinates(400, 250);
+            case "TOP" -> player.setCoordinates(250, 400);
+            case "RIGHT" -> player.setCoordinates(40, 250);
+            case "BOTTOM" -> player.setCoordinates(250, 40);
+            default -> throw new IllegalStateException("Unexpected value: " + direction);
         }
     }
 
