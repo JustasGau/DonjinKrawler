@@ -1,8 +1,9 @@
 package donjinkrawler;
 
 import com.esotericsoftware.kryonet.Client;
-import donjinkrawler.command.*;
 import donjinkrawler.adapter.AudioPlayer;
+import command.*;
+import donjinkrawler.facade.MusicMaker;
 import donjinkrawler.items.Armor;
 import donjinkrawler.items.BaseItem;
 import donjinkrawler.items.Weapon;
@@ -348,6 +349,11 @@ public class Player implements Subject {
 
         if (key == KeyEvent.VK_U) {
             backwards = true;
+        }
+
+        if (key == KeyEvent.VK_M) {
+            MusicMaker musicMaker = new MusicMaker();
+            musicMaker.playBackgroundMusic();
         }
 
         if (key == KeyEvent.VK_SPACE) {
