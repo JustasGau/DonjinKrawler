@@ -93,7 +93,7 @@ public class Game extends JPanel implements ActionListener {
     private void drawCurrentPlayer(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.drawImage(player.getImage(), player.getX(), player.getY(), this);
-        g2d.drawImage(player.getAttackImage(), player.getX()-10, player.getY()-10, this);
+        g2d.drawImage(player.getAttackImage(), player.getX() - 10, player.getY() - 10, this);
         SwingUtils.drawHealthBar(g2d, player.getX(), player.getY(), 20, 5, player.getHealth());
         g2d.setColor(Color.GREEN);
         g2d.drawString(player.getName(), player.getX(), player.getY() + 30);
@@ -107,7 +107,7 @@ public class Game extends JPanel implements ActionListener {
             offset = 60;
         }
         g2d.drawString(pl.getName() + " " + pl.getID(), pl.getX(), pl.getY() + offset);
-        g2d.drawImage(pl.getAttackImage(), pl.getX()-10, pl.getY()-10, this);
+        g2d.drawImage(pl.getAttackImage(), pl.getX() - 10, pl.getY() - 10, this);
         g2d.setColor(Color.YELLOW);
         g2d.drawString(pl.getInfo(), pl.getX(), pl.getY() + offset + 20);
         SwingUtils.drawHealthBar(g2d, pl.getX(), pl.getY(), 20, 5, pl.getHealth());

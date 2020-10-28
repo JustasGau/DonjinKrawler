@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-abstract public class AbstractShell implements AbstractShellInterface {
+ public abstract class AbstractShell implements AbstractShellInterface {
 
     protected int dx;
     protected int dy;
@@ -16,7 +16,7 @@ abstract public class AbstractShell implements AbstractShellInterface {
     protected boolean attack;
     protected double health = 100;
 
-    abstract public void loadImage();
+    public abstract void loadImage();
 
     public int getX() {
         return x;
@@ -42,9 +42,13 @@ abstract public class AbstractShell implements AbstractShellInterface {
         return image;
     }
 
-    public int getID() { return -1; }
+    public int getID() {
+        return -1;
+    }
 
-    public String getInfo() { return ""; }
+    public String getInfo() {
+        return "";
+    }
 
     public void setInfo(String info){};
 
@@ -60,7 +64,7 @@ abstract public class AbstractShell implements AbstractShellInterface {
         health = val;
     }
 
-    abstract public Image getAttackImage();
+    public abstract Image getAttackImage();
 
     public void isAttacking(boolean attack) {
         this.attack = attack;

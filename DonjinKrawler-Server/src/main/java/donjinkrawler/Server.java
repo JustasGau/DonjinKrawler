@@ -243,16 +243,18 @@ public class Server {
 
     private static void sendEnemies(Boolean create) {
         EnemyPacket enemyPacket = new EnemyPacket();
-        if (create)
+        if (create) {
             enemyPacket.setCreate();
+        }
         enemyPacket.getEnemies().addAll(rooms.get(currentRoom).getEnemies());
         server.sendToAllTCP(enemyPacket);
     }
 
     private static void sendEnemiesToPlayer(Connection connection, Boolean create) {
         EnemyPacket enemyPacket = new EnemyPacket();
-        if (create)
+        if (create) {
             enemyPacket.setCreate();
+        }
         enemyPacket.getEnemies().addAll(rooms.get(currentRoom).getEnemies());
         server.sendToTCP(connection.getID(), enemyPacket);
     }

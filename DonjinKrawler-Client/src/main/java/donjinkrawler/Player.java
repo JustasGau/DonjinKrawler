@@ -149,9 +149,9 @@ public class Player implements Subject {
     }
 
     private void handleItemCollision(BaseItem item) {
-        if(item instanceof Armor) {
+        if (item instanceof Armor) {
             this.inventory.addArmor((Armor) item);
-        } else if( item instanceof Weapon) {
+        } else if (item instanceof Weapon) {
             this.inventory.addWeapon((Weapon) item);
         }
     }
@@ -366,8 +366,8 @@ public class Player implements Subject {
     public void findTarget() {
         if (attack == true) {
             for (AbstractShellInterface enemy : shells.values()) {
-                if ((enemy.getX() >= (data.getX()-10)) && enemy.getX() <= (data.getX()+10) &&
-                        enemy.getY() >= (data.getY() -10) && enemy.getY() < (data.getY()+10)) {
+                if ((enemy.getX() >= (data.getX() - 10)) && enemy.getX() <= (data.getX() + 10)
+                        && enemy.getY() >= (data.getY() - 10) && enemy.getY() < (data.getY() + 10)) {
                     DamageEnemyPacket packet = new DamageEnemyPacket();
                     packet.id = enemy.getID();
                     packet.damage = getDamage();
