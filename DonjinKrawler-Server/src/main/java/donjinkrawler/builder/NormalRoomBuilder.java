@@ -29,7 +29,7 @@ public class NormalRoomBuilder extends RoomBuilder {
     @Override
     public RoomBuilder startNew(int id) {
         super.startNew(id);
-        roomData.setRoomType(RoomType.BOSS);
+        roomData.setRoomType(RoomType.NORMAL);
         return this;
     }
 

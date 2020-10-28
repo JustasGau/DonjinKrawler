@@ -1,6 +1,7 @@
 package donjinkrawler;
 
 import krawlercommon.map.RoomData;
+import krawlercommon.map.RoomType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -66,5 +67,13 @@ public class GameMapGeneratorTest {
         assertNotNull(rooms.get(0).getRight().getLeft());
         assertNotEquals(rooms.get(0).getLeft(), rooms.get(0).getRight());
         assertNotEquals(rooms.get(0).getRight(), rooms.get(0).getLeft());
+    }
+
+    @Test
+    public void testOnlyOneBossRoomIsGenerated() {
+        GameMapGenerator generator = new GameMapGenerator(10);
+        List<String> stringList = generator.generate();
+        Map<Integer, RoomData> rooms = generator.generateRoomsFromString(stringList);
+        assertEquals(1, rooms.values().stream().filter(r -> r.getRoomType().equals(RoomType.BOSS)).count());
     }
 }
