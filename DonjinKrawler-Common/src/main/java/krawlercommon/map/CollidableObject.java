@@ -1,6 +1,6 @@
 package krawlercommon.map;
 
-public class CollidableObject implements Cloneable{
+public class CollidableObject implements Cloneable {
     protected int x;
     protected int y;
     protected int width;

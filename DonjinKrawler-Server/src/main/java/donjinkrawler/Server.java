@@ -123,7 +123,7 @@ public class Server {
 
     private static void handleEnemyStrategyChange(Connection connection, ChangeEnemyStrategyPacket packet) {
         for (Enemy enemy : rooms.get(currentRoom).getEnemies()) {
-            if (enemy.getID() == packet.id) {
+            if (enemy != null && enemy.getID() == packet.id) {
                 enemy.setCurrentStrategy(packet.strategy);
                 break;
             }
@@ -136,7 +136,7 @@ public class Server {
 
     private static void handlePlayerDamageEnemy(Connection connection, DamageEnemyPacket packet) {
         for (Enemy enemy : rooms.get(currentRoom).getEnemies()) {
-            if (enemy.getID() == packet.id) {
+            if (enemy != null && enemy.getID() == packet.id) {
                 enemy.damage(packet.damage);
                 break;
             }

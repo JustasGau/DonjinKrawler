@@ -7,7 +7,8 @@ public class MoveCommand implements Command {
     Player controllerPlayer;
     int oldY;
     int oldX;
-    int dy, dx;
+    int dy;
+    int dx;
 
     public MoveCommand(Player newPlayer, int dx, int dy) {
         controllerPlayer = newPlayer;
@@ -16,6 +17,7 @@ public class MoveCommand implements Command {
         this.dy = dy;
         this.dx = dx;
     }
+
     @Override
     public void execute() {
         controllerPlayer.setY(oldY + dy);

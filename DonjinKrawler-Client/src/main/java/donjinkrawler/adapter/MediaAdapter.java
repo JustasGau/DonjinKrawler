@@ -5,32 +5,22 @@ public class MediaAdapter implements MediaPlayer {
 
     public MediaAdapter(String audioType) {
         switch (audioType) {
-            case "wav":
-                advancedMusicPlayer = new WavPlayer();
-                break;
+            case "wav" -> advancedMusicPlayer = new WavPlayer();
+            case "mp3" -> advancedMusicPlayer = new Mp3Player();
+            default -> {
 
-            case "mp3":
-                advancedMusicPlayer = new Mp3Player();
-                break;
-
-            default:
-                break;
+            }
         }
     }
 
     @Override
     public void play(String audioType, String fileName) {
         switch (audioType) {
-            case "wav":
-                advancedMusicPlayer.playWav(fileName);
-                break;
+            case "wav" -> advancedMusicPlayer.playWav(fileName);
+            case "mp3" -> advancedMusicPlayer.playMp3(fileName);
+            default -> {
 
-            case "mp3":
-                advancedMusicPlayer.playMp3(fileName);
-                break;
-
-            default:
-                break;
+            }
         }
     }
 }

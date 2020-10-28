@@ -15,8 +15,8 @@ public class Armor extends Armory {
         super.loadImage("items/armor.png");
 
         this.defense = this.roundStat(defense + this.tier.getDefenseBonus());
-        this.hp      = this.roundStat(hp + this.tier.getHpBonus());
-        this.mana    = this.roundStat(mana + this.tier.getManaBonus());
+        this.hp = this.roundStat(hp + this.tier.getHpBonus());
+        this.mana = this.roundStat(mana + this.tier.getManaBonus());
     }
 
     @Override
@@ -26,10 +26,10 @@ public class Armor extends Armory {
 
     @Override
     public String getDescription() {
-        return "Tier: " + this.tier.getName() + "\n" +
-                "Defense: " + this.getDefense() + "\n" +
-                "HP: " + this.getHp() + "\n" +
-                "Mana: " + this.getMana();
+        return "Tier: " + this.tier.getName() + "\n"
+                + "Defense: " + this.getDefense() + "\n"
+                + "HP: " + this.getHp() + "\n"
+                + "Mana: " + this.getMana();
     }
 
     public double getDefense() {
@@ -37,7 +37,7 @@ public class Armor extends Armory {
     }
 
     public double getHp() {
-        return this.hp ;
+        return this.hp;
     }
 
     public double getMana() {

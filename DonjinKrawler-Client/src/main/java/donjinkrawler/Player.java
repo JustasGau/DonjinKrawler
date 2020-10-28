@@ -1,5 +1,6 @@
 package donjinkrawler;
 
+import com.esotericsoftware.kryonet.Client;
 import donjinkrawler.command.*;
 import donjinkrawler.adapter.AudioPlayer;
 import donjinkrawler.items.Armor;
@@ -10,19 +11,21 @@ import krawlercommon.enemies.Enemy;
 import krawlercommon.map.*;
 import krawlercommon.observer.Observer;
 import krawlercommon.observer.Subject;
+import krawlercommon.packets.ChangeEnemyStrategyPacket;
+import krawlercommon.strategies.EnemyStrategy;
+import krawlercommon.strategies.MoveTowardPlayer;
+import krawlercommon.packets.CharacterAttackPacket;
+import krawlercommon.packets.DamageEnemyPacket;
 
-import java.awt.Image;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import javax.swing.ImageIcon;
 import com.esotericsoftware.kryonet.Client;
-import krawlercommon.packets.ChangeEnemyStrategyPacket;
-import krawlercommon.packets.CharacterAttackPacket;
-import krawlercommon.packets.DamageEnemyPacket;
-import krawlercommon.strategies.EnemyStrategy;
-import krawlercommon.strategies.MoveTowardPlayer;
+
 
 import static donjinkrawler.Game.shells;
 
@@ -67,7 +70,7 @@ public class Player implements Subject {
     }
 
     public Integer move(List<Wall> walls, List<Door> doors, List<Obstacle> obstacles, List<Decoration> decorations,
-                     HashMap<Integer, BaseItem> items) {
+                        HashMap<Integer, BaseItem> items) {
         if (isCollidingWithObstacle(obstacles)) {
             return null;
         }
@@ -78,7 +81,7 @@ public class Player implements Subject {
             return null;
         }
         Integer itemId = isCollidingWithItem(items);
-        if(itemId != null) {
+        if (itemId != null) {
             return itemId;
         }
         if (backwards) {
@@ -125,7 +128,6 @@ public class Player implements Subject {
     private boolean isCollidingWithObstacle(List<Obstacle> obstacles) {
         for (Obstacle obstacle : obstacles) {
             if (isCollidingWith(obstacle)) {
-
                 handleObstacleCollision(obstacle);
                 return true;
             }
@@ -321,7 +323,7 @@ public class Player implements Subject {
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
-        if(key == KeyEvent.VK_I) {
+        if (key == KeyEvent.VK_I) {
             this.inventory.open();
             return;
         }

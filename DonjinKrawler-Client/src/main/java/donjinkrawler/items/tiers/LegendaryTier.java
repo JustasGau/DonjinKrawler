@@ -11,27 +11,27 @@ public class LegendaryTier implements Tier {
 
     @Override
     public double getDamageBonus() {
-        return (getLastDigitOfTime() + 1) * getRandomDoubleInRange(3,4);
+        return (getLastDigitOfTime() + 1) * getRandomDoubleInRange(3, 4);
     }
 
     @Override
     public double getSpeedBonus() {
-        return (getLastDigitOfTime() + 1) * getRandomDoubleInRange(2,3);
+        return (getLastDigitOfTime() + 1) * getRandomDoubleInRange(2, 3);
     }
 
     @Override
     public double getDefenseBonus() {
-        return (getLastDigitOfTime() + 1) * getRandomDoubleInRange(3,4);
+        return (getLastDigitOfTime() + 1) * getRandomDoubleInRange(3, 4);
     }
 
     @Override
     public double getHpBonus() {
-        return (getLastDigitOfTime() + 1) * getRandomDoubleInRange(2,3);
+        return (getLastDigitOfTime() + 1) * getRandomDoubleInRange(2, 3);
     }
 
     @Override
     public double getManaBonus() {
-        return (getLastDigitOfTime() + 1) * getRandomDoubleInRange(2,3);
+        return (getLastDigitOfTime() + 1) * getRandomDoubleInRange(2, 3);
     }
 
     private double getRandomDoubleInRange(double min, double max) {

@@ -4,10 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
- public abstract class AbstractShell implements AbstractShellInterface {
+public abstract class AbstractShell implements AbstractShellInterface {
 
-    protected int dx;
-    protected int dy;
     protected int x = 250;
     protected int y = 250;
     protected String name;
@@ -50,7 +48,8 @@ import java.util.ArrayList;
         return "";
     }
 
-    public void setInfo(String info){};
+    public void setInfo(String info) {
+    }
 
     public abstract void drawClothes(Graphics2D g2d, Game game);
 
