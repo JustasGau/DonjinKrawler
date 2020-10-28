@@ -1,9 +1,7 @@
 package donjinkrawler;
 
 import com.esotericsoftware.kryonet.Client;
-import command.DamageCommand;
-import command.MoveCommand;
-import command.PlayerCommander;
+import donjinkrawler.command.*;
 import donjinkrawler.adapter.AudioPlayer;
 import donjinkrawler.items.Armor;
 import donjinkrawler.items.BaseItem;
@@ -16,6 +14,8 @@ import krawlercommon.observer.Subject;
 import krawlercommon.packets.ChangeEnemyStrategyPacket;
 import krawlercommon.strategies.EnemyStrategy;
 import krawlercommon.strategies.MoveTowardPlayer;
+import krawlercommon.packets.CharacterAttackPacket;
+import krawlercommon.packets.DamageEnemyPacket;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,6 +23,11 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import javax.swing.ImageIcon;
+import com.esotericsoftware.kryonet.Client;
+
+
+import static donjinkrawler.Game.shells;
 
 public class Player implements Subject {
     private final PlayerData data;
@@ -39,6 +44,11 @@ public class Player implements Subject {
     private AudioPlayer audioPlayer = new AudioPlayer();
     private PlayerCommander commander = new PlayerCommander();
     private Boolean backwards = false;
+    private Image attackIMG;
+    private double damage = 20;
+    private Boolean attack = false;
+    private Boolean canAttack = false;
+    private int attackTimer = 0;
     private Inventory inventory;
 
     public Player(PlayerData playerData, Client client) {
@@ -55,6 +65,8 @@ public class Player implements Subject {
         image = ii.getImage();
         height = image.getHeight(null);
         width = image.getWidth(null);
+        ii = new ImageIcon(ClassLoader.getSystemResource("attack.png").getFile());
+        attackIMG = ii.getImage();
     }
 
     public Integer move(List<Wall> walls, List<Door> doors, List<Obstacle> obstacles, List<Decoration> decorations,
@@ -116,7 +128,6 @@ public class Player implements Subject {
     private boolean isCollidingWithObstacle(List<Obstacle> obstacles) {
         for (Obstacle obstacle : obstacles) {
             if (isCollidingWith(obstacle)) {
-
                 handleObstacleCollision(obstacle);
                 return true;
             }
@@ -258,6 +269,16 @@ public class Player implements Subject {
         return image;
     }
 
+    public Image getAttackImage() {
+        if (attack == true || attackTimer < 10) {
+            CharacterAttackPacket packet = new CharacterAttackPacket();
+            packet.id = getId();
+            client.sendTCP(packet);
+            return attackIMG;
+        } else
+            return null;
+    }
+
     public int getId() {
         return data.getId();
     }
@@ -290,6 +311,15 @@ public class Player implements Subject {
         this.hasNotifiedObservers = hasNotifiedObservers;
     }
 
+    public void incrementTimer() {
+        if (attackTimer == 60)
+            canAttack = true;
+        else {
+            attackTimer++;
+            attack = false;
+        }
+    }
+
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
@@ -318,6 +348,34 @@ public class Player implements Subject {
 
         if (key == KeyEvent.VK_U) {
             backwards = true;
+        }
+
+        if (key == KeyEvent.VK_SPACE) {
+            if (canAttack) {
+                attack = true;
+                canAttack = false;
+                attackTimer = 0;
+                findTarget();
+            }
+
+        }
+    }
+
+    public double getDamage() {
+        return damage;
+    }
+
+    public void findTarget() {
+        if (attack == true) {
+            for (AbstractShellInterface enemy : shells.values()) {
+                if ((enemy.getX() >= (data.getX() - 10)) && enemy.getX() <= (data.getX() + 10)
+                        && enemy.getY() >= (data.getY() - 10) && enemy.getY() < (data.getY() + 10)) {
+                    DamageEnemyPacket packet = new DamageEnemyPacket();
+                    packet.id = enemy.getID();
+                    packet.damage = getDamage();
+                    client.sendTCP(packet);
+                }
+            }
         }
     }
 
@@ -363,13 +421,15 @@ public class Player implements Subject {
 
     @Override
     public void notifyObservers() {
-        for (Observer observer : observers) {
-            EnemyStrategy enemyStrategy = new MoveTowardPlayer();
-            observer.update(enemyStrategy);
-            ChangeEnemyStrategyPacket packet = new ChangeEnemyStrategyPacket();
-            packet.id = ((Enemy) observer).getID();
-            packet.strategy = enemyStrategy;
-            client.sendTCP(packet);
+        for (Observer observer: observers) {
+            if (observer != null) {
+                EnemyStrategy enemyStrategy = new MoveTowardPlayer();
+                observer.update(enemyStrategy);
+                ChangeEnemyStrategyPacket packet = new ChangeEnemyStrategyPacket();
+                packet.id = ((Enemy) observer).getID();
+                packet.strategy = enemyStrategy;
+                client.sendTCP(packet);
+            }
         }
     }
 }

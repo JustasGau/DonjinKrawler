@@ -27,32 +27,34 @@ import javax.swing.*;
 
 public class Game extends JPanel implements ActionListener {
     LoggerSingleton logger = LoggerSingleton.getInstance();
-    com.esotericsoftware.kryonet.Client client;
+    static com.esotericsoftware.kryonet.Client client;
     private final Timer timer;
-    private final Player player;
-    private final GameMap gameMap;
+    private static Player player = null;
+    private GameMap gameMap;
     private final int DELAY = 10;
-    private static final Map<Integer, AbstractShellInterface> shells = new ConcurrentHashMap<>();
+    private static int TARGET_FPS = 60;
+    private static long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
+    public static Map<Integer, AbstractShellInterface> shells = new ConcurrentHashMap<>();
 
     private final AudioPlayer audioPlayer = new AudioPlayer();
     private final JLabel label;
 
     public Game(com.esotericsoftware.kryonet.Client client,
                 JLabel label,
-                Player player,
+                Player newPlayer,
                 Map<Integer, RoomData> rooms,
                 int currentRoom) {
-        this(client, label, player, rooms, currentRoom, true);
+        this(client, label, newPlayer, rooms, currentRoom, true);
     }
 
     public Game(com.esotericsoftware.kryonet.Client client,
                 JLabel label,
-                Player player,
+                Player newPlayer,
                 Map<Integer, RoomData> rooms,
                 int currentRoom,
                 boolean shouldAddTimer) {
         this.label = label;
-        this.player = player;
+        player = newPlayer;
         this.gameMap = new GameMap(new Room(rooms.get(currentRoom)));
         this.client = client;
 
@@ -60,6 +62,7 @@ public class Game extends JPanel implements ActionListener {
         setBackground(Color.black);
         setFocusable(true);
         timer = new Timer(DELAY, this);
+        new GameLoop();
 
         if (shouldAddTimer) {
             timer.start();
@@ -90,6 +93,7 @@ public class Game extends JPanel implements ActionListener {
     private void drawCurrentPlayer(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.drawImage(player.getImage(), player.getX(), player.getY(), this);
+        g2d.drawImage(player.getAttackImage(), player.getX() - 10, player.getY() - 10, this);
         SwingUtils.drawHealthBar(g2d, player.getX(), player.getY(), 20, 5, player.getHealth());
         g2d.setColor(Color.GREEN);
         g2d.drawString(player.getName(), player.getX(), player.getY() + 30);
@@ -103,13 +107,43 @@ public class Game extends JPanel implements ActionListener {
             offset = 60;
         }
         g2d.drawString(pl.getName() + " " + pl.getID(), pl.getX(), pl.getY() + offset);
+        g2d.drawImage(pl.getAttackImage(), pl.getX() - 10, pl.getY() - 10, this);
         g2d.setColor(Color.YELLOW);
         g2d.drawString(pl.getInfo(), pl.getX(), pl.getY() + offset + 20);
+        SwingUtils.drawHealthBar(g2d, pl.getX(), pl.getY(), 20, 5, pl.getHealth());
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         gameUpdate();
+    }
+
+    public static class GameLoop extends Thread {
+        long now;
+        long updateTime;
+        long wait;
+
+        public GameLoop() {
+            start();
+        }
+
+        public void run() {
+            //Main loop to space out updates and entity checking
+            while (true) {
+                now = System.nanoTime();
+                player.incrementTimer();
+                sendPositionUpdate();
+
+                updateTime = System.nanoTime() - now;
+                wait = (OPTIMAL_TIME - updateTime) / 1000000;
+
+                try {
+                    Thread.sleep(wait);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     private void gameUpdate() {
@@ -132,9 +166,6 @@ public class Game extends JPanel implements ActionListener {
             sendRoomPacket(direction, newRoom.getId());
             Room newRoomObj = getNewRoom(newRoom);
             gameMap.setCurrentRoom(newRoomObj);
-        }
-        if (player.hasChangedPosition()) {
-            sendPositionUpdate();
         }
 
         Integer itemId = player.move(
@@ -179,7 +210,7 @@ public class Game extends JPanel implements ActionListener {
         return newRoomObj;
     }
 
-    private void sendPositionUpdate() {
+    private static void sendPositionUpdate() {
         MoveCharacter msg = new MoveCharacter();
         msg.id = player.getId();
         msg.x = player.getX();
@@ -245,6 +276,19 @@ public class Game extends JPanel implements ActionListener {
         }
     }
 
+    public void updateEnemies(List<Enemy> enemies) {
+        for (Enemy enemy : enemies) {
+            if (enemy != null) {
+                AbstractShellInterface updatedEnemy = shells.get(enemy.getID());
+                if (updatedEnemy != null) {
+                    updatedEnemy.setX(enemy.getX());
+                    updatedEnemy.setY(enemy.getY());
+                    updatedEnemy.setHealth(enemy.getHealth());
+                }
+            }
+        }
+    }
+
     public void addEnemies(List<Enemy> enemies) {
         shells.values().removeIf(this::isEnemyShell);
         enemies.stream().filter(Objects::nonNull).forEach(this::addEnemy);
@@ -291,6 +335,11 @@ public class Game extends JPanel implements ActionListener {
 
     public void deletePlayerShell(int id) {
         shells.remove(id);
+    }
+
+    public void drawPlayerAttack(int id) {
+        AbstractShellInterface temp = shells.get(id);
+        temp.isAttacking(true);
     }
 
     // used in testing

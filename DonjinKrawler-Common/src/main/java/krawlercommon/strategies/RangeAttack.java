@@ -22,6 +22,5 @@ public class RangeAttack implements EnemyStrategy {
 
     @Override
     public void execute() {
-        enemy.setInfo(getStrategy());
     }
 }

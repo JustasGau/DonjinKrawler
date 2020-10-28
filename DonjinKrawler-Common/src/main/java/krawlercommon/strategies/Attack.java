@@ -23,6 +23,5 @@ public class Attack implements EnemyStrategy {
 
     @Override
     public void execute() {
-        enemy.setInfo(getStrategy());
     }
 }

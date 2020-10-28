@@ -1,4 +1,4 @@
-package command;
+package donjinkrawler.command;
 
 public interface Command {
 

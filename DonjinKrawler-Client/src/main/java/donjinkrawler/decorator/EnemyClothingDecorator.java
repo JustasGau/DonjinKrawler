@@ -70,4 +70,29 @@ public abstract class EnemyClothingDecorator implements AbstractShellInterface {
         wrappee.drawClothes(g2d, game);
     }
 
+    @Override
+    public double getHealth() {
+        return wrappee.getHealth();
+    }
+
+    @Override
+    public void damage(double damage) {
+        wrappee.damage(damage);
+    }
+
+    @Override
+    public void setHealth(double val) {
+        wrappee.setHealth(val);
+    }
+
+    @Override
+    public Image getAttackImage() {
+        return wrappee.getAttackImage();
+    }
+
+    @Override
+    public void isAttacking(boolean attack) {
+        wrappee.isAttacking(attack);
+    }
+
 }

@@ -3,12 +3,14 @@ package donjinkrawler;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
+import krawlercommon.ConnectionManager;
 import krawlercommon.PlayerData;
 import krawlercommon.enemies.*;
 import donjinkrawler.logging.LoggerSingleton;
 import krawlercommon.RegistrationManager;
 import krawlercommon.map.RoomData;
 import krawlercommon.packets.*;
+import krawlercommon.strategies.MoveTowardPlayer;
 
 import java.io.IOException;
 import java.util.*;
@@ -17,7 +19,8 @@ import java.util.*;
 public class Server {
     private static final com.esotericsoftware.kryonet.Server server =
             new com.esotericsoftware.kryonet.Server(16384 * 64, 16384 * 64);
-    private static final Map<Integer, PlayerData> playerConnectionMap = new HashMap<>();
+    public static final Map<Integer, PlayerData> playerConnectionMap = new HashMap<>();
+    public static final Map<Integer, PlayerData> logInMap = new HashMap<>();
 
     private static final int mapSize = 10;
 
@@ -30,6 +33,7 @@ public class Server {
 
     private static int TARGET_FPS = 60;
     private static long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
+    private static boolean timerAdded = false;
 
 
     public static void main(String[] args) throws IOException {
@@ -38,6 +42,7 @@ public class Server {
         server.start();
         server.bind(54555, 54777);
         RegistrationManager.registerKryo(server.getKryo());
+        ConnectionManager.init(playerConnectionMap);
         server.addListener(new Listener() {
             public void received(Connection connection, Object object) {
                 if (object instanceof LoginPacket) {
@@ -50,6 +55,10 @@ public class Server {
                     handleRoomChange(connection, (RoomPacket) object);
                 } else if (object instanceof ChangeEnemyStrategyPacket) {
                     handleEnemyStrategyChange(connection, (ChangeEnemyStrategyPacket) object);
+                } else if (object instanceof CharacterAttackPacket) {
+                    handlePlayerAttack(connection, (CharacterAttackPacket) object);
+                } else if (object instanceof DamageEnemyPacket) {
+                    handlePlayerDamageEnemy(connection, (DamageEnemyPacket) object);
                 }
             }
 
@@ -58,7 +67,6 @@ public class Server {
             }
 
         });
-        new Timer();
         initMap();
         logger.info("Server is running");
     }
@@ -66,12 +74,17 @@ public class Server {
     private static void initMap() {
         GameMapGenerator generator = new GameMapGenerator(mapSize);
         List<String> gameMapString = generator.generate();
+
         rooms = generator.generateRoomsFromString(gameMapString);
     }
 
     private static void handleLogin(Connection connection, LoginPacket object) {
         if (playerConnectionMap.get(connection.getID()) == null) {
             createNewPlayer(connection, object);
+            if (!timerAdded) {
+                new Timer();
+                timerAdded = true;
+            }
         }
     }
 
@@ -91,7 +104,7 @@ public class Server {
 
     private static void handleRoomChange(Connection connection, RoomPacket roomPacket) {
         currentRoom = roomPacket.id;
-        sendEnemies();
+        sendEnemies(true);
         server.sendToAllExceptUDP(connection.getID(), roomPacket);
     }
 
@@ -109,7 +122,25 @@ public class Server {
     }
 
     private static void handleEnemyStrategyChange(Connection connection, ChangeEnemyStrategyPacket packet) {
-        server.sendToAllTCP(packet);
+        for (Enemy enemy : rooms.get(currentRoom).getEnemies()) {
+            if (enemy != null && enemy.getID() == packet.id) {
+                enemy.setCurrentStrategy(packet.strategy);
+                break;
+            }
+        }
+    }
+
+    private static void handlePlayerAttack(Connection connection, CharacterAttackPacket packet) {
+        server.sendToAllExceptUDP(connection.getID(), packet);
+    }
+
+    private static void handlePlayerDamageEnemy(Connection connection, DamageEnemyPacket packet) {
+        for (Enemy enemy : rooms.get(currentRoom).getEnemies()) {
+            if (enemy != null && enemy.getID() == packet.id) {
+                enemy.damage(packet.damage);
+                break;
+            }
+        }
     }
 
     private static void createNewPlayer(Connection connection, LoginPacket loginPacket) {
@@ -125,7 +156,8 @@ public class Server {
         logger.debug("Player " + player.getName() + " has joined the server");
         sendPlayerToExistingClients(connection, player);
         sendExistingPlayersToClient(connection.getID(), player);
-        sendEnemiesToPlayer(connection);
+        sendEnemiesToPlayer(connection, true);
+        logInMap.put(connection.getID(), player);
     }
 
     private static void sendPlayerToExistingClients(Connection connection, PlayerData player) {
@@ -180,7 +212,11 @@ public class Server {
             //Main loop to space out updates and entity checking
             while (true) {
                 now = System.nanoTime();
-
+                for (Integer conId : logInMap.keySet()) {
+                    EnemyPacket enemyPacket = new EnemyPacket();
+                    enemyPacket.getEnemies().addAll(rooms.get(currentRoom).getEnemies());
+                    server.sendToTCP(conId, enemyPacket);
+                }
                 update();
 
                 updateTime = System.nanoTime() - now;
@@ -196,34 +232,31 @@ public class Server {
     }
 
     private static void update() {
-//        for (Enemy enemy : smallEnemies) {
-//            enemy.incrementTick(TARGET_FPS);
-//        }
-//        for (Enemy enemy : bigEnemies) {
-//            enemy.incrementTick(TARGET_FPS);
-//        }
-//        sendEnemyInfo(smallEnemies);
-//        sendEnemyInfo(bigEnemies);
+        if (rooms.get(currentRoom).getEnemies().size() > 0) {
+            for (Enemy enemy : rooms.get(currentRoom).getEnemies()) {
+                if (enemy != null) {
+                    enemy.incrementTick(TARGET_FPS, server);
+                }
+            }
+        }
     }
 
-    private static void sendEnemies() {
+    private static void sendEnemies(Boolean create) {
         EnemyPacket enemyPacket = new EnemyPacket();
+        if (create) {
+            enemyPacket.setCreate();
+        }
         enemyPacket.getEnemies().addAll(rooms.get(currentRoom).getEnemies());
         server.sendToAllTCP(enemyPacket);
     }
 
-    private static void sendEnemiesToPlayer(Connection connection) {
+    private static void sendEnemiesToPlayer(Connection connection, Boolean create) {
         EnemyPacket enemyPacket = new EnemyPacket();
+        if (create) {
+            enemyPacket.setCreate();
+        }
         enemyPacket.getEnemies().addAll(rooms.get(currentRoom).getEnemies());
         server.sendToTCP(connection.getID(), enemyPacket);
-    }
-
-    public static void sendEnemyInfo(ArrayList<Enemy> enemies) {
-        for (Enemy enemy : enemies) {
-            MessagePacket messagePacket = new MessagePacket();
-            messagePacket.message = "ENI " + enemy.getID() + " " + enemy.getInfo();
-            server.sendToAllTCP(messagePacket);
-        }
     }
 
 }

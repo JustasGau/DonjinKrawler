@@ -58,7 +58,11 @@ public class Client {
                     game.changeShellPosition(msg);
                 } else if (object instanceof EnemyPacket && game != null) {
                     EnemyPacket enemyPacket = (EnemyPacket) object;
-                    game.addEnemies(enemyPacket.getEnemies());
+                    if (enemyPacket.isUpdate()) {
+                        game.updateEnemies(enemyPacket.getEnemies());
+                    } else {
+                        game.addEnemies(enemyPacket.getEnemies());
+                    }
                 } else if (object instanceof CreatePlayerPacket && game != null) {
                     CreatePlayerPacket packet = (CreatePlayerPacket) object;
                     game.addPlayerShell(packet.player);
@@ -70,6 +74,9 @@ public class Client {
                 } else if (object instanceof ChangeEnemyStrategyPacket && game != null) {
                     ChangeEnemyStrategyPacket enemy = (ChangeEnemyStrategyPacket) object;
                     game.updateEnemyStrategy(enemy.id, enemy.strategy);
+                } else if (object instanceof CharacterAttackPacket && game != null) {
+                    CharacterAttackPacket character = (CharacterAttackPacket) object;
+                    game.drawPlayerAttack(character.id);
                 }
             }
         });

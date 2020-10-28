@@ -3,6 +3,7 @@ package donjinkrawler.decorator;
 import donjinkrawler.AbstractShellInterface;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class MaracasEnemy extends EnemyClothingDecorator {

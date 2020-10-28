@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class EnemyShell extends AbstractShell {
 
     private int id;
-    private String info = "empty";
+    private String info = "No strategy";
     private ArrayList<ImageIcon> clothes = new ArrayList<>();
 
     public EnemyShell(String name, int id, int x, int y) {
@@ -75,8 +75,18 @@ public class EnemyShell extends AbstractShell {
     }
 
     @Override
+    public void damage(double damage) {
+
+    }
+
+    @Override
     public ArrayList<ImageIcon> addClothing() {
         return clothes;
+    }
+
+    @Override
+    public Image getAttackImage() {
+        return null;
     }
 
 }
