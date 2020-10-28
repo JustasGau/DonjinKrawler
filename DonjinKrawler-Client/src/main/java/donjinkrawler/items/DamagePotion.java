@@ -18,4 +18,11 @@ public class DamagePotion extends BaseItem {
     public String getDescription() {
         return "Adds some damage buff.";
     }
+
+    @Override
+    public DamagePotion deepCopy() throws CloneNotSupportedException {
+        return (DamagePotion) super.clone();
+    }
+
+
 }

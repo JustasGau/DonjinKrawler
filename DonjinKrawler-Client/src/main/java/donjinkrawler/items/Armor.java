@@ -32,6 +32,16 @@ public class Armor extends Armory {
                 + "Mana: " + this.getMana();
     }
 
+    @Override
+    public Armor clone() throws CloneNotSupportedException {
+        return (Armor) super.clone();
+    }
+
+    @Override
+    public Armor deepCopy() throws CloneNotSupportedException {
+        return (Armor) super.clone();
+    }
+
     public double getDefense() {
         return this.defense;
     }

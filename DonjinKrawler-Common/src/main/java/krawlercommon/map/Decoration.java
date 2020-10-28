@@ -13,7 +13,7 @@ public class Decoration extends CollidableObject {
     }
 
     @Override
-    protected Decoration clone() throws CloneNotSupportedException {
+    public Decoration clone() throws CloneNotSupportedException {
         return (Decoration) super.clone();
     }
 }

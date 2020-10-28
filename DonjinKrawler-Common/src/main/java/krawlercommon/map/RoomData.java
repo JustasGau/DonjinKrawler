@@ -1,5 +1,6 @@
 package krawlercommon.map;
 
+import donjinkrawler.prototype.KrawlerCloneable;
 import krawlercommon.enemies.Enemy;
 import krawlercommon.items.ItemLocationData;
 
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RoomData implements Cloneable {
+public class RoomData implements KrawlerCloneable {
     private int id;
     private boolean cleared;
     private RoomData left;
@@ -130,6 +131,7 @@ public class RoomData implements Cloneable {
         }
     }
 
+    @Override
     public RoomData deepCopy() throws CloneNotSupportedException {
         RoomData clonedData = new RoomData();
         clonedData.setId(id);

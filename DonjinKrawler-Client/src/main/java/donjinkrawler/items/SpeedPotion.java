@@ -18,4 +18,9 @@ public class SpeedPotion extends BaseItem {
     public String getDescription() {
         return "Adds some speed buff.";
     }
+
+    @Override
+    public SpeedPotion deepCopy() throws CloneNotSupportedException {
+        return (SpeedPotion) super.clone();
+    }
 }

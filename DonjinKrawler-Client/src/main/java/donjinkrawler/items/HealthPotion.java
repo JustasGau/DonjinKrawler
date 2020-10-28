@@ -18,4 +18,9 @@ public class HealthPotion extends BaseItem {
     public String getDescription() {
         return "Restore some HP.";
     }
+
+    @Override
+    public HealthPotion deepCopy() throws CloneNotSupportedException {
+        return (HealthPotion) super.clone();
+    }
 }
