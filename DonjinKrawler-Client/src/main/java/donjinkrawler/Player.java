@@ -2,7 +2,9 @@ package donjinkrawler;
 
 import com.esotericsoftware.kryonet.Client;
 import donjinkrawler.adapter.AudioPlayer;
-import command.*;
+import donjinkrawler.command.DamageCommand;
+import donjinkrawler.command.MoveCommand;
+import donjinkrawler.command.PlayerCommander;
 import donjinkrawler.facade.MusicMaker;
 import donjinkrawler.items.Armor;
 import donjinkrawler.items.BaseItem;
@@ -17,17 +19,12 @@ import krawlercommon.strategies.EnemyStrategy;
 import krawlercommon.strategies.MoveTowardPlayer;
 import krawlercommon.packets.CharacterAttackPacket;
 import krawlercommon.packets.DamageEnemyPacket;
-
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import javax.swing.ImageIcon;
-import com.esotericsoftware.kryonet.Client;
-
-
 import static donjinkrawler.Game.shells;
 
 public class Player implements Subject {

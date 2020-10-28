@@ -40,7 +40,6 @@ public class Game extends JPanel implements ActionListener {
     public static Map<Integer, AbstractShellInterface> shells = new ConcurrentHashMap<>();
 
     private final AudioPlayer audioPlayer = new AudioPlayer();
-    private AudioPlayer audioPlayer = new AudioPlayer();
     private MusicMaker musicMaker = new MusicMaker();
     private final JLabel label;
 
@@ -208,8 +207,6 @@ public class Game extends JPanel implements ActionListener {
             player.detachAllObservers();
             player.setHasNotifiedObservers(false);
             newRoomObj.getRoomData().getEnemies().forEach(player::attachObserver);
-            audioPlayer.play("wav", "times-up.wav");
-            newRoomObj.getRoomData().getEnemies().forEach(e -> player.attachObserver(e));
             if (newRoom.getRoomType().equals(RoomType.BOSS)) {
                 musicMaker.playBossRoomMusic();
             } else if (newRoom.getRoomType().equals(RoomType.ITEM)) {
@@ -274,7 +271,9 @@ public class Game extends JPanel implements ActionListener {
 
     public void updateEnemyStrategy(int id, EnemyStrategy strategy) {
         AbstractShellInterface temp = shells.get(id);
-        temp.setInfo(strategy.getStrategy());
+        if (temp != null) {
+            temp.setInfo(strategy.getStrategy());
+        }
     }
 
     public void updateEnemyInfo(String enemyData) {
