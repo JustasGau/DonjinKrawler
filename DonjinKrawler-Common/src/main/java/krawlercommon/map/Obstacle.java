@@ -21,7 +21,7 @@ public class Obstacle extends CollidableObject {
     }
 
     @Override
-    protected Obstacle clone() throws CloneNotSupportedException {
+    public Obstacle clone() throws CloneNotSupportedException {
         Obstacle clone = (Obstacle) super.clone();
         clone.setObstacleType(obstacleType);
         return clone;

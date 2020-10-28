@@ -1,6 +1,8 @@
 package krawlercommon.map;
 
-public class CollidableObject implements Cloneable {
+import donjinkrawler.prototype.KrawlerCloneable;
+
+public class CollidableObject implements KrawlerCloneable {
     protected int x;
     protected int y;
     protected int width;
@@ -66,7 +68,12 @@ public class CollidableObject implements Cloneable {
     }
 
     @Override
-    protected CollidableObject clone() throws CloneNotSupportedException {
+    public CollidableObject clone() throws CloneNotSupportedException {
         return (CollidableObject) super.clone();
+    }
+
+    @Override
+    public CollidableObject deepCopy() throws CloneNotSupportedException {
+        return this.clone();
     }
 }

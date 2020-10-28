@@ -36,4 +36,9 @@ public class Weapon extends Armory {
                 + "Damage: " + this.getDamage() + "\n"
                 + "Speed: " + this.getSpeed();
     }
+
+    @Override
+    public Weapon deepCopy() throws CloneNotSupportedException {
+        return (Weapon) super.clone();
+    }
 }

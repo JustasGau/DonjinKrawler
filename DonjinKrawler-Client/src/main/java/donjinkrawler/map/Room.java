@@ -5,6 +5,7 @@ import donjinkrawler.Player;
 import donjinkrawler.SwingUtils;
 import donjinkrawler.items.BaseItem;
 import donjinkrawler.items.ItemMaker;
+import donjinkrawler.prototype.KrawlerCloneable;
 import krawlercommon.items.ItemLocationData;
 import krawlercommon.map.*;
 
@@ -15,9 +16,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class Room implements Cloneable {
+public class Room implements KrawlerCloneable {
 
     private RoomData roomData;
     private ArrayList<Door> doors = new ArrayList<>();
@@ -184,25 +186,36 @@ public class Room implements Cloneable {
         return this.items;
     }
 
+    @Override
     public Room deepCopy() throws CloneNotSupportedException {
         Room clone = (Room) super.clone();
         clone.setRoomData(roomData.deepCopy());
         clone.doors = new ArrayList<>();
         clone.initDoors();
         clone.wallImages = new HashMap<>();
-        cloneMap(wallImages, clone.wallImages);
+        cloneImageMap(wallImages, clone.wallImages);
         clone.tileImages = new HashMap<>();
-        cloneMap(tileImages, clone.tileImages);
+        cloneImageMap(tileImages, clone.tileImages);
         clone.decorationImages = new HashMap<>();
-        cloneMap(decorationImages, clone.decorationImages);
+        cloneImageMap(decorationImages, clone.decorationImages);
         clone.obstacleImages = new HashMap<>();
-        cloneMap(obstacleImages, clone.obstacleImages);
+        cloneImageMap(obstacleImages, clone.obstacleImages);
+        clone.items = new HashMap<>();
+        cloneItems(items, clone.items);
         return clone;
     }
 
-    private void cloneMap(Map<String, BufferedImage> origMap, Map<String, BufferedImage> dest) {
+
+    private void cloneImageMap(Map<String, BufferedImage> origMap, Map<String, BufferedImage> dest) {
         for (Map.Entry<String, BufferedImage> entry : origMap.entrySet()) {
             dest.put(entry.getKey(), SwingUtils.deepCopy(entry.getValue()));
+        }
+    }
+
+    private void cloneItems(HashMap<Integer, BaseItem> origMap, HashMap<Integer, BaseItem> dest)
+            throws CloneNotSupportedException {
+        for (Map.Entry<Integer, BaseItem> entry : origMap.entrySet()) {
+            dest.put(entry.getKey(), entry.getValue().deepCopy());
         }
     }
 
@@ -217,5 +230,17 @@ public class Room implements Cloneable {
 
     public void setRoomData(RoomData roomData) {
         this.roomData = roomData;
+    }
+
+    public List<String> getAddressValues() {
+        List<String> addressValues = new ArrayList<>();
+        addressValues.add("Room hashcode: " + System.identityHashCode(this));
+        addressValues.add("RoomData hashcode: " + System.identityHashCode(roomData));
+        addressValues.add("Doors hashcode: " + System.identityHashCode(doors));
+        addressValues.add("WallImages hashcode: " + System.identityHashCode(wallImages));
+        addressValues.add("TileImages hashcode: " + System.identityHashCode(tileImages));
+        addressValues.add("DecorationImages hashcode: " + System.identityHashCode(decorationImages));
+        addressValues.add("ObstacleImages hashcode: " + System.identityHashCode(obstacleImages));
+        return addressValues;
     }
 }

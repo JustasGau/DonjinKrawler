@@ -1,6 +1,8 @@
 package krawlercommon.items;
 
-public abstract class ItemLocationData implements Cloneable {
+import donjinkrawler.prototype.KrawlerCloneable;
+
+public abstract class ItemLocationData implements KrawlerCloneable {
     protected int id;
     protected int x;
     protected int y;
