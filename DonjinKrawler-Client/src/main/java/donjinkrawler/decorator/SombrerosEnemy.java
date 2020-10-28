@@ -3,7 +3,8 @@ package donjinkrawler.decorator;
 import donjinkrawler.AbstractShellInterface;
 
 import javax.swing.*;
-import java.util.ArrayList;
+import java.awt.*;
+import java.util.Map;
 
 public class SombrerosEnemy extends EnemyClothingDecorator {
 
@@ -12,10 +13,12 @@ public class SombrerosEnemy extends EnemyClothingDecorator {
     }
 
     @Override
-    public ArrayList<ImageIcon> addClothing() {
+    public Map<String, ImageIcon> addClothing() {
         ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("sombrero.png").getFile());
-        ArrayList<ImageIcon> clothes = wrappee.addClothing();
-        clothes.add(ii);
+        Image scaledImage = ii.getImage().getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);
+        ii = new ImageIcon(scaledImage);
+        Map<String, ImageIcon> clothes = wrappee.addClothing();
+        clothes.put("Sombrero", ii);
         return clothes;
     }
 }

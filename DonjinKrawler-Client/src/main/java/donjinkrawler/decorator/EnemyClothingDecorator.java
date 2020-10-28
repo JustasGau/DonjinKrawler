@@ -5,7 +5,7 @@ import donjinkrawler.Game;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.Map;
 
 public abstract class EnemyClothingDecorator implements AbstractShellInterface {
 
@@ -16,7 +16,7 @@ public abstract class EnemyClothingDecorator implements AbstractShellInterface {
     }
 
     @Override
-    public ArrayList<ImageIcon> addClothing() {
+    public Map<String, ImageIcon> addClothing() {
         return wrappee.addClothing();
     }
 

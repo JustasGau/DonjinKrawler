@@ -2,6 +2,7 @@ package donjinkrawler.builder;
 
 import krawlercommon.enemies.Enemy;
 import krawlercommon.enemies.EnemyGenerator;
+import krawlercommon.enemies.big.BigEnemyFactory;
 import krawlercommon.enemies.small.SmallEnemyFactory;
 import krawlercommon.items.ItemLocationData;
 import krawlercommon.items.ItemGenerator;
@@ -20,6 +21,7 @@ public class NormalRoomBuilder extends RoomBuilder {
     private Map<Integer, Pair> wallPrefabs;
     private final int MAX_WALL_COORD = 300;
     private final int MIN_WALL_COORD = 100;
+    private Random rand = new Random();
 
     public NormalRoomBuilder() {
         super();
@@ -42,12 +44,10 @@ public class NormalRoomBuilder extends RoomBuilder {
 
     private void generateRandomWalls() {
         // TODO: rework because sometimes it may block doors / players
-        Random random = new Random();
-
         for (int i = 0; i < 5; i++) {
-            int wallPrefabNumber = random.nextInt(wallPrefabs.size());
-            Wall wall = new Wall(random.nextInt(MAX_WALL_COORD) + MIN_WALL_COORD,
-                    random.nextInt(MAX_WALL_COORD) + MIN_WALL_COORD,
+            int wallPrefabNumber = rand.nextInt(wallPrefabs.size());
+            Wall wall = new Wall(rand.nextInt(MAX_WALL_COORD) + MIN_WALL_COORD,
+                    rand.nextInt(MAX_WALL_COORD) + MIN_WALL_COORD,
                     wallPrefabs.get(wallPrefabNumber).width,
                     wallPrefabs.get(wallPrefabNumber).height);
             roomData.getWalls().add(wall);
@@ -63,14 +63,12 @@ public class NormalRoomBuilder extends RoomBuilder {
 
     @Override
     public RoomBuilder buildTiles() {
-        Random rand = new Random();
         roomData.setTileTexture(rand.nextInt(3) + 1);
         return this;
     }
 
     @Override
     public RoomBuilder buildObstacles() {
-        Random rand = new Random();
         for (int i = 0; i < 5; i++) {
             Obstacle obstacle = new Obstacle();
             obstacle.setX(rand.nextInt(350) + 30);
@@ -94,7 +92,10 @@ public class NormalRoomBuilder extends RoomBuilder {
     RoomBuilder buildEnemies() {
         EnemyGenerator smallEnemyGenerator = new EnemyGenerator(new SmallEnemyFactory());
         ArrayList<Enemy> smallEnemies = smallEnemyGenerator.generateRandomEnemies(5);
+        EnemyGenerator bigEnemyGenerator = new EnemyGenerator(new BigEnemyFactory());
+        ArrayList<Enemy> bigEnemies = bigEnemyGenerator.generateRandomEnemies(rand.nextInt(3));
         roomData.getEnemies().addAll(smallEnemies);
+        roomData.getEnemies().addAll(bigEnemies);
         return this;
     }
 
