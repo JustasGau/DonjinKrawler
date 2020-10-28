@@ -36,6 +36,7 @@ public class Game extends JPanel implements ActionListener {
     private static final Map<Integer, AbstractShellInterface> shells = new ConcurrentHashMap<>();
 
     private AudioPlayer audioPlayer = new AudioPlayer();
+    private MusicMaker musicMaker = new MusicMaker();
     private final JLabel label;
 
     public Game(com.esotericsoftware.kryonet.Client client,
@@ -173,7 +174,11 @@ public class Game extends JPanel implements ActionListener {
             player.detachAllObservers();
             player.setHasNotifiedObservers(false);
             newRoomObj.getRoomData().getEnemies().forEach(e -> player.attachObserver(e));
-            audioPlayer.play("wav", "times-up.wav");
+            if (newRoom.getRoomType().equals(RoomType.BOSS)) {
+                musicMaker.playBossRoomMusic();
+            } else if (newRoom.getRoomType().equals(RoomType.ITEM)) {
+                musicMaker.playItemRoomMusic();
+            }
         } else {
             newRoomObj = new Room(newRoom);
         }

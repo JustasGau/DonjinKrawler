@@ -2,10 +2,10 @@ package donjinkrawler.facade;
 
 import donjinkrawler.adapter.AudioPlayer;
 
-public class BossRoomMusic implements Music {
+public class ItemRoomMusic implements Music {
     @Override
     public void play() {
         AudioPlayer audioPlayer = new AudioPlayer();
-        audioPlayer.play("wav", "boss-fight.wav");
+        audioPlayer.play("wav", "item-room.wav");
     }
 }
