@@ -36,7 +36,7 @@ public class Client {
     }
 
     private void setupKryo() throws IOException {
-        Log.set(Log.LEVEL_TRACE);
+        Log.set(Log.LEVEL_ERROR);
         kryoClient = new com.esotericsoftware.kryonet.Client(32768, 32768);
         kryoClient.getKryo().setReferences(true);
         kryoClient.start();
@@ -58,10 +58,11 @@ public class Client {
                     game.changeShellPosition(msg);
                 } else if (object instanceof EnemyPacket && game != null) {
                     EnemyPacket enemyPacket = (EnemyPacket) object;
-                    if (enemyPacket.isUpdate())
+                    if (enemyPacket.isUpdate()) {
                         game.updateEnemies(enemyPacket.getEnemies());
-                    else
+                    } else {
                         game.addEnemies(enemyPacket.getEnemies());
+                    }
                 } else if (object instanceof CreatePlayerPacket && game != null) {
                     CreatePlayerPacket packet = (CreatePlayerPacket) object;
                     game.addPlayerShell(packet.player);

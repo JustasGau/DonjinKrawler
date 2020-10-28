@@ -90,8 +90,8 @@ public abstract class EnemyClothingDecorator implements AbstractShellInterface {
     }
 
     @Override
-    public void isAttacing(boolean attack) {
-        wrappee.isAttacing(attack);
+    public void isAttacking(boolean attack) {
+        wrappee.isAttacking(attack);
     }
 
 }

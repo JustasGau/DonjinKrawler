@@ -44,7 +44,7 @@ public class Game extends JPanel implements ActionListener {
                 Player newPlayer,
                 Map<Integer, RoomData> rooms,
                 int currentRoom) {
-        this(client, label, player, rooms, currentRoom, true);
+        this(client, label, newPlayer, rooms, currentRoom, true);
     }
 
     public Game(com.esotericsoftware.kryonet.Client client,
@@ -62,8 +62,7 @@ public class Game extends JPanel implements ActionListener {
         setBackground(Color.black);
         setFocusable(true);
         timer = new Timer(delay, this);
-        timer.start();
-        new gameLoop();
+        new GameLoop();
 
         if (shouldAddTimer) {
             timer.start();
@@ -111,6 +110,7 @@ public class Game extends JPanel implements ActionListener {
         g2d.drawImage(pl.getAttackImage(), pl.getX()-10, pl.getY()-10, this);
         g2d.setColor(Color.YELLOW);
         g2d.drawString(pl.getInfo(), pl.getX(), pl.getY() + offset + 20);
+        SwingUtils.drawHealthBar(g2d, pl.getX(), pl.getY(), 20, 5, pl.getHealth());
     }
 
     @Override
@@ -118,12 +118,12 @@ public class Game extends JPanel implements ActionListener {
         gameUpdate();
     }
 
-    public static class gameLoop extends Thread {
+    public static class GameLoop extends Thread {
         long now;
         long updateTime;
         long wait;
 
-        public gameLoop() {
+        public GameLoop() {
             start();
         }
 
@@ -167,9 +167,6 @@ public class Game extends JPanel implements ActionListener {
             Room newRoomObj = getNewRoom(newRoom);
             gameMap.setCurrentRoom(newRoomObj);
         }
-//        if (player.hasChangedPosition()) {
-//            sendPositionUpdate();
-//        }
 
         Integer itemId = player.move(
             gameMap.getCurrentRoom().getWalls(),
@@ -283,10 +280,14 @@ public class Game extends JPanel implements ActionListener {
 
     public void updateEnemies(List<Enemy> enemies) {
         for (Enemy enemy : enemies) {
-            AbstractShellInterface updatedEnemy = shells.get(enemy.getID());
-            updatedEnemy.setX(enemy.getX());
-            updatedEnemy.setY(enemy.getY());
-            updatedEnemy.setHealth(enemy.getHealth());
+            if (enemy != null) {
+                AbstractShellInterface updatedEnemy = shells.get(enemy.getID());
+                if (updatedEnemy != null) {
+                    updatedEnemy.setX(enemy.getX());
+                    updatedEnemy.setY(enemy.getY());
+                    updatedEnemy.setHealth(enemy.getHealth());
+                }
+            }
         }
     }
 
@@ -340,7 +341,7 @@ public class Game extends JPanel implements ActionListener {
 
     public void drawPlayerAttack(int id) {
         AbstractShellInterface temp = shells.get(id);
-        temp.isAttacing(true);
+        temp.isAttacking(true);
     }
 
     // used in testing

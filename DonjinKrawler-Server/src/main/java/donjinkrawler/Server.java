@@ -20,6 +20,7 @@ public class Server {
     private static final com.esotericsoftware.kryonet.Server server =
             new com.esotericsoftware.kryonet.Server(16384 * 64, 16384 * 64);
     public static final Map<Integer, PlayerData> playerConnectionMap = new HashMap<>();
+    public static final Map<Integer, PlayerData> logInMap = new HashMap<>();
 
     private static final int mapSize = 10;
 
@@ -32,6 +33,7 @@ public class Server {
 
     private static int TARGET_FPS = 60;
     private static long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
+    private static boolean timerAdded = false;
 
 
     public static void main(String[] args) throws IOException {
@@ -74,12 +76,15 @@ public class Server {
         List<String> gameMapString = generator.generate();
 
         rooms = generator.generateRoomsFromString(gameMapString);
-        new Timer();
     }
 
     private static void handleLogin(Connection connection, LoginPacket object) {
         if (playerConnectionMap.get(connection.getID()) == null) {
             createNewPlayer(connection, object);
+            if (!timerAdded) {
+                new Timer();
+                timerAdded = true;
+            }
         }
     }
 
@@ -151,7 +156,8 @@ public class Server {
         logger.debug("Player " + player.getName() + " has joined the server");
         sendPlayerToExistingClients(connection, player);
         sendExistingPlayersToClient(connection.getID(), player);
-        sendEnemiesToPlayer(connection);
+        sendEnemiesToPlayer(connection, true);
+        logInMap.put(connection.getID(), player);
     }
 
     private static void sendPlayerToExistingClients(Connection connection, PlayerData player) {
@@ -206,6 +212,11 @@ public class Server {
             //Main loop to space out updates and entity checking
             while (true) {
                 now = System.nanoTime();
+                for (Integer conId : logInMap.keySet()) {
+                    EnemyPacket enemyPacket = new EnemyPacket();
+                    enemyPacket.getEnemies().addAll(rooms.get(currentRoom).getEnemies());
+                    server.sendToTCP(conId, enemyPacket);
+                }
                 update();
 
                 updateTime = System.nanoTime() - now;
@@ -223,8 +234,9 @@ public class Server {
     private static void update() {
         if (rooms.get(currentRoom).getEnemies().size() > 0) {
             for (Enemy enemy : rooms.get(currentRoom).getEnemies()) {
-                enemy.incrementTick(TARGET_FPS, server);
-                sendEnemies(false);
+                if (enemy != null) {
+                    enemy.incrementTick(TARGET_FPS, server);
+                }
             }
         }
     }
@@ -237,8 +249,10 @@ public class Server {
         server.sendToAllTCP(enemyPacket);
     }
 
-    private static void sendEnemiesToPlayer(Connection connection) {
+    private static void sendEnemiesToPlayer(Connection connection, Boolean create) {
         EnemyPacket enemyPacket = new EnemyPacket();
+        if (create)
+            enemyPacket.setCreate();
         enemyPacket.getEnemies().addAll(rooms.get(currentRoom).getEnemies());
         server.sendToTCP(connection.getID(), enemyPacket);
     }

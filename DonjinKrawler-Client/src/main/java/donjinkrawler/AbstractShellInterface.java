@@ -36,5 +36,5 @@ public interface AbstractShellInterface {
 
     Image getAttackImage();
 
-    void isAttacing(boolean attack);
+    void isAttacking(boolean attack);
 }

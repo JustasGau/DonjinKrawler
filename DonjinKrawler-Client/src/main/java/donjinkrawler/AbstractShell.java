@@ -62,7 +62,7 @@ abstract public class AbstractShell implements AbstractShellInterface {
 
     abstract public Image getAttackImage();
 
-    public void isAttacing(boolean attack) {
+    public void isAttacking(boolean attack) {
         this.attack = attack;
     }
 

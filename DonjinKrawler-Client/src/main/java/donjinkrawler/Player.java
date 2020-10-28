@@ -420,12 +420,14 @@ public class Player implements Subject {
     @Override
     public void notifyObservers() {
         for (Observer observer: observers) {
-            EnemyStrategy enemyStrategy = new MoveTowardPlayer();
-            observer.update(enemyStrategy);
-            ChangeEnemyStrategyPacket packet = new ChangeEnemyStrategyPacket();
-            packet.id = ((Enemy) observer).getID();
-            packet.strategy = enemyStrategy;
-            client.sendTCP(packet);
+            if (observer != null) {
+                EnemyStrategy enemyStrategy = new MoveTowardPlayer();
+                observer.update(enemyStrategy);
+                ChangeEnemyStrategyPacket packet = new ChangeEnemyStrategyPacket();
+                packet.id = ((Enemy) observer).getID();
+                packet.strategy = enemyStrategy;
+                client.sendTCP(packet);
+            }
         }
     }
 }

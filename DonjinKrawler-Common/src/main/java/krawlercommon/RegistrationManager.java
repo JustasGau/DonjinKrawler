@@ -73,7 +73,6 @@ public class RegistrationManager {
         kryo.register(UUID.class);
         kryo.register(Random.class);
         kryo.register(AtomicLong.class);
-        kryo.register(Map.class);
         // TODO: check if needed
         kryo.register(HashMap.class);
     }
