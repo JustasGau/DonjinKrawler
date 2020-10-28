@@ -2,7 +2,7 @@ package donjinkrawler;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.Map;
 
 public abstract class AbstractShell implements AbstractShellInterface {
 
@@ -53,7 +53,7 @@ public abstract class AbstractShell implements AbstractShellInterface {
 
     public abstract void drawClothes(Graphics2D g2d, Game game);
 
-    public abstract ArrayList<ImageIcon> addClothing();
+    public abstract Map<String, ImageIcon> addClothing();
 
     public double getHealth() {
         return health;

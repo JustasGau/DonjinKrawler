@@ -22,6 +22,7 @@ import java.awt.event.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.swing.*;
 
@@ -34,6 +35,7 @@ public class Game extends JPanel implements ActionListener {
     private final int DELAY = 10;
     private static int TARGET_FPS = 60;
     private static long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
+    private final Random random = new Random();
     public static Map<Integer, AbstractShellInterface> shells = new ConcurrentHashMap<>();
 
     private final AudioPlayer audioPlayer = new AudioPlayer();
@@ -80,12 +82,12 @@ public class Game extends JPanel implements ActionListener {
         Graphics2D g2d = (Graphics2D) g;
         gameMap.getCurrentRoom().draw(g);
         drawCurrentPlayer(g);
-        for (AbstractShellInterface pl : shells.values()) {
+        for (AbstractShellInterface sh : shells.values()) {
             if (gameMap.getCurrentRoom().getRoomData().getRoomType() != RoomType.ITEM) {
-                drawShell(g2d, pl);
-                pl.drawClothes(g2d, this);
-            } else if (!(pl instanceof EnemyShell)) {
-                drawShell(g2d, pl);
+                drawShell(g2d, sh);
+                sh.drawClothes(g2d, this);
+            } else if (!(sh instanceof EnemyShell)) {
+                drawShell(g2d, sh);
             }
         }
     }
@@ -169,11 +171,11 @@ public class Game extends JPanel implements ActionListener {
         }
 
         Integer itemId = player.move(
-            gameMap.getCurrentRoom().getWalls(),
-            gameMap.getCurrentRoom().getDoors(),
-            gameMap.getCurrentRoom().getObstacles(),
-            gameMap.getCurrentRoom().getDecorations(),
-            gameMap.getCurrentRoom().getItems()
+                gameMap.getCurrentRoom().getWalls(),
+                gameMap.getCurrentRoom().getDoors(),
+                gameMap.getCurrentRoom().getObstacles(),
+                gameMap.getCurrentRoom().getDecorations(),
+                gameMap.getCurrentRoom().getItems()
         );
 
         if (itemId != null) {
@@ -311,14 +313,18 @@ public class Game extends JPanel implements ActionListener {
     }
 
     private void addDecoratedEnemy(Enemy e) {
-        shells.put(e.getID(),
-                new MaracasEnemy(
-                        new PonchosEnemy(
-                                new SombrerosEnemy(
-                                        new EnemyShell(e.getName(), e.getID(), e.getX(), e.getY())
-                                )
-                        )
-                ));
+        if (random.nextInt(10000) % 10 == 0) {
+            shells.put(e.getID(),
+                    new MaracasEnemy(
+                            new PonchosEnemy(
+                                    new SombrerosEnemy(
+                                            new EnemyShell(e.getName(), e.getID(), e.getX(), e.getY())
+                                    )
+                            )
+                    ));
+        } else {
+            shells.put(e.getID(), new EnemyShell(e.getName(), e.getID(), e.getX(), e.getY()));
+        }
     }
 
     public boolean isEnemyShell(AbstractShellInterface shell) {

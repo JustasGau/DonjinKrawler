@@ -2,11 +2,11 @@ package donjinkrawler;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.Map;
 
 public interface AbstractShellInterface {
 
-    ArrayList<ImageIcon> addClothing();
+    Map<String, ImageIcon> addClothing();
 
     int getX();
 

@@ -1,10 +1,8 @@
 package donjinkrawler;
 
-import krawlercommon.packets.CharacterAttackPacket;
-
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.Map;
 
 public class PlayerShell extends AbstractShell {
 
@@ -32,7 +30,7 @@ public class PlayerShell extends AbstractShell {
 
 
     @Override
-    public ArrayList<ImageIcon> addClothing() {
+    public Map<String, ImageIcon> addClothing() {
         return null;
     }
 
@@ -41,7 +39,8 @@ public class PlayerShell extends AbstractShell {
         if (attack) {
             attack = false;
             return attackIMG;
-        } else
+        } else {
             return null;
+        }
     }
 }
