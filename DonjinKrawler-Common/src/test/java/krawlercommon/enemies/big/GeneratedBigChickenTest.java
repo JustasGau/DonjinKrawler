@@ -18,7 +18,7 @@ public class GeneratedBigChickenTest {
     public void testUpdate() {
         BigChicken bigChicken = new BigChicken();
         bigChicken.update(new Attack());
-        assertsEquals("Attack", bigChicken.getInfo());
+        assertEquals("Attack", bigChicken.getInfo());
     }
 }
 
