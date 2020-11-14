@@ -1,6 +1,6 @@
 package krawlercommon.map;
 
-import donjinkrawler.prototype.KrawlerCloneable;
+import krawlercommon.KrawlerCloneable;
 
 public class CollidableObject implements KrawlerCloneable {
     protected int x;

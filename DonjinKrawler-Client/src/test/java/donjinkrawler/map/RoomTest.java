@@ -1,12 +1,20 @@
-package map;
+package donjinkrawler.map;
 
-import donjinkrawler.map.Room;
+import donjinkrawler.items.DamagePotion;
 import krawlercommon.items.ArmorData;
-import krawlercommon.map.RoomData;
-import krawlercommon.map.RoomType;
+import krawlercommon.items.DamagePotionData;
+import krawlercommon.map.*;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class RoomTest {
 
@@ -68,6 +76,39 @@ public class RoomTest {
         assertNotEquals(System.identityHashCode(room.getItems()), System.identityHashCode(clone.getItems()));
         assertNotEquals(System.identityHashCode(room.getRoomData().getItems().get(1)),
                 System.identityHashCode(clone.getRoomData().getItems().get(1)));
+    }
+
+    @Test
+    public void testRoomDraw() {
+        RoomData roomData = mock(RoomData.class);
+        when(roomData.getTileTexture()).thenReturn(1);
+        when(roomData.getId()).thenReturn(69);
+        when(roomData.getWalls()).thenReturn(new ArrayList<>(List.of(new Wall(10, 10, 10, 10))));
+        when(roomData.getDecorations()).thenReturn(new ArrayList<>(List.of(new Decoration(10, 10, 10, 10))));
+        Obstacle obstacle = new Obstacle(20, 10, 10, 10);
+        obstacle.setObstacleType(ObstacleType.LAVA);
+        when(roomData.getObstacles()).thenReturn(new ArrayList<>(List.of(obstacle)));
+
+        Graphics2D graphics = mock(Graphics2D.class);
+        Room room = new Room(roomData);
+        room.getDoors().add(new Door());
+        room.draw(graphics);
+        Mockito.verify(graphics).setColor(Color.RED);
+        Mockito.verify(graphics).drawString("69", 250, 250);
+        Mockito.verify(graphics).fill(new Rectangle(0, 0, 20, 20));
+        Mockito.verify(graphics).fill(new Rectangle(10, 10, 10, 10));
+        Mockito.verify(graphics).fill(new Rectangle(20, 10, 10, 10));
+    }
+
+    @Test
+    public void testRemoveItem() {
+        RoomData roomData = mock(RoomData.class);
+        Room room = new Room(roomData);
+        DamagePotionData mockDP = mock(DamagePotionData.class);
+        room.getItems().put(1, new DamagePotion(mockDP));
+        assertEquals(1, room.getItems().size());
+        room.removeItem(1);
+        assertEquals(0, room.getItems().size());
     }
 
     private Room generateRoom() {

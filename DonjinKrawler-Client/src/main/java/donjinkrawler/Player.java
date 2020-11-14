@@ -15,20 +15,23 @@ import krawlercommon.map.*;
 import krawlercommon.observer.Observer;
 import krawlercommon.observer.Subject;
 import krawlercommon.packets.ChangeEnemyStrategyPacket;
-import krawlercommon.strategies.EnemyStrategy;
-import krawlercommon.strategies.MoveTowardPlayer;
 import krawlercommon.packets.CharacterAttackPacket;
 import krawlercommon.packets.DamageEnemyPacket;
+import krawlercommon.strategies.EnemyStrategy;
+import krawlercommon.strategies.MoveTowardPlayer;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import javax.swing.ImageIcon;
+
 import static donjinkrawler.Game.shells;
 
 public class Player implements Subject {
     private final PlayerData data;
+    int obstacleCollisionCount = 0;
     private int dx;
     private int dy;
     private int width;
@@ -36,7 +39,6 @@ public class Player implements Subject {
     private Image image;
     private Boolean hasChangedPosition = false;
     private Boolean hasNotifiedObservers = false;
-    int obstacleCollisionCount = 0;
     private ArrayList<Observer> observers;
     private Client client;
     private AudioPlayer audioPlayer = new AudioPlayer();
@@ -226,12 +228,12 @@ public class Player implements Subject {
         return data.getX();
     }
 
-    public int getY() {
-        return data.getY();
-    }
-
     public void setX(int val) {
         data.setX(val);
+    }
+
+    public int getY() {
+        return data.getY();
     }
 
     public void setY(int val) {
@@ -273,8 +275,9 @@ public class Player implements Subject {
             packet.id = getId();
             client.sendTCP(packet);
             return attackIMG;
-        } else
+        } else {
             return null;
+        }
     }
 
     public int getId() {
@@ -310,9 +313,9 @@ public class Player implements Subject {
     }
 
     public void incrementTimer() {
-        if (attackTimer == 60)
+        if (attackTimer == 60) {
             canAttack = true;
-        else {
+        } else {
             attackTimer++;
             attack = false;
         }
@@ -424,7 +427,7 @@ public class Player implements Subject {
 
     @Override
     public void notifyObservers() {
-        for (Observer observer: observers) {
+        for (Observer observer : observers) {
             if (observer != null) {
                 EnemyStrategy enemyStrategy = new MoveTowardPlayer();
                 observer.update(enemyStrategy);

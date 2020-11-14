@@ -1,4 +1,4 @@
-package map;
+package donjinkrawler.map;
 
 import donjinkrawler.Game;
 import donjinkrawler.Player;

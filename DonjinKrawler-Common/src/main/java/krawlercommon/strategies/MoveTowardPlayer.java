@@ -6,13 +6,13 @@ import krawlercommon.enemies.Enemy;
 
 public class MoveTowardPlayer implements EnemyStrategy {
 
-    public MoveTowardPlayer() {
-    }
-
     Enemy enemy;
     PlayerData target;
     int tick = 0;
     int speed = 2;
+
+    public MoveTowardPlayer() {
+    }
 
     @Override
     public String getStrategy() {
@@ -30,19 +30,21 @@ public class MoveTowardPlayer implements EnemyStrategy {
     public void execute() {
         if (tick % 10 == 0) {
             if (target != null) {
-                if (target.getX() > enemy.getX())
+                if (target.getX() > enemy.getX()) {
                     enemy.setDx(speed);
-                else if (target.getX() < enemy.getX())
+                } else if (target.getX() < enemy.getX()) {
                     enemy.setDx((-1) * speed);
-                else
+                } else {
                     enemy.setDx(0);
+                }
 
-                if (target.getY() > enemy.getY())
+                if (target.getY() > enemy.getY()) {
                     enemy.setDy(speed);
-                else if (target.getY() < enemy.getY())
+                } else if (target.getY() < enemy.getY()) {
                     enemy.setDy((-1) * speed);
-                else
+                } else {
                     enemy.setDy(0);
+                }
             }
         } else if (tick % 2 == 0) {
             enemy.move();

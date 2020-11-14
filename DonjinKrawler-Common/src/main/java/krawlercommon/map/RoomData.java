@@ -1,6 +1,6 @@
 package krawlercommon.map;
 
-import donjinkrawler.prototype.KrawlerCloneable;
+import krawlercommon.KrawlerCloneable;
 import krawlercommon.enemies.Enemy;
 import krawlercommon.items.ItemLocationData;
 

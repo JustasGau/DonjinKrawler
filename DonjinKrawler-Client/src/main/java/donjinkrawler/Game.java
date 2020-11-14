@@ -261,11 +261,20 @@ public class Game extends JPanel implements ActionListener {
         gameMap.setCurrentRoom(new Room(currentRoomData));
 
         switch (direction) {
-            case "LEFT" -> player.setCoordinates(400, 250);
-            case "TOP" -> player.setCoordinates(250, 400);
-            case "RIGHT" -> player.setCoordinates(40, 250);
-            case "BOTTOM" -> player.setCoordinates(250, 40);
-            default -> throw new IllegalStateException("Unexpected value: " + direction);
+            case "LEFT":
+                player.setCoordinates(400, 250);
+                break;
+            case "TOP":
+                player.setCoordinates(250, 400);
+                break;
+            case "RIGHT":
+                player.setCoordinates(40, 250);
+                break;
+            case "BOTTOM":
+                player.setCoordinates(250, 40);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + direction);
         }
     }
 

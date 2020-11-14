@@ -8,7 +8,6 @@ import krawlercommon.enemies.big.BigZombie;
 import krawlercommon.enemies.small.SmallChicken;
 import krawlercommon.enemies.small.SmallSkeleton;
 import krawlercommon.enemies.small.SmallZombie;
-import krawlercommon.enemies.Enemy.Phases;
 import krawlercommon.items.*;
 import krawlercommon.map.*;
 import krawlercommon.packets.*;

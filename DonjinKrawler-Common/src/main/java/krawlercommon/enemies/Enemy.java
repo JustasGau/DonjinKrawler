@@ -14,18 +14,19 @@ import java.util.UUID;
 
 public abstract class Enemy implements Observer {
 
-    public enum Phases {
-        RANDOM,
-        TOWARDS,
-        AWAY,
-        ATTACK,
-        RANGED
-    }
-
+    Random random = new Random();
+    transient Map<Phases, EnemyStrategy> strategies = Map.of(
+            Phases.AWAY, new MoveAwayFromPlayer(),
+            Phases.RANDOM, new MoveRandomly(),
+            Phases.TOWARDS, new MoveTowardPlayer()
+    );
+    transient EnemyStrategy currentStrategy;
+    int updateIntervalSeconds = 2;
+    int tick = 0;
+    String info;
     private String name;
     private double damage;
     private int id = (int) UUID.randomUUID().getMostSignificantBits();
-    Random random = new Random();
     private int x = random.nextInt(450);
     private int y = random.nextInt(450);
     private int dx;
@@ -34,26 +35,16 @@ public abstract class Enemy implements Observer {
     private double health = 100;
     private boolean updateStatus = false;
 
-    transient Map<Phases, EnemyStrategy> strategies = Map.of(
-            Phases.AWAY, new MoveAwayFromPlayer(),
-            Phases.RANDOM, new MoveRandomly(),
-            Phases.TOWARDS, new MoveTowardPlayer()
-            );
-    transient EnemyStrategy currentStrategy;
-    int updateIntervalSeconds = 2;
-    int tick = 0;
-    String info;
-
     public String getName() {
         return name;
     }
 
-    public int getID() {
-        return id;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getID() {
+        return id;
     }
 
     public void setInterval(int interval) {
@@ -76,12 +67,12 @@ public abstract class Enemy implements Observer {
         return x;
     }
 
-    public int getY() {
-        return y;
-    }
-
     public void setX(int val) {
         x = val;
+    }
+
+    public int getY() {
+        return y;
     }
 
     public void setY(int val) {
@@ -142,27 +133,45 @@ public abstract class Enemy implements Observer {
         }
     }
 
-    public void setInfo(String info) {
-        this.info = info;
-    }
-
     public String getInfo() {
         return info;
     }
 
-    public void move() {
-        if ((dx < 0 && x - dx > 2) || (dx > 0 && x + 20 + dx < 500))
-            x += dx;
-        if ((dy < 0 && y - dy > 2) || (dy > 0 && y + 20 + 50 + dy < 500))
-            y += dy;
+    public void setInfo(String info) {
+        this.info = info;
     }
 
-    public void setDx(int val) { dx = val;}
+    public void move() {
+        if ((dx < 0 && x - dx > 2) || (dx > 0 && x + 20 + dx < 500)) {
+            x += dx;
+        }
+        if ((dy < 0 && y - dy > 2) || (dy > 0 && y + 20 + 50 + dy < 500)) {
+            y += dy;
+        }
+    }
 
-    public void setDy(int val) { dy = val; }
+    public void setDx(int val) {
+        dx = val;
+    }
 
-    public void damage(double val) { health -= val; }
+    public void setDy(int val) {
+        dy = val;
+    }
 
-    public double getHealth() { return health; }
+    public void damage(double val) {
+        health -= val;
+    }
+
+    public double getHealth() {
+        return health;
+    }
+
+    public enum Phases {
+        RANDOM,
+        TOWARDS,
+        AWAY,
+        ATTACK,
+        RANGED
+    }
 
 }

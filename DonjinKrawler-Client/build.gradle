@@ -5,7 +5,6 @@ plugins {
 
 test {
     useJUnitPlatform()
-    jvmArgs("--enable-preview")
 }
 
 
@@ -20,11 +19,3 @@ dependencies {
 }
 
 mainClassName = 'donjinkrawler.Client'
-
-tasks.withType(JavaExec) {
-    jvmArgs += '--enable-preview'
-}
-
-tasks.withType(JavaCompile) {
-    options.compilerArgs.add("--enable-preview")
-}

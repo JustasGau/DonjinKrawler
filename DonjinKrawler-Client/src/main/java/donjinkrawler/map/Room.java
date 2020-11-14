@@ -5,7 +5,7 @@ import donjinkrawler.Player;
 import donjinkrawler.SwingUtils;
 import donjinkrawler.items.BaseItem;
 import donjinkrawler.items.ItemMaker;
-import donjinkrawler.prototype.KrawlerCloneable;
+import krawlercommon.KrawlerCloneable;
 import krawlercommon.items.ItemLocationData;
 import krawlercommon.map.*;
 
@@ -85,12 +85,18 @@ public class Room implements KrawlerCloneable {
     }
 
     public RoomData getRoomFromDirection(DoorDirection direction) {
-        return switch (direction) {
-            case TOP -> roomData.getTop();
-            case LEFT -> roomData.getLeft();
-            case RIGHT -> roomData.getRight();
-            case BOTTOM -> roomData.getBottom();
-        };
+        switch (direction) {
+            case TOP:
+                return roomData.getTop();
+            case LEFT:
+                return roomData.getLeft();
+            case RIGHT:
+                return roomData.getRight();
+            case BOTTOM:
+                return roomData.getBottom();
+            default:
+                throw new IllegalStateException("Unsupported argument provided");
+        }
     }
 
     public void draw(Graphics g) {
