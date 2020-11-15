@@ -1,6 +1,9 @@
 package krawlercommon.enemies;
 
+import com.esotericsoftware.kryonet.Server;
+import krawlercommon.packets.ChangeEnemyStrategyPacket;
 import krawlercommon.strategies.EnemyStrategy;
+import krawlercommon.strategies.MoveTowardPlayer;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -62,6 +65,28 @@ public class GeneratedEnemyTest {
         Boss boss = new Boss();
         boss.damage(10.0);
         assertEquals(90.0, boss.getHealth());
+    }
+
+    @Test
+    public void testSetCurrentStrategy() {
+        Boss boss = new Boss();
+        MoveTowardPlayer strategy = new MoveTowardPlayer();
+        boss.setCurrentStrategy(strategy);
+        assertEquals(strategy.getStrategy(), boss.currentStrategy.getStrategy());
+    }
+
+    @Test
+    public void testMove()
+    {
+        Boss boss = new Boss();
+        boss.setX(5);
+        boss.setDx(2);
+        boss.move();
+        assertEquals(7, boss.getX());
+        boss.setY(5);
+        boss.setDy(2);
+        boss.move();
+        assertEquals(7, boss.getY());
     }
 }
 

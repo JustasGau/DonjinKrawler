@@ -177,5 +177,4 @@ public abstract class Enemy implements Observer {
         ATTACK,
         RANGED
     }
-
 }
