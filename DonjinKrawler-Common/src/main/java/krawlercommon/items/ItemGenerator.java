@@ -11,10 +11,6 @@ public class ItemGenerator {
         WEAPON
     }
 
-    public ItemGenerator() {
-
-    }
-
     public static ItemLocationData generateRandomItem(int id) {
         Random rand = new Random();
         return generateRandomItem(id, rand.nextInt(300) + 30, rand.nextInt(300) + 30);
