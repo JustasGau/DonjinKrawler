@@ -124,6 +124,10 @@ public abstract class Enemy implements Observer {
         server.sendToAllTCP(packet);
     }
 
+    public Phases getStrategyPhase() {
+        return strategyPhase;
+    }
+
     public void setCurrentStrategy(EnemyStrategy strategy) {
         if (strategy instanceof MoveTowardPlayer) {
             strategyPhase = Phases.TOWARDS;
