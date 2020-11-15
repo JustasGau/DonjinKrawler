@@ -1,45 +1,54 @@
 package donjinkrawler.items.tiers;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GeneratedRareTierTest {
+
     @Test
-    @Disabled
+    public void testGetName() {
+        assertEquals("Rare", (new RareTier()).getName());
+    }
+
+    @Test
     public void testGetDamageBonus() {
-        assertEquals(14.0, (new RareTier()).getDamageBonus());
+        RareTier rareTier = new RareTier();
+        double dmg = (rareTier.getLastDigitOfTime() + 1) * 2;
+        assertEquals(dmg, rareTier.getDamageBonus());
     }
 
     @Test
-    @Disabled
     public void testGetSpeedBonus() {
-        assertEquals(10.5, (new RareTier()).getSpeedBonus());
+        RareTier rareTier = new RareTier();
+        double spd = (rareTier.getLastDigitOfTime() + 1) * 1.5;
+        assertEquals(spd, rareTier.getSpeedBonus());
     }
 
     @Test
-    @Disabled
     public void testGetDefenseBonus() {
-        assertEquals(14.0, (new RareTier()).getDefenseBonus());
+        RareTier rareTier = new RareTier();
+        double def = (rareTier.getLastDigitOfTime() + 1) * 2;
+        assertEquals(def, rareTier.getDefenseBonus());
     }
 
     @Test
-    @Disabled
     public void testGetHpBonus() {
-        assertEquals(17.5, (new RareTier()).getHpBonus());
+        RareTier rareTier = new RareTier();
+        double hp = (rareTier.getLastDigitOfTime() + 1) * 2.5;
+        assertEquals(hp, rareTier.getHpBonus());
     }
 
     @Test
-    @Disabled
     public void testGetManaBonus() {
-        assertEquals(8.4, (new RareTier()).getManaBonus());
+        RareTier rareTier = new RareTier();
+        double mna = (rareTier.getLastDigitOfTime() + 1) * 1.2;
+        assertEquals(mna, rareTier.getManaBonus());
     }
 
     @Test
-    @Disabled
     public void testGetLastDigitOfTime() {
-        assertEquals(6, (new RareTier()).getLastDigitOfTime());
+        assertEquals((int) ((System.currentTimeMillis() / 1000L) % 10), (new RareTier()).getLastDigitOfTime());
     }
 }
 
