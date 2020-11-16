@@ -16,7 +16,9 @@ public abstract class Armory extends BaseItem {
 
     @Override
     public Armory clone() throws CloneNotSupportedException {
-        return (Armory) super.clone();
+        Armory armory = (Armory) super.clone();
+        armory.tier = this.tier;
+        return armory;
     }
 
     @Override

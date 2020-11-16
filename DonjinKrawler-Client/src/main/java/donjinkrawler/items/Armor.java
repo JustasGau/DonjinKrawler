@@ -34,12 +34,21 @@ public class Armor extends Armory {
 
     @Override
     public Armor clone() throws CloneNotSupportedException {
-        return (Armor) super.clone();
+        Armor armor = (Armor) super.clone();
+        armor.defense = this.defense;
+        armor.hp = this.hp;
+        armor.mana = this.mana;
+        return armor;
     }
 
     @Override
     public Armor deepCopy() throws CloneNotSupportedException {
-        return (Armor) super.clone();
+        Armor armor = (Armor) super.clone();
+        armor.tier = this.tier;
+        armor.defense = this.defense;
+        armor.hp = this.hp;
+        armor.mana = this.mana;
+        return armor;
     }
 
     public double getDefense() {
