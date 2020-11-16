@@ -170,6 +170,10 @@ public abstract class Enemy implements Observer {
         return health;
     }
 
+    public void setHealth(double health) {
+        this.health = health;
+    }
+
     public enum Phases {
         RANDOM,
         TOWARDS,

@@ -3,7 +3,6 @@ package donjinkrawler;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
-
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,9 +17,9 @@ public class PlayerShellTest {
         ImageIcon fake = new ImageIcon(ClassLoader.getSystemResource("craft.png").getFile());
         assertEquals(fake.getImage().getClass().getName(), shell.getImage().getClass().getName());
         ImageIcon fake2 = new ImageIcon(ClassLoader.getSystemResource("attack.png").getFile());
-        shell.isAttacking(true);
+        shell.setIsAttacking(true);
         assertEquals(fake2.getImage().getClass().getName(), shell.getAttackImage().getClass().getName());
-        shell.isAttacking(false);
+        shell.setIsAttacking(false);
         assertNull(shell.getAttackImage());
     }
 

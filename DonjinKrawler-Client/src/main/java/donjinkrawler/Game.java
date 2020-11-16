@@ -1,6 +1,5 @@
 package donjinkrawler;
 
-import donjinkrawler.adapter.AudioPlayer;
 import donjinkrawler.decorator.EnemyClothingDecorator;
 import donjinkrawler.decorator.MaracasEnemy;
 import donjinkrawler.decorator.PonchosEnemy;
@@ -38,8 +37,6 @@ public class Game extends JPanel implements ActionListener {
     private static long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
     private final Random random = new Random();
     public static Map<Integer, AbstractShellInterface> shells = new ConcurrentHashMap<>();
-
-    private final AudioPlayer audioPlayer = new AudioPlayer();
     private MusicMaker musicMaker = new MusicMaker();
     private final JLabel label;
 
@@ -362,12 +359,16 @@ public class Game extends JPanel implements ActionListener {
 
     public void drawPlayerAttack(int id) {
         AbstractShellInterface temp = shells.get(id);
-        temp.isAttacking(true);
+        temp.setIsAttacking(true);
     }
 
     // used in testing
     public Map<Integer, AbstractShellInterface> getShells() {
         return shells;
+    }
+
+    public Room getCurrentRoom() {
+        return gameMap.getCurrentRoom();
     }
 
 }
