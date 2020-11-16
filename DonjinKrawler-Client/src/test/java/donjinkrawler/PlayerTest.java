@@ -1,14 +1,26 @@
 package donjinkrawler;
 
 import com.esotericsoftware.kryonet.Client;
+import donjinkrawler.items.Armor;
+import donjinkrawler.items.BaseItem;
+import donjinkrawler.items.SpeedPotion;
+import donjinkrawler.items.Weapon;
+import donjinkrawler.items.tiers.CommonTier;
 import krawlercommon.PlayerData;
 import krawlercommon.enemies.Boss;
+import krawlercommon.items.ArmorData;
+import krawlercommon.items.SpeedPotionData;
+import krawlercommon.items.WeaponData;
+import krawlercommon.map.*;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -245,5 +257,186 @@ public class PlayerTest {
         player.attachObserver(new Boss());
         player.notifyObservers();
         assertTrue(true);
+    }
+
+    @Test
+    public void testGetBotX()  {
+        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        Player player = new Player(data, new Client());
+        player.getBotX();
+        assertTrue(true);
+    }
+
+    @Test
+    public void testGetBotY()  {
+        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        Player player = new Player(data, new Client());
+        player.getBotY();
+        assertTrue(true);
+    }
+
+    @Test
+    public void testMove() {
+        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        Player player = new Player(data, new Client());
+
+        List<Wall> walls = new ArrayList<>();
+        List<Door> doors= new ArrayList<>();
+        List<Obstacle> obstacles = new ArrayList<>();
+        List<Decoration> decorations = new ArrayList<>();
+        HashMap<Integer, BaseItem> items = new HashMap<>();
+
+        player.move(walls, doors, obstacles, decorations, items);
+        assertTrue(true);
+    }
+
+    @Test
+    public void testCollideWithWall() {
+        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        Player player = new Player(data, new Client());
+
+        List<Wall> walls = new ArrayList<>();
+        List<Door> doors = new ArrayList<>();
+        List<Obstacle> obstacles = new ArrayList<>();
+        List<Decoration> decorations = new ArrayList<>();
+        HashMap<Integer, BaseItem> items = new HashMap<>();
+
+        walls.add(new Wall(2,3,5,5));
+
+        assertNull(player.move(walls, doors, obstacles, decorations, items));
+    }
+
+    @Test
+    public void testCollideWithObstacle() {
+        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        Player player = new Player(data, new Client());
+
+        List<Wall> walls = new ArrayList<>();
+        List<Door> doors = new ArrayList<>();
+        List<Obstacle> obstacles = new ArrayList<>();
+        List<Decoration> decorations = new ArrayList<>();
+        HashMap<Integer, BaseItem> items = new HashMap<>();
+
+        obstacles.add(new Obstacle(2,3,5,5));
+
+        assertNull(player.move(walls, doors, obstacles, decorations, items));
+    }
+
+    @Test
+    public void testCollideWithLavaObstacle() {
+        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        Player player = new Player(data, new Client());
+
+        List<Wall> walls = new ArrayList<>();
+        List<Door> doors = new ArrayList<>();
+        List<Obstacle> obstacles = new ArrayList<>();
+        List<Decoration> decorations = new ArrayList<>();
+        HashMap<Integer, BaseItem> items = new HashMap<>();
+
+        Obstacle o = new Obstacle(2,3,5,5);
+        o.setObstacleType(ObstacleType.LAVA);
+        obstacles.add(o);
+
+        assertNull(player.move(walls, doors, obstacles, decorations, items));
+    }
+
+    @Test
+    public void testCollideWithSpikesObstacle() {
+        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        Player player = new Player(data, new Client());
+
+        List<Wall> walls = new ArrayList<>();
+        List<Door> doors = new ArrayList<>();
+        List<Obstacle> obstacles = new ArrayList<>();
+        List<Decoration> decorations = new ArrayList<>();
+        HashMap<Integer, BaseItem> items = new HashMap<>();
+
+        Obstacle o = new Obstacle(2,3,5,5);
+        o.setObstacleType(ObstacleType.SPIKES);
+        obstacles.add(o);
+
+        assertNull(player.move(walls, doors, obstacles, decorations, items));
+    }
+
+    @Test
+    public void testCollideWithSlimeObstacle() {
+        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        Player player = new Player(data, new Client());
+
+        List<Wall> walls = new ArrayList<>();
+        List<Door> doors = new ArrayList<>();
+        List<Obstacle> obstacles = new ArrayList<>();
+        List<Decoration> decorations = new ArrayList<>();
+        HashMap<Integer, BaseItem> items = new HashMap<>();
+
+        Obstacle o = new Obstacle(2,3,5,5);
+        o.setObstacleType(ObstacleType.SLIME);
+        obstacles.add(o);
+
+        assertNull(player.move(walls, doors, obstacles, decorations, items));
+    }
+
+    @Test
+    public void testCollideWithDoor() {
+        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        Player player = new Player(data, new Client());
+
+        List<Wall> walls = new ArrayList<>();
+        List<Door> doors = new ArrayList<>();
+        List<Obstacle> obstacles = new ArrayList<>();
+        List<Decoration> decorations = new ArrayList<>();
+        HashMap<Integer, BaseItem> items = new HashMap<>();
+
+        doors.add(new Door(DoorDirection.TOP,2,3));
+
+        assertNull(player.move(walls, doors, obstacles, decorations, items));
+    }
+
+    @Test
+    public void testCollideWithItem() {
+        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        Player player = new Player(data, new Client());
+
+        List<Wall> walls = new ArrayList<>();
+        List<Door> doors = new ArrayList<>();
+        List<Obstacle> obstacles = new ArrayList<>();
+        List<Decoration> decorations = new ArrayList<>();
+        HashMap<Integer, BaseItem> items = new HashMap<>();
+
+        items.put(1, new SpeedPotion(new SpeedPotionData(1,2,3)));
+
+        assertEquals(1, player.move(walls, doors, obstacles, decorations, items));
+    }
+
+    @Test
+    public void testCollideWithArmor() {
+        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        Player player = new Player(data, new Client());
+
+        List<Wall> walls = new ArrayList<>();
+        List<Door> doors = new ArrayList<>();
+        List<Obstacle> obstacles = new ArrayList<>();
+        List<Decoration> decorations = new ArrayList<>();
+        HashMap<Integer, BaseItem> items = new HashMap<>();
+
+        items.put(1, new Armor(new ArmorData(1,2,3), new CommonTier(), 10, 15, 20));
+
+        assertEquals(1, player.move(walls, doors, obstacles, decorations, items));
+    }
+
+    @Test
+    public void testCollideWithWeapon() {
+        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        Player player = new Player(data, new Client());
+
+        List<Wall> walls = new ArrayList<>();
+        List<Door> doors = new ArrayList<>();
+        List<Obstacle> obstacles = new ArrayList<>();
+        List<Decoration> decorations = new ArrayList<>();
+        HashMap<Integer, BaseItem> items = new HashMap<>();
+
+        items.put(1, new Weapon(new WeaponData(1,2,3), new CommonTier(), 10, 15));
+
+        assertEquals(1, player.move(walls, doors, obstacles, decorations, items));
     }
 }
