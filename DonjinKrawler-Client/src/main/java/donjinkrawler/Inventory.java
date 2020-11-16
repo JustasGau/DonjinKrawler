@@ -19,6 +19,10 @@ public class Inventory {
         this.frame.setVisible(true);
     }
 
+    public void close() {
+        this.frame.setVisible(false);
+    }
+
     public void addWeapon(Weapon weapon) {
         this.weapon = weapon;
         this.frame.setWeapon(this.weapon);
