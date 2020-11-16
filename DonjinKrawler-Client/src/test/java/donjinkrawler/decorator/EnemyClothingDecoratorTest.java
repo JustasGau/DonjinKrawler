@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -96,5 +97,13 @@ public class EnemyClothingDecoratorTest {
         ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("zombie-big.png").getFile());
         Image image = ii.getImage();
         assertEquals(image, test.getImage());
+    }
+
+    @Test
+    public void testAddClothing() {
+        MaracasEnemy test = new MaracasEnemy(new EnemyShell("Big-Zombie", 1, 10, 20));
+        ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("maracas.png").getFile());
+        Map<String, ImageIcon> clothes = test.addClothing();
+        assertEquals(1, clothes.size());
     }
 }
