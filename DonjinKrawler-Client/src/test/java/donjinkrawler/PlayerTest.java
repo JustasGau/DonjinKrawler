@@ -1,6 +1,7 @@
 package donjinkrawler;
 
 import com.esotericsoftware.kryonet.Client;
+import donjinkrawler.facade.MusicMaker;
 import donjinkrawler.items.Armor;
 import donjinkrawler.items.BaseItem;
 import donjinkrawler.items.SpeedPotion;
@@ -153,6 +154,7 @@ public class PlayerTest {
         PlayerData data = new PlayerData("JhonnyTest",1,2,3);
         Player player = new Player(data, new Client());
 
+        Inventory.doNotOpenInventory = true;
         KeyEvent e = new KeyEvent(new Button(), KeyEvent.VK_I, System.currentTimeMillis(), 0,  KeyEvent.VK_I,'Z');
         player.keyPressed(e);
 
@@ -171,6 +173,7 @@ public class PlayerTest {
         e = new KeyEvent(new Button(), KeyEvent.VK_U, System.currentTimeMillis(), 0,  KeyEvent.VK_U,'Z');
         player.keyPressed(e);
 
+        MusicMaker.doNotPlayMusic = true;
         e = new KeyEvent(new Button(), KeyEvent.VK_M, System.currentTimeMillis(), 0,  KeyEvent.VK_M,'Z');
         player.keyPressed(e);
 

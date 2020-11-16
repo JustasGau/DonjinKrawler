@@ -6,6 +6,7 @@ import donjinkrawler.items.Weapon;
 
 public class Inventory {
 
+    public static Boolean doNotOpenInventory = false;
     private final InventoryFrame frame;
 
     private Weapon weapon;
@@ -16,11 +17,7 @@ public class Inventory {
     }
 
     public void open() {
-        this.frame.setVisible(true);
-    }
-
-    public void close() {
-        this.frame.setVisible(false);
+        this.frame.setVisible(!doNotOpenInventory);
     }
 
     public void addWeapon(Weapon weapon) {
