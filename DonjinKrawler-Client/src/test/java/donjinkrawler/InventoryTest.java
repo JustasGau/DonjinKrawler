@@ -31,4 +31,18 @@ public class InventoryTest {
         inventory.addArmor(new Armor(new ArmorData(1,2,3), new CommonTier(), 15, 20, 25));
         Assertions.assertTrue(true);
     }
+
+    @Test
+    public void testRemoveWeapon() {
+        Inventory inventory = new Inventory();
+        inventory.removeWeapon();
+        Assertions.assertTrue(true);
+    }
+
+    @Test
+    public void testRemoveArmor() {
+        Inventory inventory = new Inventory();
+        inventory.removeArmor();
+        Assertions.assertTrue(true);
+    }
 }
