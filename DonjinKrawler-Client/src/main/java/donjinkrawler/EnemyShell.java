@@ -89,7 +89,7 @@ public class EnemyShell extends AbstractShell {
 
     @Override
     public void damage(double damage) {
-
+        setHealth(getHealth() - damage);
     }
 
     @Override
