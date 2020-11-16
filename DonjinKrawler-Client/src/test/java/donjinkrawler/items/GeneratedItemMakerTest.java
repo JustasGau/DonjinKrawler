@@ -1,11 +1,13 @@
 package donjinkrawler.items;
 
 import krawlercommon.items.*;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Tag("generated")
 public class GeneratedItemMakerTest {
     @Test
     public void testMakeItem() {

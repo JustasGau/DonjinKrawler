@@ -1,10 +1,12 @@
 package krawlercommon.strategies;
 
 import krawlercommon.enemies.Boss;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Tag("generated")
 public class GeneratedMoveTowardPlayerTest {
     @Test
     public void testInit() {

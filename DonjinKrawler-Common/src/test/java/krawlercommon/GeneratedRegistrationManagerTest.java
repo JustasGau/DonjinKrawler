@@ -2,10 +2,12 @@ package krawlercommon;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.util.ListReferenceResolver;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Tag("generated")
 public class GeneratedRegistrationManagerTest {
     @Test
     public void testRegisterKryo() {

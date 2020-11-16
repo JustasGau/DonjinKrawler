@@ -1,10 +1,12 @@
 package krawlercommon.enemies.small;
 
 import krawlercommon.strategies.Attack;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Tag("generated")
 public class GeneratedSmallZombieTest {
     @Test
     public void testConstructor() {

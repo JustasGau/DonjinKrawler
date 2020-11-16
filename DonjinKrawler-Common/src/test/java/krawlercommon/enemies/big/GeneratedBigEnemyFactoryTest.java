@@ -2,11 +2,13 @@ package krawlercommon.enemies.big;
 
 import krawlercommon.enemies.Enemy;
 import krawlercommon.enemies.EnemyType;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+@Tag("generated")
 public class GeneratedBigEnemyFactoryTest {
     @Test
     public void testMake() {

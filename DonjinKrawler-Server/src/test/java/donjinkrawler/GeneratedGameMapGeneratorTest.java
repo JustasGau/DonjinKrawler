@@ -1,11 +1,13 @@
 package donjinkrawler;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Tag("generated")
 public class GeneratedGameMapGeneratorTest {
     @Test
     public void testGenerate() {

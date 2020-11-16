@@ -1,11 +1,13 @@
 package donjinkrawler.map;
 
 import krawlercommon.map.RoomData;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
+@Tag("generated")
 public class GeneratedGameMapTest {
     @Test
     public void testConstructor() {
