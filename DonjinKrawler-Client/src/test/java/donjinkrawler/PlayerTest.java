@@ -1,14 +1,16 @@
+package donjinkrawler;
+
 import com.esotericsoftware.kryonet.Client;
-import donjinkrawler.Player;
 import krawlercommon.PlayerData;
+import krawlercommon.enemies.Boss;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTest {
 
@@ -132,5 +134,116 @@ public class PlayerTest {
         player.setAttackTimer(10);
         player.incrementTimer();
         assertEquals(11, player.getAttackTimer());
+    }
+
+    @Test
+    public void testTestKeyPressed()  {
+        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        Player player = new Player(data, new Client());
+
+        KeyEvent e = new KeyEvent(new Button(), KeyEvent.VK_I, System.currentTimeMillis(), 0,  KeyEvent.VK_I,'Z');
+        player.keyPressed(e);
+
+        e = new KeyEvent(new Button(), KeyEvent.VK_LEFT, System.currentTimeMillis(), 0,  KeyEvent.VK_LEFT,'Z');
+        player.keyPressed(e);
+
+        e = new KeyEvent(new Button(), KeyEvent.VK_RIGHT, System.currentTimeMillis(), 0,  KeyEvent.VK_RIGHT,'Z');
+        player.keyPressed(e);
+
+        e = new KeyEvent(new Button(), KeyEvent.VK_UP, System.currentTimeMillis(), 0,  KeyEvent.VK_UP,'Z');
+        player.keyPressed(e);
+
+        e = new KeyEvent(new Button(), KeyEvent.VK_DOWN, System.currentTimeMillis(), 0,  KeyEvent.VK_DOWN,'Z');
+        player.keyPressed(e);
+
+        e = new KeyEvent(new Button(), KeyEvent.VK_U, System.currentTimeMillis(), 0,  KeyEvent.VK_U,'Z');
+        player.keyPressed(e);
+
+        e = new KeyEvent(new Button(), KeyEvent.VK_M, System.currentTimeMillis(), 0,  KeyEvent.VK_M,'Z');
+        player.keyPressed(e);
+
+        e = new KeyEvent(new Button(), KeyEvent.VK_SPACE, System.currentTimeMillis(), 0,  KeyEvent.VK_SPACE,'Z');
+        player.keyPressed(e);
+
+        assertTrue(true);
+    }
+
+    @Test
+    public void testGetDamage()  {
+        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        Player player = new Player(data, new Client());
+        assertEquals(20, player.getDamage());
+    }
+
+    @Test
+    public void testFindTarget()  {
+        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        Player player = new Player(data, new Client());
+        player.isAttacking(true);
+        player.findTarget();
+        assertTrue(true);
+    }
+
+    @Test
+    public void testTestKeyReleased()  {
+        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        Player player = new Player(data, new Client());
+
+        KeyEvent e = new KeyEvent(new Button(), KeyEvent.VK_LEFT, System.currentTimeMillis(), 0,  KeyEvent.VK_LEFT,'Z');
+        player.keyReleased(e);
+
+        e = new KeyEvent(new Button(), KeyEvent.VK_RIGHT, System.currentTimeMillis(), 0,  KeyEvent.VK_RIGHT,'Z');
+        player.keyReleased(e);
+
+        e = new KeyEvent(new Button(), KeyEvent.VK_UP, System.currentTimeMillis(), 0,  KeyEvent.VK_UP,'Z');
+        player.keyReleased(e);
+
+        e = new KeyEvent(new Button(), KeyEvent.VK_DOWN, System.currentTimeMillis(), 0,  KeyEvent.VK_DOWN,'Z');
+        player.keyReleased(e);
+
+        e = new KeyEvent(new Button(), KeyEvent.VK_U, System.currentTimeMillis(), 0,  KeyEvent.VK_U,'Z');
+        player.keyReleased(e);
+
+        assertTrue(true);
+    }
+
+    @Test
+    public void testAttachAndDetachObserver()  {
+        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        Player player = new Player(data, new Client());
+
+        Boss newBaus = new Boss();
+
+        player.attachObserver(newBaus);
+        assertTrue(player.getObservers().contains(newBaus));
+
+        player.detachObserver(newBaus);
+        assertFalse(player.getObservers().contains(newBaus));
+    }
+
+    @Test
+    public void testDetachAllObservers()  {
+        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        Player player = new Player(data, new Client());
+
+        Boss boss1 = new Boss();
+        Boss boss2 = new Boss();
+
+        player.attachObserver(boss1);
+        player.attachObserver(boss2);
+
+        player.detachAllObservers();
+        assertFalse(player.getObservers().contains(boss1));
+        assertFalse(player.getObservers().contains(boss2));
+    }
+
+    @Test
+    public void testNotifyObservers()  {
+        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        Player player = new Player(data, new Client());
+        player.attachObserver(new Boss());
+        player.attachObserver(new Boss());
+        player.notifyObservers();
+        assertTrue(true);
     }
 }

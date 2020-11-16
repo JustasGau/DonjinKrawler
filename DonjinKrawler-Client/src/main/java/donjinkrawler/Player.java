@@ -418,6 +418,10 @@ public class Player implements Subject {
         }
     }
 
+    public ArrayList<Observer> getObservers() {
+        return this.observers;
+    }
+
     @Override
     public void attachObserver(Observer observer) {
         this.observers.add(observer);
