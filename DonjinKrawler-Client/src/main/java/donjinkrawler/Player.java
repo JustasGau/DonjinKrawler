@@ -49,7 +49,7 @@ public class Player implements Subject {
     private Boolean attack = false;
     private Boolean canAttack = false;
     private int attackTimer = 0;
-    private Inventory inventory;
+    private final Inventory inventory;
 
     public Player(PlayerData playerData, Client client) {
         this.client = client;
@@ -270,7 +270,7 @@ public class Player implements Subject {
     }
 
     public Image getAttackImage() {
-        if (attack == true || attackTimer < 10) {
+        if (attack || attackTimer < 10) {
             CharacterAttackPacket packet = new CharacterAttackPacket();
             packet.id = getId();
             client.sendTCP(packet);
@@ -312,6 +312,10 @@ public class Player implements Subject {
         this.hasNotifiedObservers = hasNotifiedObservers;
     }
 
+    public Boolean hasNotifiedObservers() {
+        return this.hasNotifiedObservers;
+    }
+
     public void incrementTimer() {
         if (attackTimer == 60) {
             canAttack = true;
@@ -319,6 +323,10 @@ public class Player implements Subject {
             attackTimer++;
             attack = false;
         }
+    }
+
+    public int getAttackTimer() {
+        return this.attackTimer;
     }
 
     public void keyPressed(KeyEvent e) {
@@ -372,7 +380,7 @@ public class Player implements Subject {
     }
 
     public void findTarget() {
-        if (attack == true) {
+        if (attack) {
             for (AbstractShellInterface enemy : shells.values()) {
                 if ((enemy.getX() >= (data.getX() - 10)) && enemy.getX() <= (data.getX() + 10)
                         && enemy.getY() >= (data.getY() - 10) && enemy.getY() < (data.getY() + 10)) {
@@ -437,5 +445,13 @@ public class Player implements Subject {
                 client.sendTCP(packet);
             }
         }
+    }
+
+    public void isAttacking(boolean b) {
+        this.attack = b;
+    }
+
+    public void setAttackTimer(int timer) {
+        this.attackTimer = timer;
     }
 }
