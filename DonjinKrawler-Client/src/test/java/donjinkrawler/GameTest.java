@@ -10,6 +10,7 @@ import krawlercommon.map.RoomType;
 import krawlercommon.packets.MoveCharacter;
 import krawlercommon.packets.RoomPacket;
 import krawlercommon.strategies.Attack;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -68,6 +69,10 @@ public class GameTest {
         client = mock(com.esotericsoftware.kryonet.Client.class);
         fakePlayer = new Player(playerData, client);
         when(client.sendTCP(any())).thenReturn(1);
+    }
+
+    @AfterEach
+    public void teardown() {
         Game.shells.clear();
     }
 
