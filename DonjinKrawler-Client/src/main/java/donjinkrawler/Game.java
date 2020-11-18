@@ -110,7 +110,9 @@ public class Game extends JPanel implements ActionListener {
         g2d.drawString(pl.getName() + " " + pl.getID(), pl.getX(), pl.getY() + offset);
         g2d.drawImage(pl.getAttackImage(), pl.getX() - 10, pl.getY() - 10, this);
         g2d.setColor(Color.YELLOW);
-        g2d.drawString(pl.getInfo(), pl.getX(), pl.getY() + offset + 20);
+        if (pl.getInfo() != null) {
+            g2d.drawString(pl.getInfo(), pl.getX(), pl.getY() + offset + 20);
+        }
         SwingUtils.drawHealthBar(g2d, pl.getX(), pl.getY(), 20, 5, pl.getHealth());
     }
 
