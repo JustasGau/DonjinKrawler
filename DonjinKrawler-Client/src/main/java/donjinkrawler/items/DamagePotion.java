@@ -23,6 +23,4 @@ public class DamagePotion extends BaseItem {
     public DamagePotion deepCopy() throws CloneNotSupportedException {
         return (DamagePotion) super.clone();
     }
-
-
 }

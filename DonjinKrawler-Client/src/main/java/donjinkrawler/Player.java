@@ -15,20 +15,23 @@ import krawlercommon.map.*;
 import krawlercommon.observer.Observer;
 import krawlercommon.observer.Subject;
 import krawlercommon.packets.ChangeEnemyStrategyPacket;
-import krawlercommon.strategies.EnemyStrategy;
-import krawlercommon.strategies.MoveTowardPlayer;
 import krawlercommon.packets.CharacterAttackPacket;
 import krawlercommon.packets.DamageEnemyPacket;
+import krawlercommon.strategies.EnemyStrategy;
+import krawlercommon.strategies.MoveTowardPlayer;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import javax.swing.ImageIcon;
+
 import static donjinkrawler.Game.shells;
 
 public class Player implements Subject {
     private final PlayerData data;
+    int obstacleCollisionCount = 0;
     private int dx;
     private int dy;
     private int width;
@@ -36,7 +39,6 @@ public class Player implements Subject {
     private Image image;
     private Boolean hasChangedPosition = false;
     private Boolean hasNotifiedObservers = false;
-    int obstacleCollisionCount = 0;
     private ArrayList<Observer> observers;
     private Client client;
     private AudioPlayer audioPlayer = new AudioPlayer();
@@ -47,7 +49,7 @@ public class Player implements Subject {
     private Boolean attack = false;
     private Boolean canAttack = false;
     private int attackTimer = 0;
-    private Inventory inventory;
+    private final Inventory inventory;
 
     public Player(PlayerData playerData, Client client) {
         this.client = client;
@@ -226,12 +228,12 @@ public class Player implements Subject {
         return data.getX();
     }
 
-    public int getY() {
-        return data.getY();
-    }
-
     public void setX(int val) {
         data.setX(val);
+    }
+
+    public int getY() {
+        return data.getY();
     }
 
     public void setY(int val) {
@@ -268,13 +270,14 @@ public class Player implements Subject {
     }
 
     public Image getAttackImage() {
-        if (attack == true || attackTimer < 10) {
+        if (attack || attackTimer < 10) {
             CharacterAttackPacket packet = new CharacterAttackPacket();
             packet.id = getId();
             client.sendTCP(packet);
             return attackIMG;
-        } else
+        } else {
             return null;
+        }
     }
 
     public int getId() {
@@ -309,13 +312,21 @@ public class Player implements Subject {
         this.hasNotifiedObservers = hasNotifiedObservers;
     }
 
+    public Boolean hasNotifiedObservers() {
+        return this.hasNotifiedObservers;
+    }
+
     public void incrementTimer() {
-        if (attackTimer == 60)
+        if (attackTimer == 60) {
             canAttack = true;
-        else {
+        } else {
             attackTimer++;
             attack = false;
         }
+    }
+
+    public int getAttackTimer() {
+        return this.attackTimer;
     }
 
     public void keyPressed(KeyEvent e) {
@@ -369,7 +380,7 @@ public class Player implements Subject {
     }
 
     public void findTarget() {
-        if (attack == true) {
+        if (attack) {
             for (AbstractShellInterface enemy : shells.values()) {
                 if ((enemy.getX() >= (data.getX() - 10)) && enemy.getX() <= (data.getX() + 10)
                         && enemy.getY() >= (data.getY() - 10) && enemy.getY() < (data.getY() + 10)) {
@@ -407,6 +418,10 @@ public class Player implements Subject {
         }
     }
 
+    public ArrayList<Observer> getObservers() {
+        return this.observers;
+    }
+
     @Override
     public void attachObserver(Observer observer) {
         this.observers.add(observer);
@@ -424,7 +439,7 @@ public class Player implements Subject {
 
     @Override
     public void notifyObservers() {
-        for (Observer observer: observers) {
+        for (Observer observer : observers) {
             if (observer != null) {
                 EnemyStrategy enemyStrategy = new MoveTowardPlayer();
                 observer.update(enemyStrategy);
@@ -434,5 +449,13 @@ public class Player implements Subject {
                 client.sendTCP(packet);
             }
         }
+    }
+
+    public void isAttacking(boolean b) {
+        this.attack = b;
+    }
+
+    public void setAttackTimer(int timer) {
+        this.attackTimer = timer;
     }
 }

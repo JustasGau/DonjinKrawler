@@ -13,6 +13,7 @@ public abstract class AbstractShell implements AbstractShellInterface {
     protected Image attackIMG;
     protected boolean attack;
     protected double health = 100;
+    private String info;
 
     public abstract void loadImage();
 
@@ -45,10 +46,11 @@ public abstract class AbstractShell implements AbstractShellInterface {
     }
 
     public String getInfo() {
-        return "";
+        return this.info;
     }
 
     public void setInfo(String info) {
+        this.info = info;
     }
 
     public abstract void drawClothes(Graphics2D g2d, Game game);
@@ -65,7 +67,11 @@ public abstract class AbstractShell implements AbstractShellInterface {
 
     public abstract Image getAttackImage();
 
-    public void isAttacking(boolean attack) {
+    public boolean isAttacking() {
+        return this.attack;
+    }
+
+    public void setIsAttacking(boolean attack) {
         this.attack = attack;
     }
 

@@ -1,6 +1,5 @@
 package donjinkrawler;
 
-import donjinkrawler.adapter.AudioPlayer;
 import donjinkrawler.decorator.EnemyClothingDecorator;
 import donjinkrawler.decorator.MaracasEnemy;
 import donjinkrawler.decorator.PonchosEnemy;
@@ -38,8 +37,6 @@ public class Game extends JPanel implements ActionListener {
     private static long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
     private final Random random = new Random();
     public static Map<Integer, AbstractShellInterface> shells = new ConcurrentHashMap<>();
-
-    private final AudioPlayer audioPlayer = new AudioPlayer();
     private MusicMaker musicMaker = new MusicMaker();
     private final JLabel label;
 
@@ -261,11 +258,20 @@ public class Game extends JPanel implements ActionListener {
         gameMap.setCurrentRoom(new Room(currentRoomData));
 
         switch (direction) {
-            case "LEFT" -> player.setCoordinates(400, 250);
-            case "TOP" -> player.setCoordinates(250, 400);
-            case "RIGHT" -> player.setCoordinates(40, 250);
-            case "BOTTOM" -> player.setCoordinates(250, 40);
-            default -> throw new IllegalStateException("Unexpected value: " + direction);
+            case "LEFT":
+                player.setCoordinates(400, 250);
+                break;
+            case "TOP":
+                player.setCoordinates(250, 400);
+                break;
+            case "RIGHT":
+                player.setCoordinates(40, 250);
+                break;
+            case "BOTTOM":
+                player.setCoordinates(250, 40);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + direction);
         }
     }
 
@@ -353,12 +359,16 @@ public class Game extends JPanel implements ActionListener {
 
     public void drawPlayerAttack(int id) {
         AbstractShellInterface temp = shells.get(id);
-        temp.isAttacking(true);
+        temp.setIsAttacking(true);
     }
 
     // used in testing
     public Map<Integer, AbstractShellInterface> getShells() {
         return shells;
+    }
+
+    public Room getCurrentRoom() {
+        return gameMap.getCurrentRoom();
     }
 
 }

@@ -9,6 +9,7 @@ public class MoveRandomly implements EnemyStrategy {
     Random random = new Random();
     Enemy enemy;
     int tick = 0;
+
     public MoveRandomly() {
     }
 

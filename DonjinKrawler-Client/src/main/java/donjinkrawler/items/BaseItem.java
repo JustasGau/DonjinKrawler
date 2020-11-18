@@ -1,6 +1,6 @@
 package donjinkrawler.items;
 
-import donjinkrawler.prototype.KrawlerCloneable;
+import krawlercommon.KrawlerCloneable;
 import krawlercommon.items.ItemLocationData;
 
 import javax.swing.*;

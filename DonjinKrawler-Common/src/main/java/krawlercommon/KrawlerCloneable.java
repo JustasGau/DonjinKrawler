@@ -1,4 +1,4 @@
-package donjinkrawler.prototype;
+package krawlercommon;
 
 public interface KrawlerCloneable extends Cloneable {
 

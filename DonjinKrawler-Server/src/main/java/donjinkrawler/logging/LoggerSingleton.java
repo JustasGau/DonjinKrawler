@@ -18,12 +18,21 @@ public class LoggerSingleton {
     private final ConfigSingleton config;
     private final LoggingLevel logLevel;
     private PrintStream out;
+    private boolean isTestingMode;
 
+    // ONLY USED IN TESTS
+    protected LoggerSingleton(ConfigSingleton config) {
+        this.config = config;
+        init();
+        logLevel = getLoggingLevel();
+        isTestingMode = true;
+    }
 
     private LoggerSingleton() {
         config = ConfigSingleton.getInstance();
         init();
         logLevel = getLoggingLevel();
+        isTestingMode = false;
         System.out.println("LoggerSingleton initialized");
     }
 
@@ -76,32 +85,39 @@ public class LoggerSingleton {
         outputLogMessage(LoggingLevel.ERROR, e.getMessage());
     }
 
-    private void outputLogMessage(LoggingLevel info, String message) {
+    private void outputLogMessage(LoggingLevel loggingLevel, String message) {
         StringBuilder builder = new StringBuilder();
-        builder.append(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now())).append(" ");
-        builder.append("[").append(info).append("] ");
-        builder.append(getCallerClassMethod()).append(": ");
+        if (!isTestingMode) {
+            builder.append(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now())).append(" ");
+        }
+        builder.append("[").append(loggingLevel).append("] ");
+        if (!isTestingMode) {
+            builder.append(getCallerClassMethod()).append(": ");
+        }
         builder.append(message);
         out.println(builder.toString());
     }
 
-    private String getCallerClassMethod() {
+    protected String getCallerClassMethod() {
         StackTraceElement ste = Thread.currentThread().getStackTrace()[2];
         String callerClass = ste.getClassName();
         String callerMethod = ste.getMethodName();
         return callerClass + "#" + callerMethod;
     }
 
-
-
     private LoggingLevel getLoggingLevel() {
         String loggingLevel = config.getPropertyValue("logging.level", "INFO");
-        LoggingLevel level = switch (loggingLevel) {
-            case "DEBUG" -> LoggingLevel.DEBUG;
-            case "ERROR" -> LoggingLevel.ERROR;
-            default -> LoggingLevel.INFO;
-        };
-        return level;
+        if (loggingLevel == null) {
+            return LoggingLevel.INFO;
+        }
+        switch (loggingLevel) {
+            case "DEBUG":
+                return LoggingLevel.DEBUG;
+            case "ERROR":
+                return LoggingLevel.ERROR;
+            default:
+                return LoggingLevel.INFO;
+        }
     }
 
     private boolean isInfoEnabled() {
@@ -110,5 +126,10 @@ public class LoggerSingleton {
 
     private boolean isDebugEnabled() {
         return logLevel == LoggingLevel.DEBUG;
+    }
+
+    // used in testing
+    public boolean isLogEnabled() {
+        return out != null;
     }
 }

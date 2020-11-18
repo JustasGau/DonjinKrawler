@@ -20,14 +20,13 @@ public class PlayerShell extends AbstractShell {
 
     @Override
     public void drawClothes(Graphics2D g2d, Game game) {
-
+        // Todo: implement
     }
 
     @Override
     public void damage(double damage) {
-
+        this.health = this.health - damage;
     }
-
 
     @Override
     public Map<String, ImageIcon> addClothing() {

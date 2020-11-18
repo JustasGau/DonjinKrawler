@@ -6,6 +6,7 @@ import donjinkrawler.builder.NormalRoomBuilder;
 import donjinkrawler.builder.RoomDirector;
 import donjinkrawler.logging.LoggerSingleton;
 import krawlercommon.map.RoomData;
+import krawlercommon.map.RoomType;
 
 import java.util.*;
 
@@ -69,8 +70,6 @@ public class GameMapGenerator {
                 }
             }
         }
-        logger.info("Generated map \n");
-        logger.info(printMap(mapGrid));
         return convertToAdjacencyMatrix(mapGrid, cellId + 1);
     }
 
@@ -138,12 +137,12 @@ public class GameMapGenerator {
         for (int i = 1; i < adjacencyMatrix.size(); i++) {
             if (random.nextInt(10) == 0) {
                 rooms.put(i, itemRoomDirector.constructRoom(i));
-            } else if (i == adjacencyMatrix.size() - 1) {
-                rooms.put(i, bossRoomDirector.constructRoom(i));
             } else {
                 rooms.put(i, normalRoomDirector.constructRoom(i));
             }
-            logger.info(rooms.get(i).getRoomType().toString());
+        }
+        if (rooms.values().stream().filter(r -> r.getRoomType().equals(RoomType.BOSS)).count() == 0) {
+            rooms.put(rooms.size() - 1, bossRoomDirector.constructRoom(rooms.size() - 1));
         }
         return rooms;
     }

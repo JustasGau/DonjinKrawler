@@ -30,14 +30,16 @@ public class MoveAwayFromPlayer implements EnemyStrategy {
     public void execute() {
         if (tick % 10 == 0) {
             if (target != null) {
-                if (target.getX() < enemy.getX())
+                if (target.getX() < enemy.getX()) {
                     enemy.setDx(speed);
-                else if (target.getX() > enemy.getX())
+                } else if (target.getX() > enemy.getX()) {
                     enemy.setDx((-1) * speed);
-                if (target.getY() < enemy.getY())
+                }
+                if (target.getY() < enemy.getY()) {
                     enemy.setDy(speed);
-                else if (target.getY() > enemy.getY())
+                } else if (target.getY() > enemy.getY()) {
                     enemy.setDy((-1) * speed);
+                }
             }
         } else if (tick % 2 == 0) {
             enemy.move();

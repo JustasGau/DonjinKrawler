@@ -4,6 +4,13 @@ public class Decoration extends CollidableObject {
 
     private int imageNumber;
 
+    public Decoration() {
+    }
+
+    public Decoration(int x, int y, int width, int height) {
+        super(x, y, width, height);
+    }
+
     public int getImageNumber() {
         return imageNumber;
     }

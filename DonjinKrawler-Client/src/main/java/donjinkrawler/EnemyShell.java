@@ -74,14 +74,14 @@ public class EnemyShell extends AbstractShell {
         for (Map.Entry<String, ImageIcon> entry : clothes.entrySet()) {
             Image clothImage = entry.getValue().getImage();
             switch (entry.getKey()) {
-                case "Maracas", "Poncho" -> {
+                case "Maracas":
+                case "Poncho":
                     offsetX = 0;
                     offsetY = 5;
-                }
-                default -> {
+                    break;
+                default:
                     offsetX = 2;
                     offsetY = -3;
-                }
             }
             g2d.drawImage(clothImage, getX() + offsetX, getY() + offsetY, g);
         }
@@ -89,7 +89,7 @@ public class EnemyShell extends AbstractShell {
 
     @Override
     public void damage(double damage) {
-
+        setHealth(getHealth() - damage);
     }
 
     @Override
