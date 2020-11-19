@@ -1,5 +1,7 @@
 package donjinkrawler;
 
+import donjinkrawler.flyweight.EnemyType;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
@@ -10,18 +12,24 @@ public class EnemyShell extends AbstractShell {
     private int id;
     private String info = "No strategy";
     private Map<String, ImageIcon> clothes = new HashMap<>();
+    private EnemyType type;
 
-    public EnemyShell(String name, int id, int x, int y) {
+    public EnemyShell(String name, int id, int x, int y, EnemyType type) {
         this.name = name;
         this.id = id;
         this.x = x;
         this.y = y;
-        loadImage();
+        this.type = type;
     }
 
+    @Override
     public void loadImage() {
-        ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource(this.resolveImageName()).getFile());
-        image = ii.getImage();
+
+    }
+
+    @Override
+    public Image getImage() {
+        return type.getImage();
     }
 
     public int getID() {
@@ -34,38 +42,6 @@ public class EnemyShell extends AbstractShell {
 
     public void setInfo(String info) {
         this.info = info;
-    }
-
-    private String resolveImageName() {
-        if (this.getName().equals("Small-Zombie")) {
-            return "zombie.png";
-        }
-
-        if (this.getName().equals("Big-Zombie")) {
-            return "zombie-big.png";
-        }
-
-        if (this.getName().equals("Small-Skeleton")) {
-            return "skeleton.png";
-        }
-
-        if (this.getName().equals("Big-Skeleton")) {
-            return "skeleton-big.png";
-        }
-
-        if (this.getName().equals("Small-Chicken")) {
-            return "chicken.png";
-        }
-
-        if (this.getName().equals("Big-Chicken")) {
-            return "chicken-big.png";
-        }
-
-        if (this.getName().equals("Boss")) {
-            return "boss.png";
-        }
-
-        return "zombie.png";
     }
 
     public void drawClothes(Graphics2D g2d, Game g) {
