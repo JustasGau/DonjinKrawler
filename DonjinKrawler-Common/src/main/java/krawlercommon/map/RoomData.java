@@ -4,11 +4,12 @@ import krawlercommon.KrawlerCloneable;
 import krawlercommon.enemies.Enemy;
 import krawlercommon.items.ItemLocationData;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RoomData implements KrawlerCloneable {
+public class RoomData implements KrawlerCloneable, Serializable {
     private int id;
     private boolean cleared;
     private RoomData left;

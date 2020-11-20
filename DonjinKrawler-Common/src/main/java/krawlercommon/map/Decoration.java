@@ -1,6 +1,8 @@
 package krawlercommon.map;
 
-public class Decoration extends CollidableObject {
+import java.io.Serializable;
+
+public class Decoration extends CollidableObject implements Serializable {
 
     private int imageNumber;
 

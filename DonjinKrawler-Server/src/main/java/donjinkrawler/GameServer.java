@@ -4,6 +4,9 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import donjinkrawler.logging.LoggerSingleton;
+import donjinkrawler.memento.History;
+import donjinkrawler.memento.Memento;
+import donjinkrawler.memento.SavedObject;
 import krawlercommon.ConnectionManager;
 import krawlercommon.PlayerData;
 import krawlercommon.RegistrationManager;
@@ -11,16 +14,13 @@ import krawlercommon.enemies.Enemy;
 import krawlercommon.map.RoomData;
 import krawlercommon.packets.*;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.io.*;
+import java.util.*;
 
 public class GameServer {
     protected final com.esotericsoftware.kryonet.Server kryoServer =
             new com.esotericsoftware.kryonet.Server(16384 * 64, 16384 * 64);
-    protected final Map<Integer, PlayerData> playerConnectionMap = new HashMap<>();
+    protected Map<Integer, PlayerData> playerConnectionMap = new HashMap<>();
     protected final Map<Integer, PlayerData> logInMap = new HashMap<>();
     protected final int mapSize = 10;
     protected final int KRYO_TCP_PORT = 54555;
@@ -32,15 +32,19 @@ public class GameServer {
     protected HashMap<Integer, RoomData> rooms;
     protected int playerIDs = 1;
     protected int currentRoom = 0;
+    protected String currentDirection;
 
     private int TARGET_FPS = 60;
     private long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
     protected boolean timerAdded = false;
+    private History history;
 
     public void startServer() throws IOException {
         Log.set(Log.LEVEL_ERROR);
         setupKryo();
         initMap();
+        history = new History();
+        new TerminalReader();
         logger.info("Server is running");
     }
 
@@ -60,6 +64,47 @@ public class GameServer {
             }
 
         });
+    }
+
+    public void save() {
+        System.out.println("Execute");
+        history.push(new Memento(this));
+    }
+
+    public void undo() {
+        System.out.println("Undo");
+        history.undo();
+    }
+
+    public SavedObject backup() {
+        System.out.println("Diirection " + currentDirection);
+
+
+        return new SavedObject(
+                currentRoom,
+                currentDirection,
+                playerConnectionMap,
+                new HashMap<>(rooms));
+    }
+
+    public void restore(SavedObject state) {
+        Boolean changed = false;
+        playerConnectionMap = state.getPlayers();
+        currentDirection = state.getDirection();
+        rooms = state.getRooms();
+        if (currentRoom != state.getCurrentRoom()) {
+            changed = true;
+            currentRoom = state.getCurrentRoom();
+        }
+        if (changed) {
+            sendEnemies(true);
+            RoomPacket roomPacket = new RoomPacket();
+            roomPacket.direction = currentDirection;
+            roomPacket.id = currentRoom;
+            kryoServer.sendToAllUDP(roomPacket);
+        } else {
+            sendEnemies(false);
+        }
     }
 
     private void handleReceivedPacket(Connection connection, Object object) {
@@ -113,6 +158,7 @@ public class GameServer {
 
     private void handleRoomChange(Connection connection, RoomPacket roomPacket) {
         currentRoom = roomPacket.id;
+        currentDirection = roomPacket.direction;
         sendEnemies(true);
         kryoServer.sendToAllExceptUDP(connection.getID(), roomPacket);
     }
@@ -253,6 +299,26 @@ public class GameServer {
                     Thread.sleep(wait);
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public class TerminalReader extends Thread {
+
+        public TerminalReader() {
+            start();
+        }
+
+        public void run() {
+            Scanner in = new Scanner(System.in);
+            while (true) {
+                String s = in.nextLine();
+                System.out.println("Komanda: "+s);
+                if (s.equals("save")) {
+                    save();
+                } else if (s.equals("load")) {
+                    undo();
                 }
             }
         }

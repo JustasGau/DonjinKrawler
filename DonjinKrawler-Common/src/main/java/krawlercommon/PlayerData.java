@@ -1,6 +1,8 @@
 package krawlercommon;
 
-public class PlayerData {
+import java.io.Serializable;
+
+public class PlayerData implements Serializable {
     private String name;
     private int id;
     private int x;

@@ -16,4 +16,8 @@ dependencies {
     testImplementation("org.mockito:mockito-core:2.+")
 }
 
+run {
+    standardInput = System.in
+}
+
 mainClassName = 'donjinkrawler.Server'

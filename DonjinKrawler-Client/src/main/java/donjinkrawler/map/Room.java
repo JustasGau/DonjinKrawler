@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Room implements KrawlerCloneable {
+public class Room implements KrawlerCloneable{
 
     private RoomData roomData;
     private ArrayList<Door> doors = new ArrayList<>();
