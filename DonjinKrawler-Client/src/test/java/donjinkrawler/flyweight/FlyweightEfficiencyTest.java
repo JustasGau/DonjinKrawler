@@ -5,16 +5,23 @@ import donjinkrawler.EnemyShell;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.lang.instrument.Instrumentation;
+import java.util.concurrent.TimeUnit;
 
 public class FlyweightEfficiencyTest {
 
-    static int ENEMIES_TO_DRAW = 10000000;
+    static int ENEMIES_TO_DRAW = 1000000;
     static int TYPE_NUM = 7;
 
-
-    public static void main(String[] args){
-        int cycle = (int)(ENEMIES_TO_DRAW/TYPE_NUM);
+// Guestimated sizes of the object properties
+//    int x - 4
+//    int y - 4
+//    double health - 8
+//    String info - 22
+//    Name is in flyweight
+//    String name - 24
+    public static void main(String[] args) throws InterruptedException {
+        int cycle = (ENEMIES_TO_DRAW/TYPE_NUM);
+        System.out.println("Cycle: " + cycle);
         List<AbstractShellInterface> shells = new ArrayList<>();
         long start = System.nanoTime();
         for (int i = 0; i < cycle; i++) {
@@ -29,7 +36,8 @@ public class FlyweightEfficiencyTest {
         long end = System.nanoTime();
         long elapsedTime = end - start;
         System.out.println(elapsedTime);
-        System.out.println(((1323 + 1501 + 14379 + 13059 + 1101 + 1181 + 16700) * cycle) / 1024 / 1024 + "MB");
+        long allEnemiesSize = 1323 + 1501 + 14379 + 13059 + 1101 + 1181 + 16700 + (24 * 7);
+        System.out.println((allEnemiesSize + (38 * cycle)) / 1024 / 1024 + "MB");
 
         shells = new ArrayList<>();
         start = System.nanoTime();
@@ -45,7 +53,9 @@ public class FlyweightEfficiencyTest {
         end = System.nanoTime();
         elapsedTime = end - start;
         System.out.println(elapsedTime);
-        System.out.println(((1323 + 1501 + 14379 + 13059 + 1101 + 1181 + 16700)) / 1024 / 1024 + "MB");
+        allEnemiesSize = 1323 + 1501 + 14379 + 13059 + 1101 + 1181 + 16700 + (52 * 7);
+        System.out.println((allEnemiesSize * cycle) / 1024 / 1024 + "MB");
+        TimeUnit.SECONDS.sleep(10);
     }
 
     static private EnemyShell getEnemyObject(String name, int id, int x, int y) {

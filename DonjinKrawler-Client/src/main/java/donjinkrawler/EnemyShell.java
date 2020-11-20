@@ -28,6 +28,11 @@ public class EnemyShell extends AbstractShell {
     }
 
     @Override
+    public String getName() {
+        return this.type.getName();
+    }
+
+    @Override
     public Image getImage() {
         return type.getImage();
     }

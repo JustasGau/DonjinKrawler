@@ -20,6 +20,10 @@ public class EnemyType {
     public Image getImage() {
         return image;
     }
+
+    public String getName() {
+        return name;
+    }
     private String resolveImageName() {
         if (this.name.equals("Small-Zombie")) {
             return "zombie.png";

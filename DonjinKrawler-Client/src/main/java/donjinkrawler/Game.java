@@ -308,16 +308,8 @@ public class Game extends JPanel implements ActionListener {
     }
 
     public void addEnemies(List<Enemy> enemies) {
-        // RAM usage test
-        long beforeUsedMem;
-        long afterUsedMem;
-        beforeUsedMem = Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
         shells.values().removeIf(this::isEnemyShell);
         enemies.stream().filter(Objects::nonNull).forEach(this::addEnemy);
-        afterUsedMem = Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
-
-        long actualMemUsed=afterUsedMem-beforeUsedMem;
-        System.out.println(actualMemUsed);
 
         for (AbstractShellInterface pl : shells.values()) {
             pl.addClothing();
