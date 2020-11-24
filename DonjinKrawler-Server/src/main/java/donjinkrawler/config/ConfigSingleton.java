@@ -8,10 +8,12 @@ public class ConfigSingleton {
 
     private static final String PROPERTIES_FILE_NAME = "application.properties";
     private Properties properties;
+    private Properties previousProperties;
 
     private static final ConfigSingleton instance = new ConfigSingleton();
 
     private ConfigSingleton() {
+        previousProperties = new Properties();
         initProperties();
         System.out.println("ConfigSingleton initialized");
     }
@@ -49,6 +51,24 @@ public class ConfigSingleton {
     private void checkIfPropertiesLoaded() {
         if (properties == null) {
             throw new PropertyFileNotLoadedException(this.getClass(), "Properties file not loaded");
+        }
+    }
+
+    public void setTestProperty(String propertyKey, String value) {
+        if (properties.get(propertyKey) != null) {
+            previousProperties.put(propertyKey, properties.get(propertyKey));
+        }
+        properties.put(propertyKey, value);
+    }
+
+    public void resetProperties() {
+        for (Object prop : previousProperties.keySet()) {
+            try {
+                String propKey = (String) prop;
+                properties.put(propKey, previousProperties.get(propKey));
+            } catch (Exception e) {
+                // ignored
+            }
         }
     }
 }

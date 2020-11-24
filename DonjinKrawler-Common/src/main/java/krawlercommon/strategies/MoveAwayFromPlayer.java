@@ -52,8 +52,8 @@ public class MoveAwayFromPlayer implements EnemyStrategy {
     private PlayerData calculateClosest() {
         PlayerData closest = null;
         double distance = Double.MAX_VALUE;
-        if (ConnectionManager.getConnectionMap() != null) {
-            for (PlayerData player : ConnectionManager.getConnectionMap().values()) {
+        if (ConnectionManager.getInstance().getAllPlayers().size() > 0) {
+            for (PlayerData player : ConnectionManager.getInstance().getAllPlayers()) {
                 int x = enemy.getX() - player.getX();
                 int y = enemy.getY() - player.getY();
                 double tmpDist = Math.sqrt(x * x + y * y);
