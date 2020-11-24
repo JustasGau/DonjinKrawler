@@ -1,5 +1,6 @@
 package donjinkrawler;
 
+import donjinkrawler.flyweight.EnemyFlyweight;
 import krawlercommon.PlayerData;
 import krawlercommon.enemies.Enemy;
 import krawlercommon.enemies.EnemyGenerator;
@@ -108,7 +109,7 @@ public class GameTest {
     @Test
     public void testEnemyShellDrawing() {
         Game game = new Game(client, jLabel, fakePlayer, testRooms, 0, false);
-        AbstractShellInterface fakeShell = new EnemyShell("Enemy", 69420, 200, 200);
+        AbstractShellInterface fakeShell = new EnemyShell("Enemy", 69420, 200, 200, new EnemyFlyweight("type"));
         fakeShell.setInfo("Hello world!");
         game.getShells().put(69420, fakeShell);
         game.getShells().put(42, new PlayerShell("AnotherPlayer"));
@@ -174,7 +175,7 @@ public class GameTest {
     @Test
     public void testUpdateEnemyStrategy() {
         Game game = new Game(client, jLabel, fakePlayer, testRooms, 0, false);
-        AbstractShellInterface fakeShell = new EnemyShell("Enemy", 69420, 200, 200);
+        AbstractShellInterface fakeShell = new EnemyShell("Enemy", 69420, 200, 200, new EnemyFlyweight("type"));
         fakeShell.setInfo("Hello world!");
         game.getShells().put(69420, fakeShell);
         game.updateEnemyStrategy(69420, new Attack());
@@ -184,7 +185,7 @@ public class GameTest {
     @Test
     public void testUpdateEnemyInfo() {
         Game game = new Game(client, jLabel, fakePlayer, testRooms, 0, false);
-        AbstractShellInterface fakeShell = new EnemyShell("Enemy", 69420, 200, 200);
+        AbstractShellInterface fakeShell = new EnemyShell("Enemy", 69420, 200, 200, new EnemyFlyweight("type"));
         fakeShell.setInfo("Hello world!");
         game.getShells().put(69420, fakeShell);
         game.updateEnemyInfo("ENI 69420 MoveTowardPlayer");
@@ -195,7 +196,7 @@ public class GameTest {
     public void testUpdateEnemies() {
         Game game = new Game(client, jLabel, fakePlayer, testRooms, 0, false);
         Enemy fakeEnemy = new BigChicken();
-        AbstractShellInterface fakeShell = new EnemyShell("Enemy", 69420, 200, 200);
+        AbstractShellInterface fakeShell = new EnemyShell("Enemy", 69420, 200, 200, new EnemyFlyweight("type"));
         fakeShell.setInfo("Hello world!");
         game.getShells().put(fakeEnemy.getID(), fakeShell);
         List<Enemy> enemyList = List.of(fakeEnemy);
@@ -215,7 +216,7 @@ public class GameTest {
         packet.y = 350;
         packet.id = 69420;
         Game game = new Game(client, jLabel, fakePlayer, testRooms, 0, false);
-        AbstractShellInterface fakeShell = new EnemyShell("Enemy", 69420, 200, 200);
+        AbstractShellInterface fakeShell = new EnemyShell("Enemy", 69420, 200, 200, new EnemyFlyweight("type"));
         game.getShells().put(69420, fakeShell);
         game.changeShellPosition(packet);
         assertEquals(300, fakeShell.getX());
