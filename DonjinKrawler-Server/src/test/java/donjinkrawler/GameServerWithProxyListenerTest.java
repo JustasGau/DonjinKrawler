@@ -20,14 +20,13 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class GameServerTest {
-
+public class GameServerWithProxyListenerTest {
     private static GameServer gameServer;
     private static Client kryoClient;
 
     @BeforeAll
     public static void setup() {
-        ConfigSingleton.getInstance().setTestProperty("krawler.useProxy", "false");
+        ConfigSingleton.getInstance().setTestProperty("krawler.useProxy", "true");
         gameServer = new GameServer();
         kryoClient = new com.esotericsoftware.kryonet.Client(32768, 32768);
     }
@@ -61,9 +60,10 @@ public class GameServerTest {
         int initialId = ConnectionManager.getInstance().getPlayerIDs();
         kryoClient.sendUDP(loginPacket);
         // wait until packet is handled
-        Thread.sleep(2000);
-        assertEquals(initialId + 1, ConnectionManager.getInstance().getPlayerIDs());
-        assertNotNull(ConnectionManager.getInstance().getPlayerFromId(initialId));
+        Thread.sleep(1000);
+        // should not be changed because connections are managed by the Listener Proxy
+        assertEquals(initialId, ConnectionManager.getInstance().getPlayerIDs());
+        assertNotNull(ConnectionManager.getInstance().getAllPlayers().get(0));
     }
 
     @Test
@@ -133,7 +133,7 @@ public class GameServerTest {
     public void testDisconnect() throws InterruptedException {
         kryoClient.close();
         // wait until packet is handled
-        Thread.sleep(1000);
+        Thread.sleep(3000);
         assertEquals(0, ConnectionManager.getInstance().getAllPlayers().size());
     }
 }

@@ -5,6 +5,8 @@ import donjinkrawler.decorator.MaracasEnemy;
 import donjinkrawler.decorator.PonchosEnemy;
 import donjinkrawler.decorator.SombrerosEnemy;
 import donjinkrawler.facade.MusicMaker;
+import donjinkrawler.flyweight.EnemySelector;
+import donjinkrawler.flyweight.EnemyFlyweight;
 import donjinkrawler.logging.LoggerSingleton;
 import donjinkrawler.map.GameMap;
 import donjinkrawler.map.Room;
@@ -113,7 +115,9 @@ public class Game extends JPanel implements ActionListener {
         g2d.drawString(pl.getName() + " " + pl.getID(), pl.getX(), pl.getY() + offset);
         g2d.drawImage(pl.getAttackImage(), pl.getX() - 10, pl.getY() - 10, this);
         g2d.setColor(Color.YELLOW);
-        g2d.drawString(pl.getInfo(), pl.getX(), pl.getY() + offset + 20);
+        if (pl.getInfo() != null) {
+            g2d.drawString(pl.getInfo(), pl.getX(), pl.getY() + offset + 20);
+        }
         SwingUtils.drawHealthBar(g2d, pl.getX(), pl.getY(), 20, 5, pl.getHealth());
     }
 
@@ -325,8 +329,14 @@ public class Game extends JPanel implements ActionListener {
         }
     }
 
+    private EnemyShell getEnemyObject(String name, int id, int x, int y) {
+        EnemyFlyweight type = EnemySelector.getEnemyType(name);
+        EnemyShell enemy = new EnemyShell(name, id, x, y, type);
+        return enemy;
+    }
+
     private void addBoss(Enemy e) {
-        shells.put(e.getID(), new EnemyShell(e.getName(), e.getID(), e.getX(), e.getY()));
+        shells.put(e.getID(), getEnemyObject(e.getName(), e.getID(), e.getX(), e.getY()));
     }
 
     private void addDecoratedEnemy(Enemy e) {
@@ -335,12 +345,12 @@ public class Game extends JPanel implements ActionListener {
                     new MaracasEnemy(
                             new PonchosEnemy(
                                     new SombrerosEnemy(
-                                            new EnemyShell(e.getName(), e.getID(), e.getX(), e.getY())
+                                            getEnemyObject(e.getName(), e.getID(), e.getX(), e.getY())
                                     )
                             )
                     ));
         } else {
-            shells.put(e.getID(), new EnemyShell(e.getName(), e.getID(), e.getX(), e.getY()));
+            shells.put(e.getID(), getEnemyObject(e.getName(), e.getID(), e.getX(), e.getY()));
         }
     }
 

@@ -39,9 +39,9 @@ public class Client {
         Log.set(Log.LEVEL_ERROR);
         kryoClient = new com.esotericsoftware.kryonet.Client(65536, 65536);
         kryoClient.getKryo().setReferences(true);
+        RegistrationManager.registerKryo(kryoClient.getKryo());
         kryoClient.start();
         kryoClient.connect(5000, serverAddress, SERVER_TCP_PORT, SERVER_UDP_PORT);
-        RegistrationManager.registerKryo(kryoClient.getKryo());
 
         kryoClient.addListener(new Listener() {
 
@@ -81,6 +81,9 @@ public class Client {
                 } else if (object instanceof CharacterAttackPacket && game != null) {
                     CharacterAttackPacket character = (CharacterAttackPacket) object;
                     game.drawPlayerAttack(character.id);
+                } else if (object instanceof ServerFullPacket) {
+                    JOptionPane.showMessageDialog(frame, "Server is full, sorry!");
+                    System.exit(0);
                 }
             }
         });
