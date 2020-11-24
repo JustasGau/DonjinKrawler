@@ -6,7 +6,7 @@ import donjinkrawler.decorator.PonchosEnemy;
 import donjinkrawler.decorator.SombrerosEnemy;
 import donjinkrawler.facade.MusicMaker;
 import donjinkrawler.flyweight.EnemySelector;
-import donjinkrawler.flyweight.EnemyType;
+import donjinkrawler.flyweight.EnemyFlyweight;
 import donjinkrawler.logging.LoggerSingleton;
 import donjinkrawler.map.GameMap;
 import donjinkrawler.map.Room;
@@ -325,7 +325,7 @@ public class Game extends JPanel implements ActionListener {
     }
 
     private EnemyShell getEnemyObject(String name, int id, int x, int y) {
-        EnemyType type = EnemySelector.getEnemyType(name);
+        EnemyFlyweight type = EnemySelector.getEnemyType(name);
         EnemyShell enemy = new EnemyShell(name, id, x, y, type);
         return enemy;
     }

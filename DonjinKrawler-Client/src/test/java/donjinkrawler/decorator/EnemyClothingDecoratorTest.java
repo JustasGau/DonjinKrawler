@@ -1,10 +1,8 @@
 package donjinkrawler.decorator;
 
 import donjinkrawler.EnemyShell;
-import donjinkrawler.Game;
 import donjinkrawler.flyweight.EnemySelector;
-import donjinkrawler.flyweight.EnemyType;
-import krawlercommon.enemies.big.BigChicken;
+import donjinkrawler.flyweight.EnemyFlyweight;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
@@ -17,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 public class EnemyClothingDecoratorTest {
 
     private EnemyShell getEnemyObject(String name, int id, int x, int y) {
-        EnemyType type = EnemySelector.getEnemyType(name);
+        EnemyFlyweight type = EnemySelector.getEnemyType(name);
         EnemyShell enemy = new EnemyShell(name, id, x, y, type);
         return enemy;
     }

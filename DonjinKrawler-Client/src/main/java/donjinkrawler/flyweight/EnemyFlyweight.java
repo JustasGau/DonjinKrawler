@@ -3,11 +3,11 @@ package donjinkrawler.flyweight;
 import javax.swing.*;
 import java.awt.*;
 
-public class EnemyType {
+public class EnemyFlyweight {
     private String name;
     private Image image;
 
-    public EnemyType(String name) {
+    public EnemyFlyweight(String name) {
         this.name = name;
         loadImage();
     }
@@ -24,6 +24,7 @@ public class EnemyType {
     public String getName() {
         return name;
     }
+    
     private String resolveImageName() {
         if (this.name.equals("Small-Zombie")) {
             return "zombie.png";

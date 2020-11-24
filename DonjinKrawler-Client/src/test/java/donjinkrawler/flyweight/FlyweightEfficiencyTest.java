@@ -59,7 +59,7 @@ public class FlyweightEfficiencyTest {
     }
 
     static private EnemyShell getEnemyObject(String name, int id, int x, int y) {
-        EnemyType type = EnemySelector.getEnemyType(name);
+        EnemyFlyweight type = EnemySelector.getEnemyType(name);
         EnemyShell enemy = new EnemyShell(name, id, x, y, type);
         return enemy;
     }

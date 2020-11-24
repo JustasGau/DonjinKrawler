@@ -13,7 +13,7 @@ public class EnemyShellForTest extends AbstractShell {
     private int id;
     private String info = "No strategy";
     private Map<String, ImageIcon> clothes = new HashMap<>();
-    private EnemyType type;
+    private EnemyFlyweight type;
 
     public EnemyShellForTest(String name, int id, int x, int y) {
         this.name = name;
@@ -31,6 +31,7 @@ public class EnemyShellForTest extends AbstractShell {
     public Image getImage() {
         return image;
     }
+
     private String resolveImageName() {
         if (this.name.equals("Small-Zombie")) {
             return "zombie.png";

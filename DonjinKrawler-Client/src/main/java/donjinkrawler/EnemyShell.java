@@ -1,6 +1,6 @@
 package donjinkrawler;
 
-import donjinkrawler.flyweight.EnemyType;
+import donjinkrawler.flyweight.EnemyFlyweight;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,9 +12,9 @@ public class EnemyShell extends AbstractShell {
     private int id;
     private String info = "No strategy";
     private Map<String, ImageIcon> clothes = new HashMap<>();
-    private EnemyType type;
+    private EnemyFlyweight type;
 
-    public EnemyShell(String name, int id, int x, int y, EnemyType type) {
+    public EnemyShell(String name, int id, int x, int y, EnemyFlyweight type) {
         this.name = name;
         this.id = id;
         this.x = x;
