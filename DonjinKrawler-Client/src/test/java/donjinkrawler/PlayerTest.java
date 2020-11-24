@@ -12,6 +12,7 @@ import krawlercommon.enemies.Boss;
 import krawlercommon.items.ArmorData;
 import krawlercommon.items.SpeedPotionData;
 import krawlercommon.items.WeaponData;
+import krawlercommon.iterator.door.DoorCollection;
 import krawlercommon.map.*;
 import org.junit.jupiter.api.Test;
 
@@ -288,7 +289,7 @@ public class PlayerTest {
         Player player = new Player(data, new Client());
 
         List<Wall> walls = new ArrayList<>();
-        List<Door> doors = new ArrayList<>();
+        DoorCollection doors = new DoorCollection();
         List<Obstacle> obstacles = new ArrayList<>();
         List<Decoration> decorations = new ArrayList<>();
         HashMap<Integer, BaseItem> items = new HashMap<>();
@@ -303,7 +304,7 @@ public class PlayerTest {
         Player player = new Player(data, new Client());
 
         List<Wall> walls = new ArrayList<>();
-        List<Door> doors = new ArrayList<>();
+        DoorCollection doors = new DoorCollection();
         List<Obstacle> obstacles = new ArrayList<>();
         List<Decoration> decorations = new ArrayList<>();
         HashMap<Integer, BaseItem> items = new HashMap<>();
@@ -319,7 +320,7 @@ public class PlayerTest {
         Player player = new Player(data, new Client());
 
         List<Wall> walls = new ArrayList<>();
-        List<Door> doors = new ArrayList<>();
+        DoorCollection doors = new DoorCollection();
         List<Obstacle> obstacles = new ArrayList<>();
         List<Decoration> decorations = new ArrayList<>();
         HashMap<Integer, BaseItem> items = new HashMap<>();
@@ -335,7 +336,7 @@ public class PlayerTest {
         Player player = new Player(data, new Client());
 
         List<Wall> walls = new ArrayList<>();
-        List<Door> doors = new ArrayList<>();
+        DoorCollection doors = new DoorCollection();
         List<Obstacle> obstacles = new ArrayList<>();
         List<Decoration> decorations = new ArrayList<>();
         HashMap<Integer, BaseItem> items = new HashMap<>();
@@ -353,7 +354,7 @@ public class PlayerTest {
         Player player = new Player(data, new Client());
 
         List<Wall> walls = new ArrayList<>();
-        List<Door> doors = new ArrayList<>();
+        DoorCollection doors = new DoorCollection();
         List<Obstacle> obstacles = new ArrayList<>();
         List<Decoration> decorations = new ArrayList<>();
         HashMap<Integer, BaseItem> items = new HashMap<>();
@@ -371,7 +372,7 @@ public class PlayerTest {
         Player player = new Player(data, new Client());
 
         List<Wall> walls = new ArrayList<>();
-        List<Door> doors = new ArrayList<>();
+        DoorCollection doors = new DoorCollection();
         List<Obstacle> obstacles = new ArrayList<>();
         List<Decoration> decorations = new ArrayList<>();
         HashMap<Integer, BaseItem> items = new HashMap<>();
@@ -389,7 +390,7 @@ public class PlayerTest {
         Player player = new Player(data, new Client());
 
         List<Wall> walls = new ArrayList<>();
-        List<Door> doors = new ArrayList<>();
+        DoorCollection doors = new DoorCollection();
         List<Obstacle> obstacles = new ArrayList<>();
         List<Decoration> decorations = new ArrayList<>();
         HashMap<Integer, BaseItem> items = new HashMap<>();
@@ -405,7 +406,7 @@ public class PlayerTest {
         Player player = new Player(data, new Client());
 
         List<Wall> walls = new ArrayList<>();
-        List<Door> doors = new ArrayList<>();
+        DoorCollection doors = new DoorCollection();
         List<Obstacle> obstacles = new ArrayList<>();
         List<Decoration> decorations = new ArrayList<>();
         HashMap<Integer, BaseItem> items = new HashMap<>();
@@ -421,7 +422,7 @@ public class PlayerTest {
         Player player = new Player(data, new Client());
 
         List<Wall> walls = new ArrayList<>();
-        List<Door> doors = new ArrayList<>();
+        DoorCollection doors = new DoorCollection();
         List<Obstacle> obstacles = new ArrayList<>();
         List<Decoration> decorations = new ArrayList<>();
         HashMap<Integer, BaseItem> items = new HashMap<>();
@@ -437,7 +438,7 @@ public class PlayerTest {
         Player player = new Player(data, new Client());
 
         List<Wall> walls = new ArrayList<>();
-        List<Door> doors = new ArrayList<>();
+        DoorCollection doors = new DoorCollection();
         List<Obstacle> obstacles = new ArrayList<>();
         List<Decoration> decorations = new ArrayList<>();
         HashMap<Integer, BaseItem> items = new HashMap<>();
