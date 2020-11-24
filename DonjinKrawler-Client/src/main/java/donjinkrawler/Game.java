@@ -19,12 +19,11 @@ import krawlercommon.strategies.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.swing.*;
+import javax.swing.Timer;
 
 public class Game extends JPanel implements ActionListener {
     LoggerSingleton logger = LoggerSingleton.getInstance();
@@ -89,6 +88,10 @@ public class Game extends JPanel implements ActionListener {
                 drawShell(g2d, sh);
             }
         }
+    }
+
+    public void updateMap(HashMap<Integer, RoomData> rooms){
+        this.gameMap = new GameMap(new Room(rooms.get(0)));
     }
 
     private void drawCurrentPlayer(Graphics g) {

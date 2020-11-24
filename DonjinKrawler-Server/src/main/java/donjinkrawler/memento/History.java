@@ -15,7 +15,7 @@ public class History {
         virtualSize = history.size();
     }
 
-    public boolean undo() {
+    public boolean undo() throws InterruptedException {
         Memento m = getUndo();
         if (m == null) {
             return false;

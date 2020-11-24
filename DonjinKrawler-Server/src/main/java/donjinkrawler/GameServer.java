@@ -71,12 +71,12 @@ public class GameServer {
         history.push(new Memento(this));
     }
 
-    public void undo() {
+    public void undo() throws InterruptedException {
         System.out.println("Undo");
         history.undo();
     }
 
-    public static HashMap<Integer, RoomData> copyRoomMap(HashMap<Integer, RoomData> original) throws CloneNotSupportedException {
+    public HashMap<Integer, RoomData> copyRoomMap(HashMap<Integer, RoomData> original) throws CloneNotSupportedException {
         HashMap<Integer, RoomData> copy = new HashMap<>();
         for (Map.Entry<Integer, RoomData> entry : original.entrySet())
         {
@@ -94,7 +94,7 @@ public class GameServer {
                 copyRoomMap(rooms));
     }
 
-    public void restore(SavedObject state) {
+    public void restore(SavedObject state) throws InterruptedException {
         Boolean changed = false;
         currentDirection = state.getDirection();
         rooms = state.getRooms();
@@ -102,6 +102,8 @@ public class GameServer {
             changed = true;
             currentRoom = state.getCurrentRoom();
         }
+        sendMapToPlayers();
+        Thread.sleep(1000);
         if (changed) {
             sendEnemies(true);
             RoomPacket roomPacket = new RoomPacket();
@@ -234,6 +236,14 @@ public class GameServer {
         kryoServer.sendToTCP(connection.getID(), mapPacket);
     }
 
+    private void sendMapToPlayers() {
+        MapPacket mapPacket = new MapPacket();
+        mapPacket.gridSize = mapSize;
+        mapPacket.rooms = rooms;
+        mapPacket.update = true;
+        kryoServer.sendToAllTCP(mapPacket);
+    }
+
     private void sendWelcomeMessages(Connection connection) {
         MessageSender.sendMessageToSingle(connection, kryoServer, "You joined the server");
         MessageSender.sendMessageToAllExcept(connection, kryoServer, "A player has joined the server");
@@ -328,7 +338,11 @@ public class GameServer {
                         e.printStackTrace();
                     }
                 } else if (s.equals("load")) {
-                    undo();
+                    try {
+                        undo();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

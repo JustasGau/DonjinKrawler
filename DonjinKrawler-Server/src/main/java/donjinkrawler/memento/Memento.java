@@ -11,7 +11,7 @@ public class Memento {
         this.backup = server.backup();
     }
 
-    public void restore() {
+    public void restore() throws InterruptedException {
         server.restore(backup);
     }
 }
