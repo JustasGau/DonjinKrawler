@@ -66,7 +66,7 @@ public class GameServer {
         });
     }
 
-    public void save() {
+    public void save() throws CloneNotSupportedException {
         System.out.println("Execute");
         history.push(new Memento(this));
     }
@@ -76,20 +76,26 @@ public class GameServer {
         history.undo();
     }
 
-    public SavedObject backup() {
-        System.out.println("Diirection " + currentDirection);
+    public static HashMap<Integer, RoomData> copyRoomMap(HashMap<Integer, RoomData> original) throws CloneNotSupportedException {
+        HashMap<Integer, RoomData> copy = new HashMap<>();
+        for (Map.Entry<Integer, RoomData> entry : original.entrySet())
+        {
+            RoomData orig = entry.getValue();
+            RoomData copyRoom = orig.deepCopy();
+            copy.put(entry.getKey(), copyRoom);
+        }
+        return copy;
+    }
 
-
+    public SavedObject backup() throws CloneNotSupportedException {
         return new SavedObject(
                 currentRoom,
                 currentDirection,
-                playerConnectionMap,
-                new HashMap<>(rooms));
+                copyRoomMap(rooms));
     }
 
     public void restore(SavedObject state) {
         Boolean changed = false;
-        playerConnectionMap = state.getPlayers();
         currentDirection = state.getDirection();
         rooms = state.getRooms();
         if (currentRoom != state.getCurrentRoom()) {
@@ -316,7 +322,11 @@ public class GameServer {
                 String s = in.nextLine();
                 System.out.println("Komanda: "+s);
                 if (s.equals("save")) {
-                    save();
+                    try {
+                        save();
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                    }
                 } else if (s.equals("load")) {
                     undo();
                 }

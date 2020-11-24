@@ -169,6 +169,11 @@ public class RoomData implements KrawlerCloneable, Serializable {
             Decoration clone = decoration.clone();
             clonedData.decorations.add(clone);
         }
+        clonedData.enemies = new ArrayList<>();
+        for (Enemy enemy : enemies) {
+            Enemy clone = enemy.clone();
+            clonedData.enemies.add(clone);
+        }
         clonedData.roomType = roomType;
         return clonedData;
     }

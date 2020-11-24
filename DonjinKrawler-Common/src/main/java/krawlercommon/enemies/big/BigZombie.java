@@ -15,4 +15,9 @@ public class BigZombie extends Enemy {
         strategy.init(this);
         strategy.execute();
     }
+
+    @Override
+    public Object deepCopy() throws CloneNotSupportedException {
+        return null;
+    }
 }

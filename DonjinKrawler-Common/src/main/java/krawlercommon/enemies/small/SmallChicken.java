@@ -14,4 +14,9 @@ public class SmallChicken extends Chicken {
     public void update(EnemyStrategy strategy) {
         strategy.init(this);
     }
+
+    @Override
+    public Object deepCopy() throws CloneNotSupportedException {
+        return null;
+    }
 }
