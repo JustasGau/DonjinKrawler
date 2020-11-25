@@ -37,7 +37,7 @@ public class Client {
 
     private void setupKryo() throws IOException {
         Log.set(Log.LEVEL_ERROR);
-        kryoClient = new com.esotericsoftware.kryonet.Client(32768, 32768);
+        kryoClient = new com.esotericsoftware.kryonet.Client(65536, 65536);
         kryoClient.getKryo().setReferences(true);
         RegistrationManager.registerKryo(kryoClient.getKryo());
         kryoClient.start();
@@ -50,7 +50,11 @@ public class Client {
                     handleMessagePacket((MessagePacket) object);
                 } else if (object instanceof MapPacket) {
                     MapPacket mapPacket = (MapPacket) object;
-                    rooms = mapPacket.rooms;
+                    if (mapPacket.update) {
+                        game.updateMap(mapPacket.rooms);
+                    } else {
+                        rooms = mapPacket.rooms;
+                    }
                 } else if (object instanceof IdPacket) {
                     handleIdPacket((IdPacket) object);
                 } else if (object instanceof MoveCharacter && game != null) {

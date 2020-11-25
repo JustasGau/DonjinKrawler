@@ -5,6 +5,9 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import donjinkrawler.config.ConfigSingleton;
 import donjinkrawler.logging.LoggerSingleton;
+import donjinkrawler.memento.History;
+import donjinkrawler.memento.Memento;
+import donjinkrawler.memento.SavedObject;
 import krawlercommon.ConnectionManager;
 import krawlercommon.PlayerData;
 import krawlercommon.RegistrationManager;
@@ -12,10 +15,8 @@ import krawlercommon.enemies.Enemy;
 import krawlercommon.map.RoomData;
 import krawlercommon.packets.*;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.io.*;
+import java.util.*;
 
 public class GameServer {
     protected final com.esotericsoftware.kryonet.Server kryoServer =
@@ -29,16 +30,20 @@ public class GameServer {
 
     protected HashMap<Integer, RoomData> rooms;
     protected int currentRoom = 0;
+    protected String currentDirection;
     protected boolean timerAdded = false;
     private int TARGET_FPS = 60;
     private long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
     private boolean useProxyListener = false;
+    private History history;
 
     public void startServer() throws IOException {
         Log.set(Log.LEVEL_ERROR);
         useProxyListener = Boolean.parseBoolean(ConfigSingleton.getInstance().getPropertyValue("krawler.useProxy"));
         setupKryo();
         initMap();
+        history = new History();
+        new TerminalReader();
         logger.info("Server is running");
     }
 
@@ -69,6 +74,53 @@ public class GameServer {
                     handleDisconnect(connection);
                 }
             });
+        }
+    }
+
+    public void save() throws CloneNotSupportedException {
+        history.push(new Memento(this));
+    }
+
+    public void undo() throws InterruptedException {
+        history.undo();
+    }
+
+    public HashMap<Integer, RoomData> copyRoomMap(HashMap<Integer, RoomData> original) throws CloneNotSupportedException {
+        HashMap<Integer, RoomData> copy = new HashMap<>();
+        for (Map.Entry<Integer, RoomData> entry : original.entrySet())
+        {
+            RoomData orig = entry.getValue();
+            RoomData copyRoom = orig.deepCopy();
+            copy.put(entry.getKey(), copyRoom);
+        }
+        return copy;
+    }
+
+    public SavedObject backup() throws CloneNotSupportedException {
+        return new SavedObject(
+                currentRoom,
+                currentDirection,
+                copyRoomMap(rooms));
+    }
+
+    public void restore(SavedObject state) throws InterruptedException {
+        Boolean changed = false;
+        currentDirection = state.getDirection();
+        rooms = state.getRooms();
+        if (currentRoom != state.getCurrentRoom()) {
+            changed = true;
+            currentRoom = state.getCurrentRoom();
+        }
+        sendMapToPlayers();
+        Thread.sleep(1000);
+        if (changed) {
+            sendEnemies(true);
+            RoomPacket roomPacket = new RoomPacket();
+            roomPacket.direction = currentDirection;
+            roomPacket.id = currentRoom;
+            kryoServer.sendToAllUDP(roomPacket);
+        } else {
+            sendEnemies(false);
         }
     }
 
@@ -121,6 +173,7 @@ public class GameServer {
 
     private void handleRoomChange(Connection connection, RoomPacket roomPacket) {
         currentRoom = roomPacket.id;
+        currentDirection = roomPacket.direction;
         sendEnemies(true);
         kryoServer.sendToAllExceptUDP(connection.getID(), roomPacket);
     }
@@ -197,6 +250,14 @@ public class GameServer {
         mapPacket.gridSize = mapSize;
         mapPacket.rooms = rooms;
         kryoServer.sendToTCP(connection.getID(), mapPacket);
+    }
+
+    private void sendMapToPlayers() {
+        MapPacket mapPacket = new MapPacket();
+        mapPacket.gridSize = mapSize;
+        mapPacket.rooms = rooms;
+        mapPacket.update = true;
+        kryoServer.sendToAllTCP(mapPacket);
     }
 
     private void sendWelcomeMessages(Connection connection) {
@@ -281,6 +342,33 @@ public class GameServer {
                     Thread.sleep(wait);
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public class TerminalReader extends Thread {
+
+        public TerminalReader() {
+            start();
+        }
+
+        public void run() {
+            Scanner in = new Scanner(System.in);
+            while (true) {
+                String s = in.nextLine();
+                if (s.equals("save")) {
+                    try {
+                        save();
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                    }
+                } else if (s.equals("load")) {
+                    try {
+                        undo();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

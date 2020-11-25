@@ -1,6 +1,8 @@
 package krawlercommon.enemies;
 
 import com.esotericsoftware.kryonet.Server;
+import krawlercommon.KrawlerCloneable;
+import krawlercommon.map.Decoration;
 import krawlercommon.observer.Observer;
 import krawlercommon.packets.ChangeEnemyStrategyPacket;
 import krawlercommon.strategies.EnemyStrategy;
@@ -12,7 +14,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
-public abstract class Enemy implements Observer {
+public abstract class Enemy implements Observer, KrawlerCloneable {
 
     Random random = new Random();
     transient Map<Phases, EnemyStrategy> strategies = Map.of(
@@ -180,5 +182,10 @@ public abstract class Enemy implements Observer {
         AWAY,
         ATTACK,
         RANGED
+    }
+
+    @Override
+    public Enemy clone() throws CloneNotSupportedException {
+        return (Enemy) super.clone();
     }
 }

@@ -15,4 +15,9 @@ public class SmallZombie extends Zombie {
         strategy.init(this);
         strategy.execute();
     }
+
+    @Override
+    public Object deepCopy() throws CloneNotSupportedException {
+        return null;
+    }
 }
