@@ -29,6 +29,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static donjinkrawler.Game.shells;
 
@@ -444,17 +445,17 @@ public class Player implements Subject {
     }
 
     public ArrayList<Observer> getObservers() {
-        return this.observerCollection.observers;
+        return new ArrayList<>(observerCollection.observers.values());
     }
 
     @Override
     public void attachObserver(Observer observer) {
-        this.observerCollection.observers.add(observer);
+        this.observerCollection.add(observer);
     }
 
     @Override
     public void detachObserver(Observer observer) {
-        this.observerCollection.observers.remove(observer);
+        this.observerCollection.remove(observer);
     }
 
     @Override
