@@ -1,9 +1,9 @@
 package krawlercommon.enemies.big;
 
-import krawlercommon.enemies.Enemy;
+import krawlercommon.enemies.Zombie;
 import krawlercommon.strategies.EnemyStrategy;
 
-public class BigZombie extends Enemy {
+public class BigZombie extends Zombie {
 
     public BigZombie() {
         this.setName("Big-Zombie");

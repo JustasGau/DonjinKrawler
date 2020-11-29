@@ -1,10 +1,7 @@
 package donjinkrawler.memento;
 
-import krawlercommon.PlayerData;
 import krawlercommon.map.RoomData;
-
 import java.util.HashMap;
-import java.util.Map;
 
 public class SavedObject {
     HashMap<Integer, RoomData>  rooms;
