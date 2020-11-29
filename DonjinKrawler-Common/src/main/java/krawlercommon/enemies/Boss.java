@@ -4,7 +4,7 @@ import krawlercommon.strategies.*;
 
 import java.util.Map;
 
-public class Boss extends Enemy {
+final public class Boss extends Enemy {
 
     public Boss() {
         this.setX(225);

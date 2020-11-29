@@ -23,9 +23,4 @@ public abstract class Chicken extends Enemy {
                 Phases.TOWARDS, new MoveTowardPlayer()
         );
     }
-
-    @Override
-    public void debug() {
-        System.out.println("Chicken has been created");
-    }
 }
