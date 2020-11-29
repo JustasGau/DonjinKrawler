@@ -25,7 +25,7 @@ public class Boss extends Enemy {
         return null;
     }
 
-    public void setInterval(){
+    public void setInterval() {
         this.updateIntervalSeconds = 2;
     }
 

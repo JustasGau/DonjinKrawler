@@ -1,6 +1,5 @@
 package krawlercommon.enemies;
 
-import krawlercommon.strategies.EnemyStrategy;
 import krawlercommon.strategies.MoveAwayFromPlayer;
 import krawlercommon.strategies.MoveRandomly;
 import krawlercommon.strategies.MoveTowardPlayer;
@@ -13,7 +12,7 @@ public abstract class Chicken extends Enemy {
         this.initEnemy();
     }
 
-    public void setInterval(){
+    public void setInterval() {
         this.updateIntervalSeconds = 3;
     }
 
