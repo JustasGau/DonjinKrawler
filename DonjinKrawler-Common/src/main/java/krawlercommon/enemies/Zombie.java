@@ -9,7 +9,8 @@ public abstract class Zombie extends Enemy {
     public Zombie() {
         this.initEnemy();
     }
-    public void setInterval(){
+
+    public void setInterval() {
         this.updateIntervalSeconds = 2;
     }
 

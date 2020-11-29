@@ -9,7 +9,9 @@ public abstract class EnemyTemplate {
     }
 
     abstract void setInterval();
+
     abstract void setStrategies();
+
     public void debug(){}
 
 }

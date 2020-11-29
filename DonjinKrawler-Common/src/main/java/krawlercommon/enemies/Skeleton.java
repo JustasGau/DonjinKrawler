@@ -10,7 +10,7 @@ public abstract class Skeleton extends Enemy {
         this.initEnemy();
     }
 
-    public void setInterval(){
+    public void setInterval() {
         this.updateIntervalSeconds = 1;
     }
 

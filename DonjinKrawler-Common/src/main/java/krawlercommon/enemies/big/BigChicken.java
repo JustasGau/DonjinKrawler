@@ -3,8 +3,6 @@ package krawlercommon.enemies.big;
 import krawlercommon.enemies.Chicken;
 import krawlercommon.strategies.EnemyStrategy;
 
-import java.util.Map;
-
 public class BigChicken extends Chicken {
 
     public BigChicken() {
