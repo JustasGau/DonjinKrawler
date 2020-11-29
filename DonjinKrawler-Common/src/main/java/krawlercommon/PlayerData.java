@@ -2,9 +2,7 @@ package krawlercommon;
 
 import krawlercommon.composite.Attribute;
 
-import java.io.Serializable;
-
-public class PlayerData implements Serializable {
+public class PlayerData {
     private String name;
     private int id;
     private int x;

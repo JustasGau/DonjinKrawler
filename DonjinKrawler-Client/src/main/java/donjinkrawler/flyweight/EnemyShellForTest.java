@@ -14,7 +14,6 @@ public class EnemyShellForTest extends AbstractShell {
     private int id;
     private String info = "No strategy";
     private Map<String, ImageIcon> clothes = new HashMap<>();
-    private EnemyFlyweight type;
 
     public EnemyShellForTest(String name, int id, int x, int y) {
         this.name = name;
