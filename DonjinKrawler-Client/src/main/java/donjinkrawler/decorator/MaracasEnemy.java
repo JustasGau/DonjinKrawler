@@ -36,4 +36,9 @@ public class MaracasEnemy extends EnemyClothingDecorator {
     public ShellType getShellType() {
         return ShellType.ENEMY;
     }
+
+    @Override
+    public ShellType getShellType() {
+        return ShellType.ENEMY;
+    }
 }
