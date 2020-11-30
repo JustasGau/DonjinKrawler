@@ -373,11 +373,11 @@ public class Player implements Subject {
             this.musicMaker.playNextBackgroundMusic();
         }
 
-        if (key == KeyEvent.VK_SLASH) {
+        if (key == KeyEvent.VK_N) {
             this.musicMaker.stopBackgroundMusic();
         }
 
-        if (key == KeyEvent.VK_N) {
+        if (key == KeyEvent.VK_SLASH) {
             this.musicMaker.lockPlayer();
         }
 
