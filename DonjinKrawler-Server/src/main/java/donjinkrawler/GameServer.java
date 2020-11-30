@@ -209,6 +209,9 @@ public class GameServer {
         for (Enemy enemy : rooms.get(currentRoom).getEnemies()) {
             if (enemy != null && enemy.getID() == packet.id) {
                 enemy.damage(packet.damage);
+                if (enemy.getHealth() < 0) {
+                    rooms.get(currentRoom).getEnemies().remove(enemy);
+                }
                 break;
             }
         }

@@ -83,4 +83,9 @@ public class EnemyShell extends AbstractShell {
         return null;
     }
 
+    @Override
+    public ShellType getShellType() {
+        return ShellType.ENEMY;
+    }
+
 }

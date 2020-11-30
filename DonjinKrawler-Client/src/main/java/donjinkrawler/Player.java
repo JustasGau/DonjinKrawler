@@ -6,10 +6,10 @@ import donjinkrawler.command.DamageCommand;
 import donjinkrawler.command.MoveCommand;
 import donjinkrawler.command.PlayerCommander;
 import donjinkrawler.facade.MusicMaker;
-import donjinkrawler.items.Armor;
-import donjinkrawler.items.BaseItem;
-import donjinkrawler.items.Weapon;
+import donjinkrawler.items.*;
 import krawlercommon.PlayerData;
+import krawlercommon.composite.FinalBonus;
+import krawlercommon.composite.RawBonus;
 import krawlercommon.enemies.Enemy;
 import krawlercommon.map.*;
 import krawlercommon.observer.Observer;
@@ -45,12 +45,13 @@ public class Player implements Subject {
     private PlayerCommander commander = new PlayerCommander();
     private Boolean backwards = false;
     private Image attackIMG;
-    private double damage = 20;
     private Boolean attack = false;
     private Boolean canAttack = false;
     private int attackTimer = 0;
     private final Inventory inventory;
     private final MusicMaker musicMaker;
+    private RawBonus armorBonus = null;
+    private RawBonus weaponBonus = null;
 
     public Player(PlayerData playerData, Client client) {
         this.client = client;
@@ -154,9 +155,30 @@ public class Player implements Subject {
 
     private void handleItemCollision(BaseItem item) {
         if (item instanceof Armor) {
+            if (armorBonus != null) {
+                data.getMaxHealth().removeRawBonus(armorBonus);
+            }
+            armorBonus = new RawBonus(((Armor) item).getHp(), 0);
+            data.getMaxHealth().addRawBonus(armorBonus);
+            data.adjustHealthWithMaxHealth();
             this.inventory.addArmor((Armor) item);
         } else if (item instanceof Weapon) {
+            if (weaponBonus != null) {
+                data.getDamage().removeRawBonus(weaponBonus);
+            }
+            weaponBonus = new RawBonus(((Weapon) item).getDamage(), 0);
+            data.getDamage().addRawBonus(weaponBonus);
             this.inventory.addWeapon((Weapon) item);
+        } else if (item instanceof DamagePotion) {
+            DamagePotion damagePotion = (DamagePotion) item;
+            FinalBonus finalBonus = new FinalBonus(0, damagePotion.getMultiplier(), 10);
+            data.getDamage().addFinalBonus(finalBonus);
+            finalBonus.startTimer(data.getDamage());
+        } else if (item instanceof SpeedPotion) {
+            SpeedPotion speedPotion = (SpeedPotion) item;
+            FinalBonus finalBonus = new FinalBonus(0, speedPotion.getMultiplier(), 5);
+            data.getSpeed().addFinalBonus(finalBonus);
+            finalBonus.startTimer(data.getSpeed());
         }
     }
 
@@ -341,20 +363,22 @@ public class Player implements Subject {
 
         hasChangedPosition = true;
 
+        // cast it to an int since coords are  whole numbers
+        int playerSpeed = (int) data.getSpeed().getFinalValue();
         if (key == KeyEvent.VK_LEFT) {
-            dx = -2;
+            dx = -1 * playerSpeed;
         }
 
         if (key == KeyEvent.VK_RIGHT) {
-            dx = 2;
+            dx = playerSpeed;
         }
 
         if (key == KeyEvent.VK_UP) {
-            dy = -2;
+            dy = -playerSpeed;
         }
 
         if (key == KeyEvent.VK_DOWN) {
-            dy = 2;
+            dy = playerSpeed;
         }
 
         if (key == KeyEvent.VK_U) {
@@ -393,7 +417,7 @@ public class Player implements Subject {
     }
 
     public double getDamage() {
-        return damage;
+        return data.getDamage().getFinalValue();
     }
 
     public void findTarget() {

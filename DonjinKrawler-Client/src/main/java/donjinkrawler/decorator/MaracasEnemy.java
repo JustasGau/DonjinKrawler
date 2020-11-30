@@ -1,6 +1,7 @@
 package donjinkrawler.decorator;
 
 import donjinkrawler.AbstractShellInterface;
+import donjinkrawler.ShellType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,5 +21,10 @@ public class MaracasEnemy extends EnemyClothingDecorator {
         Map<String, ImageIcon> clothes = wrappee.addClothing();
         clothes.put("Maracas", ii);
         return clothes;
+    }
+
+    @Override
+    public ShellType getShellType() {
+        return ShellType.ENEMY;
     }
 }

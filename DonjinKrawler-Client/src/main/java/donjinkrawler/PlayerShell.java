@@ -42,4 +42,9 @@ public class PlayerShell extends AbstractShell {
             return null;
         }
     }
+
+    @Override
+    public ShellType getShellType() {
+        return ShellType.PLAYER;
+    }
 }

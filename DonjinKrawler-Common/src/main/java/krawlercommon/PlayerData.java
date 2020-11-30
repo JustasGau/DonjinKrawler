@@ -1,5 +1,7 @@
 package krawlercommon;
 
+import krawlercommon.composite.Attribute;
+
 import java.io.Serializable;
 
 public class PlayerData implements Serializable {
@@ -8,6 +10,9 @@ public class PlayerData implements Serializable {
     private int x;
     private int y;
     private double health;
+    private Attribute maxHealth;
+    private Attribute speed;
+    private Attribute damage;
 
     public PlayerData() {
 
@@ -19,6 +24,9 @@ public class PlayerData implements Serializable {
         this.x = x;
         this.y = y;
         health = 100;
+        maxHealth = new Attribute(100);
+        speed = new Attribute(2);
+        damage = new Attribute(5);
     }
 
     public String getName() {
@@ -59,5 +67,25 @@ public class PlayerData implements Serializable {
 
     public void setHealth(double health) {
         this.health = health;
+    }
+
+    public Attribute getMaxHealth() {
+        return maxHealth;
+    }
+
+    public Attribute getSpeed() {
+        return speed;
+    }
+
+    public Attribute getDamage() {
+        return damage;
+    }
+
+    public void adjustHealthWithMaxHealth() {
+        if (health != maxHealth.getFinalValue()) {
+            double maxHealthValue = maxHealth.getFinalValue();
+            double difference = maxHealthValue - maxHealth.getBaseValue();
+            health += difference;
+        }
     }
 }
