@@ -26,6 +26,7 @@ public class MusicMaker {
         if(doNotPlayMusic) {
             return;
         }
+        this.player.stop();
         bossRoomMusic.play();
     }
 
@@ -33,6 +34,7 @@ public class MusicMaker {
         if(doNotPlayMusic) {
             return;
         }
+        this.player.stop();
         itemRoomMusic.play();
     }
 
