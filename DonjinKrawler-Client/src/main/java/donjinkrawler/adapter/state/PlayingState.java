@@ -15,7 +15,8 @@ public class PlayingState extends State {
 
     @Override
     public void onPlay() {
-        // Do nothing - keep playing music
+        player.stop();
+        player.startPlayback();
     }
 
     @Override
