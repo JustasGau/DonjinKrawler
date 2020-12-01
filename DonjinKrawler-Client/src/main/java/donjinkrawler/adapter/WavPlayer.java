@@ -20,13 +20,10 @@ public class WavPlayer implements AdvancedMediaPlayer {
             this.clip = AudioSystem.getClip();
             clip.open(audioInput);
 
-            clip.addLineListener(new LineListener() {
-                @Override
-                public void update(LineEvent lineEvent) {
-                    if (lineEvent.getType().equals(LineEvent.Type.STOP) && repeat) {
-                        clip.setMicrosecondPosition(0);
-                        clip.start();
-                    }
+            clip.addLineListener(lineEvent -> {
+                if (lineEvent.getType().equals(LineEvent.Type.STOP) && repeat) {
+                    clip.setMicrosecondPosition(0);
+                    clip.start();
                 }
             });
 

@@ -36,9 +36,4 @@ public class SombrerosEnemy extends EnemyClothingDecorator {
     public ShellType getShellType() {
         return ShellType.ENEMY;
     }
-
-    @Override
-    public ShellType getShellType() {
-        return ShellType.ENEMY;
-    }
 }
