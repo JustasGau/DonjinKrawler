@@ -1,8 +1,8 @@
 package donjinkrawler.pckcontrol;
 
 import donjinkrawler.GameServer;
-import donjinkrawler.pckcontrol.handlers.CharacterAttackPacketHandler;
-import donjinkrawler.pckcontrol.handlers.PacketHandler;
+import donjinkrawler.pckcontrol.handlers.*;
+import com.esotericsoftware.kryonet.Connection;
 
 public class PacketControlUnit {
 
@@ -11,8 +11,7 @@ public class PacketControlUnit {
     public PacketControlUnit() {
         PacketHandler packetHandler = (new LoginPacketHandler());
 
-        packetHandler
-                .linkWith(new MessagePacketHandler())
+        packetHandler.linkWith(new MessagePacketHandler())
                 .linkWith(new MoveCharacterPacketHandler())
                 .linkWith(new RoomPacketHandler())
                 .linkWith(new ChangeEnemyStrategyPacketHandler())
@@ -22,8 +21,7 @@ public class PacketControlUnit {
         this.packetHandler = packetHandler;
     }
 
-    public void handle(GameServer gameServer, Object object) {
-        packetHandler.handle(object, gameServer);
+    public void handle(GameServer gameServer, Object object, Connection connection) {
+        packetHandler.handle(object, gameServer, connection);
     }
-
 }
