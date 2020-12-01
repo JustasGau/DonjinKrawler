@@ -3,8 +3,10 @@ package donjinkrawler.items;
 import krawlercommon.KrawlerCloneable;
 import krawlercommon.items.ItemLocationData;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.InputStream;
 
 public abstract class BaseItem implements KrawlerCloneable {
 
@@ -12,8 +14,13 @@ public abstract class BaseItem implements KrawlerCloneable {
     protected Image image;
 
     protected void loadImage(String imagePath) {
-        ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource(imagePath).getFile());
-        image = ii.getImage();
+        try {
+            InputStream stream = getClass().getResourceAsStream("/".concat(imagePath));
+            ImageIcon ii = new ImageIcon(ImageIO.read(stream));
+            image = ii.getImage();
+        } catch (Exception ignored) {
+
+        }
     }
 
     public Image getImage() {

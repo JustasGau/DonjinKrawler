@@ -20,9 +20,11 @@ import krawlercommon.packets.DamageEnemyPacket;
 import krawlercommon.strategies.EnemyStrategy;
 import krawlercommon.strategies.MoveTowardPlayer;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,12 +66,17 @@ public class Player implements Subject {
     }
 
     private void loadImage() {
-        ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("craft.png").getFile());
-        image = ii.getImage();
-        height = image.getHeight(null);
-        width = image.getWidth(null);
-        ii = new ImageIcon(ClassLoader.getSystemResource("attack.png").getFile());
-        attackIMG = ii.getImage();
+        try {
+            InputStream stream = getClass().getResourceAsStream("/craft.png");
+            ImageIcon ii = new ImageIcon(ImageIO.read(stream));
+            image = ii.getImage();
+            height = image.getHeight(null);
+            width = image.getWidth(null);
+            ii = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/attack.png")));
+            attackIMG = ii.getImage();
+        } catch (Exception ignored) {
+
+        }
     }
 
     public Integer move(List<Wall> walls, List<Door> doors, List<Obstacle> obstacles, List<Decoration> decorations,

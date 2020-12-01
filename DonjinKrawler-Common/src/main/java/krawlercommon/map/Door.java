@@ -1,7 +1,9 @@
 package krawlercommon.map;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.InputStream;
 
 public class Door {
     private int x;
@@ -21,8 +23,13 @@ public class Door {
     }
 
     private void loadImage() {
-        ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("door.png").getFile());
-        doorImage = ii.getImage();
+        try {
+            InputStream stream = getClass().getResourceAsStream("/door.png");
+            ImageIcon ii = new ImageIcon(ImageIO.read(stream));
+            doorImage = ii.getImage();
+        } catch (Exception ignored) {
+
+        }
     }
 
     public boolean checkCollision(int topCornerX, int topCornerY, int botCornerX,

@@ -1,7 +1,9 @@
 package donjinkrawler;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.InputStream;
 import java.util.Map;
 
 public class PlayerShell extends AbstractShell {
@@ -12,10 +14,15 @@ public class PlayerShell extends AbstractShell {
     }
 
     public void loadImage() {
-        ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("craft.png").getFile());
-        image = ii.getImage();
-        ii = new ImageIcon(ClassLoader.getSystemResource("attack.png").getFile());
-        attackIMG = ii.getImage();
+        try {
+            InputStream stream = getClass().getResourceAsStream("/craft.png");
+            ImageIcon ii = new ImageIcon(ImageIO.read(stream));
+            image = ii.getImage();
+            ii = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/attack.png")));
+            attackIMG = ii.getImage();
+        } catch (Exception ignored) {
+
+        }
     }
 
     @Override
