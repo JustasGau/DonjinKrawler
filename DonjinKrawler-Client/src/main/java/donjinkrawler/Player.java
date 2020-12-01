@@ -50,11 +50,13 @@ public class Player implements Subject {
     private Boolean canAttack = false;
     private int attackTimer = 0;
     private final Inventory inventory;
+    private final MusicMaker musicMaker;
 
     public Player(PlayerData playerData, Client client) {
         this.client = client;
         this.observers = new ArrayList<>();
         this.inventory = new Inventory();
+        this.musicMaker = new MusicMaker();
 
         data = playerData;
         loadImage();
@@ -360,8 +362,23 @@ public class Player implements Subject {
         }
 
         if (key == KeyEvent.VK_M) {
-            MusicMaker musicMaker = new MusicMaker();
-            musicMaker.playBackgroundMusic();
+            this.musicMaker.playBackgroundMusic();
+        }
+
+        if (key == KeyEvent.VK_COMMA) {
+            this.musicMaker.playPrevBackgroundMusic();
+        }
+
+        if (key == KeyEvent.VK_PERIOD) {
+            this.musicMaker.playNextBackgroundMusic();
+        }
+
+        if (key == KeyEvent.VK_N) {
+            this.musicMaker.stopBackgroundMusic();
+        }
+
+        if (key == KeyEvent.VK_SLASH) {
+            this.musicMaker.lockPlayer();
         }
 
         if (key == KeyEvent.VK_SPACE) {

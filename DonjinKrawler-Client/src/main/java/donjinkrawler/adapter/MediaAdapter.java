@@ -29,4 +29,8 @@ public class MediaAdapter implements MediaPlayer {
                 throw new IllegalStateException("Unsupported audio type");
         }
     }
+
+    public void stop() {
+        advancedMusicPlayer.stop();
+    }
 }
