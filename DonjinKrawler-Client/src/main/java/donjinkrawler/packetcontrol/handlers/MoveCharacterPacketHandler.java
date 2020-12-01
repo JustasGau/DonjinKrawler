@@ -1,4 +1,4 @@
-package donjinkrawler.packetcontrol;
+package donjinkrawler.packetcontrol.handlers;
 
 import donjinkrawler.Client;
 import krawlercommon.packets.MoveCharacter;
