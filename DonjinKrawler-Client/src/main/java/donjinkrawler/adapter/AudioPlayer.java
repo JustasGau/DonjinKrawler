@@ -31,10 +31,6 @@ public class AudioPlayer implements MediaPlayer {
         }
     }
 
-    public void addTrack(Track track) {
-        this.playlist.add(track);
-    }
-
     public void addTrack(String audioType, String fileName) {
         this.playlist.add(new Track(audioType, fileName));
     }

@@ -475,4 +475,8 @@ public class Player implements Subject {
     public void setAttackTimer(int timer) {
         this.attackTimer = timer;
     }
+
+    public MusicMaker getMusic() {
+        return this.musicMaker;
+    }
 }
