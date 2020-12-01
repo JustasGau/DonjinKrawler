@@ -3,6 +3,7 @@ package donjinkrawler;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
+import donjinkrawler.packetcontrol.PacketControlUnit;
 import krawlercommon.PlayerData;
 import krawlercommon.map.RoomData;
 import krawlercommon.packets.*;
@@ -12,6 +13,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Client {
@@ -43,58 +45,17 @@ public class Client {
         kryoClient.start();
         kryoClient.connect(5000, serverAddress, SERVER_TCP_PORT, SERVER_UDP_PORT);
 
-        kryoClient.addListener(new Listener() {
+        PacketControlUnit pcu = new PacketControlUnit();
+        Client client = this;
 
+        kryoClient.addListener(new Listener() {
             public void received(Connection connection, Object object) {
-                if (object instanceof MessagePacket) {
-                    handleMessagePacket((MessagePacket) object);
-                } else if (object instanceof MapPacket) {
-                    MapPacket mapPacket = (MapPacket) object;
-                    if (mapPacket.update) {
-                        game.updateMap(mapPacket.rooms);
-                    } else {
-                        rooms = mapPacket.rooms;
-                    }
-                } else if (object instanceof IdPacket) {
-                    handleIdPacket((IdPacket) object);
-                } else if (object instanceof MoveCharacter && game != null) {
-                    MoveCharacter msg = (MoveCharacter) object;
-                    game.changeShellPosition(msg);
-                } else if (object instanceof EnemyPacket && game != null) {
-                    EnemyPacket enemyPacket = (EnemyPacket) object;
-                    if (enemyPacket.isUpdate()) {
-                        game.updateEnemies(enemyPacket.getEnemies());
-                    } else {
-                        game.addEnemies(enemyPacket.getEnemies());
-                    }
-                } else if (object instanceof CreatePlayerPacket && game != null) {
-                    CreatePlayerPacket packet = (CreatePlayerPacket) object;
-                    game.addPlayerShell(packet.player);
-                } else if (object instanceof DisconnectPacket && game != null) {
-                    DisconnectPacket dcPacket = (DisconnectPacket) object;
-                    game.deletePlayerShell(dcPacket.id);
-                } else if (object instanceof RoomPacket && game != null) {
-                    game.changeRoom((RoomPacket) object);
-                } else if (object instanceof ChangeEnemyStrategyPacket && game != null) {
-                    ChangeEnemyStrategyPacket enemy = (ChangeEnemyStrategyPacket) object;
-                    game.updateEnemyStrategy(enemy.id, enemy.strategy);
-                } else if (object instanceof CharacterAttackPacket && game != null) {
-                    CharacterAttackPacket character = (CharacterAttackPacket) object;
-                    game.drawPlayerAttack(character.id);
-                } else if (object instanceof ServerFullPacket) {
-                    JOptionPane.showMessageDialog(frame, "Server is full, sorry!");
-                    System.exit(0);
-                }
+                pcu.handle(client, object);
             }
         });
     }
 
-    private void handleIdPacket(IdPacket idPacket) {
-        name = idPacket.playerData.getName();
-        initUI(idPacket.currentRoom, idPacket.playerData);
-    }
-
-    private void initUI(int currentRoom, PlayerData playerData) {
+    public void initUI(int currentRoom, PlayerData playerData) {
 
         frame.setTitle("Donjin Krawler. Player - " + name);
         frame.setSize(screenWidth, screenHeight);
@@ -108,15 +69,6 @@ public class Client {
         game = new Game(kryoClient, messageLabel, new Player(playerData, kryoClient), rooms, currentRoom);
         frame.add(game);
         frame.setVisible(true);
-
-    }
-
-    private void handleMessagePacket(MessagePacket messagePacket) {
-        if (messagePacket.message.startsWith("MSG")) {
-            messageLabel.setText(messagePacket.message.substring(4));
-        } else if (messagePacket.message.startsWith("ENI") && game != null) {
-            game.updateEnemyInfo(messagePacket.message);
-        }
     }
 
     private void logIn() {
@@ -145,5 +97,25 @@ public class Client {
             address = InetAddress.getByName("localhost").getHostAddress();
         }
         new Client(address);
+    }
+
+    public Game getGame() {
+        return this.game;
+    }
+
+    public void setMessageLabelText(String text) {
+        this.messageLabel.setText(text);
+    }
+
+    public void setRooms(HashMap<Integer, RoomData> rooms) {
+        this.rooms = rooms;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public JFrame getFrame() {
+        return this.frame;
     }
 }
