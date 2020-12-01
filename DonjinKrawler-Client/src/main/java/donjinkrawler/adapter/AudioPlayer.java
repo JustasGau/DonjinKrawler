@@ -19,14 +19,16 @@ public class AudioPlayer implements MediaPlayer {
     }
 
     @Override
-    public void play(String audioType, String fileName) {
+    public void play(String audioType, String fileName, boolean repeat) {
         mediaAdapter = new MediaAdapter(audioType);
-        mediaAdapter.play(audioType, fileName);
+        mediaAdapter.play(audioType, fileName, repeat);
     }
 
     @Override
     public void stop() {
-        mediaAdapter.stop();
+        if(this.mediaAdapter != null) {
+            mediaAdapter.stop();
+        }
     }
 
     public void addTrack(Track track) {
@@ -47,7 +49,7 @@ public class AudioPlayer implements MediaPlayer {
 
     public void startPlayback() {
         Track track = playlist.get(currentTrack);
-        this.play(track.getType(), track.getFile());
+        this.play(track.getType(), track.getFile(), true);
     }
 
     public void nextTrack() {

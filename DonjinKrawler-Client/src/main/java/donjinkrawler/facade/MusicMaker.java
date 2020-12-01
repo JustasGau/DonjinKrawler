@@ -23,19 +23,11 @@ public class MusicMaker {
     }
 
     public void playBossRoomMusic() {
-        if(doNotPlayMusic) {
-            return;
-        }
-        this.player.stop();
-        bossRoomMusic.play();
+        //
     }
 
     public void playItemRoomMusic() {
-        if(doNotPlayMusic) {
-            return;
-        }
-        this.player.stop();
-        itemRoomMusic.play();
+        //
     }
 
     public void playBackgroundMusic() {

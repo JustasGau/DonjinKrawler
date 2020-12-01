@@ -6,6 +6,6 @@ public class ItemRoomMusic implements Music {
     @Override
     public void play() {
         AudioPlayer audioPlayer = new AudioPlayer();
-        audioPlayer.play("wav", "item-room.wav");
+        audioPlayer.play("wav", "item-room.wav", false);
     }
 }

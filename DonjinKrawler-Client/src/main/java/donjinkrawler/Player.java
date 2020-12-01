@@ -182,7 +182,7 @@ public class Player implements Subject {
         if (obstacleCollisionCount % 25 == 0) {
             commander.execute(new DamageCommand(this, health));
             obstacleCollisionCount = 0;
-            audioPlayer.play("wav", "hurt.wav");
+            audioPlayer.play("wav", "hurt.wav", false);
             if (data.getHealth() < 50) {
                 notifyObservers();
                 setHasNotifiedObservers(true);

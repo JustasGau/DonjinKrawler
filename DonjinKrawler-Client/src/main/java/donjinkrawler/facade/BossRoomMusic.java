@@ -6,6 +6,6 @@ public class BossRoomMusic implements Music {
     @Override
     public void play() {
         AudioPlayer audioPlayer = new AudioPlayer();
-        audioPlayer.play("wav", "boss-fight.wav");
+        audioPlayer.play("wav", "boss-fight.wav", false);
     }
 }
