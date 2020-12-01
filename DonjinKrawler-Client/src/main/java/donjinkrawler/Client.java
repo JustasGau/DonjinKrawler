@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.Arrays;
 import java.util.Map;
 
 public class Client {
@@ -30,8 +31,8 @@ public class Client {
     private Map<Integer, RoomData> rooms;
 
     public Client(String serverAddress) throws IOException {
-        setupKryo();
         this.serverAddress = serverAddress;
+        setupKryo();
         logIn();
     }
 
@@ -144,6 +145,7 @@ public class Client {
         } else {
             address = InetAddress.getByName("localhost").getHostAddress();
         }
+
         new Client(address);
     }
 }
