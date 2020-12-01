@@ -1,8 +1,6 @@
 package donjinkrawler.adapter;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
+import javax.sound.sampled.*;
 import java.io.File;
 
 public class Mp3Player implements AdvancedMediaPlayer {
@@ -16,6 +14,17 @@ public class Mp3Player implements AdvancedMediaPlayer {
             AudioInputStream audioInput = AudioSystem.getAudioInputStream(soundFile);
             clip = AudioSystem.getClip();
             clip.open(audioInput);
+
+            clip.addLineListener(new LineListener() {
+                @Override
+                public void update(LineEvent lineEvent) {
+                    if (lineEvent.getType().equals(LineEvent.Type.STOP)) {
+                        clip.setMicrosecondPosition(0);
+                        clip.start();
+                    }
+                }
+            });
+
             clip.start();
         } catch (Exception e) {
             e.printStackTrace();
@@ -27,6 +36,6 @@ public class Mp3Player implements AdvancedMediaPlayer {
 
     @Override
     public void stop() {
-        this.clip.stop();
+        this.clip.close();
     }
 }
