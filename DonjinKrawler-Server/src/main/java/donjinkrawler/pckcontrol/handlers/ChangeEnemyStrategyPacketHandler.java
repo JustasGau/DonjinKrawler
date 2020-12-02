@@ -1,20 +1,19 @@
 package donjinkrawler.pckcontrol.handlers;
 
-import com.esotericsoftware.kryonet.Connection;
-import donjinkrawler.GameServer;
+import donjinkrawler.pckcontrol.Request;
 import krawlercommon.enemies.Enemy;
 import krawlercommon.packets.ChangeEnemyStrategyPacket;
 
 public class ChangeEnemyStrategyPacketHandler extends PacketHandler {
     @Override
-    public boolean handle(Object object, GameServer gameServer, Connection connection) {
-        if(! (object instanceof ChangeEnemyStrategyPacket)) {
-            return this.next(object, gameServer, connection);
+    public boolean handle(Request request) {
+        if(! (request.getObject() instanceof ChangeEnemyStrategyPacket)) {
+            return this.next(request);
         }
 
-        ChangeEnemyStrategyPacket packet = (ChangeEnemyStrategyPacket) object;
+        ChangeEnemyStrategyPacket packet = (ChangeEnemyStrategyPacket) request.getObject();
 
-        for (Enemy enemy : gameServer.getCurrentRoom().getEnemies()) {
+        for (Enemy enemy : request.getGameServer().getCurrentRoom().getEnemies()) {
             if (enemy != null && enemy.getID() == packet.id) {
                 enemy.setCurrentStrategy(packet.strategy);
                 break;

@@ -22,6 +22,6 @@ public class PacketControlUnit {
     }
 
     public void handle(GameServer gameServer, Object object, Connection connection) {
-        packetHandler.handle(object, gameServer, connection);
+        packetHandler.handle(new Request(gameServer, object, connection));
     }
 }

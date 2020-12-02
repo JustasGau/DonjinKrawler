@@ -1,7 +1,6 @@
 package donjinkrawler.pckcontrol.handlers;
 
-import com.esotericsoftware.kryonet.Connection;
-import donjinkrawler.GameServer;
+import donjinkrawler.pckcontrol.Request;
 
 public abstract class PacketHandler {
 
@@ -18,17 +17,17 @@ public abstract class PacketHandler {
     /**
      * Subclasses will implement this method with concrete checks.
      */
-    public abstract boolean handle(Object object, GameServer gameServer, Connection connection);
+    public abstract boolean handle(Request request);
 
     /**
      * Runs check on the next object in chain or ends traversing if we're in
      * last object in chain.
      */
-    protected boolean next(Object object, GameServer gameServer, Connection connection) {
+    protected boolean next(Request request) {
         if (next == null) {
             return true;
         }
-        return this.next.handle(object, gameServer, connection);
+        return this.next.handle(request);
     }
 
 }

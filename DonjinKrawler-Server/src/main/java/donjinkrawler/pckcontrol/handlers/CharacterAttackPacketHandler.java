@@ -1,18 +1,17 @@
 package donjinkrawler.pckcontrol.handlers;
 
-import com.esotericsoftware.kryonet.Connection;
-import donjinkrawler.GameServer;
+import donjinkrawler.pckcontrol.Request;
 import krawlercommon.packets.CharacterAttackPacket;
 
 public class CharacterAttackPacketHandler extends PacketHandler {
     @Override
-    public boolean handle(Object object, GameServer gameServer, Connection connection) {
-        if(! (object instanceof CharacterAttackPacket)) {
-            return this.next(object, gameServer, connection);
+    public boolean handle(Request request) {
+        if(! (request.getObject() instanceof CharacterAttackPacket)) {
+            return this.next(request);
         }
 
-        CharacterAttackPacket packet = (CharacterAttackPacket) object;
-        gameServer.getKryo().sendToAllExceptUDP(connection.getID(), packet);
+        CharacterAttackPacket packet = (CharacterAttackPacket) request.getObject();
+        request.getGameServer().getKryo().sendToAllExceptUDP(request.getConnection().getID(), packet);
 
         return true;
     }

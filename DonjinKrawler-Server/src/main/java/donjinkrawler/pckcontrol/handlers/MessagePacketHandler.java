@@ -1,22 +1,21 @@
 package donjinkrawler.pckcontrol.handlers;
 
-import com.esotericsoftware.kryonet.Connection;
-import donjinkrawler.GameServer;
+import donjinkrawler.pckcontrol.Request;
 import krawlercommon.ConnectionManager;
 import krawlercommon.packets.MessagePacket;
 
 public class MessagePacketHandler extends PacketHandler {
     @Override
-    public boolean handle(Object object, GameServer gameServer, Connection connection) {
-        if(! (object instanceof MessagePacket)) {
-            return this.next(object, gameServer, connection);
+    public boolean handle(Request request) {
+        if(! (request.getObject() instanceof MessagePacket)) {
+            return this.next(request);
         }
 
-        MessagePacket messagePacket = (MessagePacket) object;
+        MessagePacket messagePacket = (MessagePacket) request.getObject();
 
-        String playerName = ConnectionManager.getInstance().getPlayerFromConnection(connection).getName();
+        String playerName = ConnectionManager.getInstance().getPlayerFromConnection(request.getConnection()).getName();
         messagePacket.message = messagePacket.message + " " + playerName;
-        gameServer.getKryo().sendToAllExceptUDP(connection.getID(), messagePacket);
+        request.getGameServer().getKryo().sendToAllExceptUDP(request.getConnection().getID(), messagePacket);
 
         return true;
     }

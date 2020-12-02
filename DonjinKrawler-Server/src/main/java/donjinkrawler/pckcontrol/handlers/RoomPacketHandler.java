@@ -1,22 +1,21 @@
 package donjinkrawler.pckcontrol.handlers;
 
-import com.esotericsoftware.kryonet.Connection;
-import donjinkrawler.GameServer;
+import donjinkrawler.pckcontrol.Request;
 import krawlercommon.packets.RoomPacket;
 
 public class RoomPacketHandler extends PacketHandler {
     @Override
-    public boolean handle(Object object, GameServer gameServer, Connection connection) {
-        if(! (object instanceof RoomPacket)) {
-            return this.next(object, gameServer, connection);
+    public boolean handle(Request request) {
+        if(! (request.getObject() instanceof RoomPacket)) {
+            return this.next(request);
         }
 
-        RoomPacket roomPacket = (RoomPacket) object;
+        RoomPacket roomPacket = (RoomPacket) request.getObject();
 
-        gameServer.setCurrentRoom(roomPacket.id);
-        gameServer.setCurrentDirection(roomPacket.direction);
-        gameServer.sendEnemies(true);
-        gameServer.getKryo().sendToAllExceptUDP(connection.getID(), roomPacket);
+        request.getGameServer().setCurrentRoom(roomPacket.id);
+        request.getGameServer().setCurrentDirection(roomPacket.direction);
+        request.getGameServer().sendEnemies(true);
+        request.getGameServer().getKryo().sendToAllExceptUDP(request.getConnection().getID(), roomPacket);
 
         return true;
     }
