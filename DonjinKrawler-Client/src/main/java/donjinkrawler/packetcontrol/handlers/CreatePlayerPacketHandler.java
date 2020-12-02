@@ -1,17 +1,17 @@
 package donjinkrawler.packetcontrol.handlers;
 
-import donjinkrawler.Client;
+import donjinkrawler.packetcontrol.Request;
 import krawlercommon.packets.CreatePlayerPacket;
 
 public class CreatePlayerPacketHandler extends PacketHandler{
     @Override
-    public boolean handle(Object object, Client client) {
-        if(! (object instanceof CreatePlayerPacket) || client.getGame() == null) {
-            return this.next(object, client);
+    public boolean handle(Request request) {
+        if(! (request.getObject() instanceof CreatePlayerPacket) || !request.isGameActive()) {
+            return this.next(request);
         }
 
-        CreatePlayerPacket createPlayerPacket = (CreatePlayerPacket) object;
-        client.getGame().addPlayerShell(createPlayerPacket.player);
+        CreatePlayerPacket createPlayerPacket = (CreatePlayerPacket) request.getObject();
+        request.getGame().addPlayerShell(createPlayerPacket.player);
 
         return true;
     }

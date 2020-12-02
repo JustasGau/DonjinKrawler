@@ -25,6 +25,6 @@ public class PacketControlUnit {
     }
 
     public void handle(Client client, Object object) {
-        packetHandler.handle(object, client);
+        packetHandler.handle(new Request(client, object));
     }
 }

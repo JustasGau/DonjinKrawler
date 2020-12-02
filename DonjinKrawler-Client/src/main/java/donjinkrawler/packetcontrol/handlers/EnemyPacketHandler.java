@@ -1,22 +1,22 @@
 package donjinkrawler.packetcontrol.handlers;
 
-import donjinkrawler.Client;
+import donjinkrawler.packetcontrol.Request;
 import krawlercommon.packets.EnemyPacket;
 
 public class EnemyPacketHandler extends PacketHandler {
 
     @Override
-    public boolean handle(Object object, Client client) {
-        if(! (object instanceof EnemyPacket) || client.getGame() == null) {
-            return this.next(object, client);
+    public boolean handle(Request request) {
+        if(! (request.getObject() instanceof EnemyPacket) || !request.isGameActive()) {
+            return this.next(request);
         }
 
-        EnemyPacket enemyPacket = (EnemyPacket) object;
+        EnemyPacket enemyPacket = (EnemyPacket) request.getObject();
 
         if (enemyPacket.isUpdate()) {
-            client.getGame().updateEnemies(enemyPacket.getEnemies());
+            request.getGame().updateEnemies(enemyPacket.getEnemies());
         } else {
-            client.getGame().addEnemies(enemyPacket.getEnemies());
+            request.getGame().addEnemies(enemyPacket.getEnemies());
         }
 
         return true;

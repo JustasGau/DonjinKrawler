@@ -1,19 +1,19 @@
 package donjinkrawler.packetcontrol.handlers;
 
-import donjinkrawler.Client;
+import donjinkrawler.packetcontrol.Request;
 import krawlercommon.packets.IdPacket;
 
 public class IdPacketHandler extends PacketHandler{
     @Override
-    public boolean handle(Object object, Client client) {
-        if(! (object instanceof IdPacket)) {
-            return this.next(object, client);
+    public boolean handle(Request request) {
+        if(! (request.getObject() instanceof IdPacket)) {
+            return this.next(request);
         }
 
-        IdPacket idPacket = (IdPacket) object;
+        IdPacket idPacket = (IdPacket) request.getObject();
 
-        client.setName(idPacket.playerData.getName());
-        client.initUI(idPacket.currentRoom, idPacket.playerData);
+        request.getClient().setName(idPacket.playerData.getName());
+        request.getClient().initUI(idPacket.currentRoom, idPacket.playerData);
 
         return true;
     }

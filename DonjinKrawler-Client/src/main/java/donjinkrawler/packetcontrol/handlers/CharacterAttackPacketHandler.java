@@ -1,17 +1,17 @@
 package donjinkrawler.packetcontrol.handlers;
 
-import donjinkrawler.Client;
+import donjinkrawler.packetcontrol.Request;
 import krawlercommon.packets.CharacterAttackPacket;
 
 public class CharacterAttackPacketHandler extends PacketHandler {
     @Override
-    public boolean handle(Object object, Client client) {
-        if(! (object instanceof CharacterAttackPacket) || client.getGame() == null) {
-            return this.next(object, client);
+    public boolean handle(Request request) {
+        if(! (request.getObject() instanceof CharacterAttackPacket) || !request.isGameActive()) {
+            return this.next(request);
         }
 
-        CharacterAttackPacket character = (CharacterAttackPacket) object;
-        client.getGame().drawPlayerAttack(character.id);
+        CharacterAttackPacket character = (CharacterAttackPacket) request.getObject();
+        request.getGame().drawPlayerAttack(character.id);
 
         return true;
     }

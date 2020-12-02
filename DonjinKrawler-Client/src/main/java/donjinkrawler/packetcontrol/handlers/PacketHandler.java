@@ -1,6 +1,6 @@
 package donjinkrawler.packetcontrol.handlers;
 
-import donjinkrawler.Client;
+import donjinkrawler.packetcontrol.Request;
 
 public abstract class PacketHandler {
 
@@ -16,17 +16,19 @@ public abstract class PacketHandler {
 
     /**
      * Subclasses will implement this method with concrete checks.
+     * @param request
      */
-    public abstract boolean handle(Object object, Client client);
+    public abstract boolean handle(Request request);
 
     /**
      * Runs check on the next object in chain or ends traversing if we're in
      * last object in chain.
+     * @param request
      */
-    protected boolean next(Object object, Client client) {
+    protected boolean next(Request request) {
         if (next == null) {
             return true;
         }
-        return this.next.handle(object, client);
+        return this.next.handle(request);
     }
 }

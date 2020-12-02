@@ -1,22 +1,22 @@
 package donjinkrawler.packetcontrol.handlers;
 
-import donjinkrawler.Client;
+import donjinkrawler.packetcontrol.Request;
 import krawlercommon.packets.MapPacket;
 
 public class MapPacketHandler extends PacketHandler{
     @Override
-    public boolean handle(Object object, Client client) {
+    public boolean handle(Request request) {
 
-        if(! (object instanceof MapPacket)) {
-            return this.next(object, client);
+        if(! (request.getObject() instanceof MapPacket)) {
+            return this.next(request);
         }
 
-        MapPacket mapPacket = (MapPacket) object;
+        MapPacket mapPacket = (MapPacket) request.getObject();
 
         if (mapPacket.update) {
-            client.getGame().updateMap(mapPacket.rooms);
+            request.getGame().updateMap(mapPacket.rooms);
         } else {
-            client.setRooms(mapPacket.rooms);
+            request.getClient().setRooms(mapPacket.rooms);
         }
 
         return true;

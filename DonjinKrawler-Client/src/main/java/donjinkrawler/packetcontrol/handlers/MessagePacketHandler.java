@@ -1,23 +1,23 @@
 package donjinkrawler.packetcontrol.handlers;
 
-import donjinkrawler.Client;
+import donjinkrawler.packetcontrol.Request;
 import krawlercommon.packets.MessagePacket;
 
 public class MessagePacketHandler extends PacketHandler{
 
     @Override
-    public boolean handle(Object object, Client client) {
+    public boolean handle(Request request) {
 
-        if(! (object instanceof MessagePacket)) {
-            return this.next(object, client);
+        if(! (request.getObject() instanceof MessagePacket)) {
+            return this.next(request);
         }
 
-        MessagePacket messagePacket = (MessagePacket) object;
+        MessagePacket messagePacket = (MessagePacket) request.getObject() ;
 
         if (messagePacket.message.startsWith("MSG")) {
-            client.setMessageLabelText(messagePacket.message.substring(4));
-        } else if (messagePacket.message.startsWith("ENI") && client.getGame() != null) {
-            client.getGame().updateEnemyInfo(messagePacket.message);
+            request.getClient().setMessageLabelText(messagePacket.message.substring(4));
+        } else if (messagePacket.message.startsWith("ENI") && request.getGame() != null) {
+            request.getGame().updateEnemyInfo(messagePacket.message);
         }
 
         return true;
