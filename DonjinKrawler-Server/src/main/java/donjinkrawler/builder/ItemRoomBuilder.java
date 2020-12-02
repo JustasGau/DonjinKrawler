@@ -1,7 +1,7 @@
 package donjinkrawler.builder;
 
-import krawlercommon.items.ItemLocationData;
 import krawlercommon.items.ItemGenerator;
+import krawlercommon.items.ItemLocationData;
 import krawlercommon.map.RoomType;
 
 public class ItemRoomBuilder extends RoomBuilder {
@@ -29,7 +29,7 @@ public class ItemRoomBuilder extends RoomBuilder {
             ItemLocationData itemData =
                     ItemGenerator.generateRandomItem(roomData.getItems().size(), 210, centerpoints[i]);
             roomData.getItems().put(roomData.getItems().size(), itemData);
-            itemData  = ItemGenerator.generateRandomItem(roomData.getItems().size(), 310, centerpoints[i]);
+            itemData = ItemGenerator.generateRandomItem(roomData.getItems().size(), 310, centerpoints[i]);
             roomData.getItems().put(roomData.getItems().size(), itemData);
         }
         return this;

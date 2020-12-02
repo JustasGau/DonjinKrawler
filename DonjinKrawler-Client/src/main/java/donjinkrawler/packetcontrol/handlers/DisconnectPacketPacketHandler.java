@@ -3,11 +3,11 @@ package donjinkrawler.packetcontrol.handlers;
 import donjinkrawler.packetcontrol.Request;
 import krawlercommon.packets.DisconnectPacket;
 
-public class DisconnectPacketPacketHandler extends PacketHandler{
+public class DisconnectPacketPacketHandler extends PacketHandler {
 
     @Override
     public boolean handle(Request request) {
-        if(! (request.getObject() instanceof DisconnectPacket) || !request.isGameActive()) {
+        if (!(request.getObject() instanceof DisconnectPacket) || !request.isGameActive()) {
             return this.next(request);
         }
 

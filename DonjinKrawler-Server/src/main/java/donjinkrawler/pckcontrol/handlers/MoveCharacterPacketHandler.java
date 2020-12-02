@@ -9,7 +9,7 @@ public class MoveCharacterPacketHandler extends PacketHandler {
     @Override
     public boolean handle(Request request) {
 
-        if(! (request.getObject() instanceof MoveCharacter)) {
+        if (!(request.getObject() instanceof MoveCharacter)) {
             return this.next(request);
         }
 

@@ -2,7 +2,6 @@ package krawlercommon.enemies;
 
 import com.esotericsoftware.kryonet.Server;
 import krawlercommon.KrawlerCloneable;
-import krawlercommon.map.Decoration;
 import krawlercommon.observer.Observer;
 import krawlercommon.packets.ChangeEnemyStrategyPacket;
 import krawlercommon.strategies.EnemyStrategy;
@@ -176,16 +175,16 @@ public abstract class Enemy implements Observer, KrawlerCloneable {
         this.health = health;
     }
 
+    @Override
+    public Enemy clone() throws CloneNotSupportedException {
+        return (Enemy) super.clone();
+    }
+
     public enum Phases {
         RANDOM,
         TOWARDS,
         AWAY,
         ATTACK,
         RANGED
-    }
-
-    @Override
-    public Enemy clone() throws CloneNotSupportedException {
-        return (Enemy) super.clone();
     }
 }

@@ -5,10 +5,10 @@ import krawlercommon.packets.ServerFullPacket;
 
 import javax.swing.*;
 
-public class ServerFullPacketHandler extends PacketHandler{
+public class ServerFullPacketHandler extends PacketHandler {
     @Override
     public boolean handle(Request request) {
-        if(! (request.getObject() instanceof ServerFullPacket)) {
+        if (!(request.getObject() instanceof ServerFullPacket)) {
             return this.next(request);
         }
 

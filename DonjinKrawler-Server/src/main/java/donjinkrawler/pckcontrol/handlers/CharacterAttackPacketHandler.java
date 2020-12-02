@@ -6,7 +6,7 @@ import krawlercommon.packets.CharacterAttackPacket;
 public class CharacterAttackPacketHandler extends PacketHandler {
     @Override
     public boolean handle(Request request) {
-        if(! (request.getObject() instanceof CharacterAttackPacket)) {
+        if (!(request.getObject() instanceof CharacterAttackPacket)) {
             return this.next(request);
         }
 

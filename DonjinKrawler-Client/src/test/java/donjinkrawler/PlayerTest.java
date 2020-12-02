@@ -16,7 +16,6 @@ import krawlercommon.map.*;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -28,56 +27,56 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PlayerTest {
 
     @Test
-    public void testSetX()  {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+    public void testSetX() {
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
         player.setX(10);
         assertEquals(10, player.getX());
     }
 
     @Test
-    public void testSetY()  {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+    public void testSetY() {
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
         player.setY(10);
         assertEquals(10, player.getY());
     }
 
     @Test
-    public void testSetCoordinates()  {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+    public void testSetCoordinates() {
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
-        player.setCoordinates(1,2);
+        player.setCoordinates(1, 2);
         assertEquals(1, player.getX());
         assertEquals(2, player.getY());
     }
 
     @Test
-    public void testSetHasChangedPosition()  {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+    public void testSetHasChangedPosition() {
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
         player.setHasChangedPosition(true);
         assertEquals(true, player.hasChangedPosition());
     }
 
     @Test
-    public void testGetName()  {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+    public void testGetName() {
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
         assertEquals("JhonnyTest", player.getName());
     }
 
     @Test
-    public void testGetImage()  {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+    public void testGetImage() {
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
         ImageIcon fake = new ImageIcon(ClassLoader.getSystemResource("craft.png").getFile());
         assertEquals(fake.getImage().getClass().getName(), player.getImage().getClass().getName());
     }
 
     @Test
-    public void testGetAttackImage()  {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+    public void testGetAttackImage() {
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
         player.setAttackTimer(11);
         assertNull(player.getAttackImage());
@@ -88,30 +87,30 @@ public class PlayerTest {
     }
 
     @Test
-    public void testGetId()  {
-        PlayerData data = new PlayerData("JhonnyTest",69,2,3);
+    public void testGetId() {
+        PlayerData data = new PlayerData("JhonnyTest", 69, 2, 3);
         Player player = new Player(data, new Client());
         assertEquals(69, player.getId());
     }
 
     @Test
-    public void testSetId()  {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+    public void testSetId() {
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
         player.setId(69);
         assertEquals(69, player.getId());
     }
 
     @Test
-    public void testGetData()  {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+    public void testGetData() {
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
         assertEquals(data, player.getData());
     }
 
     @Test
-    public void testGetWidthAndGetHeight()  {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+    public void testGetWidthAndGetHeight() {
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
 
         ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("craft.png").getFile());
@@ -125,24 +124,24 @@ public class PlayerTest {
     }
 
     @Test
-    public void testSetHealth()  {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+    public void testSetHealth() {
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
         player.setHealth(69);
         assertEquals(69, player.getHealth());
     }
 
     @Test
-    public void testSetHasNotifiedObservers()  {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+    public void testSetHasNotifiedObservers() {
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
         player.setHasNotifiedObservers(true);
         assertEquals(true, player.hasNotifiedObservers());
     }
 
     @Test
-    public void testIncrementTimer()  {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+    public void testIncrementTimer() {
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
         player.setAttackTimer(10);
         player.incrementTimer();
@@ -150,49 +149,49 @@ public class PlayerTest {
     }
 
     @Test
-    public void testTestKeyPressed()  {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+    public void testTestKeyPressed() {
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
 
         Inventory.doNotOpenInventory = true;
-        KeyEvent e = new KeyEvent(new Button(), KeyEvent.VK_I, System.currentTimeMillis(), 0,  KeyEvent.VK_I,'Z');
+        KeyEvent e = new KeyEvent(new Button(), KeyEvent.VK_I, System.currentTimeMillis(), 0, KeyEvent.VK_I, 'Z');
         player.keyPressed(e);
 
-        e = new KeyEvent(new Button(), KeyEvent.VK_LEFT, System.currentTimeMillis(), 0,  KeyEvent.VK_LEFT,'Z');
+        e = new KeyEvent(new Button(), KeyEvent.VK_LEFT, System.currentTimeMillis(), 0, KeyEvent.VK_LEFT, 'Z');
         player.keyPressed(e);
 
-        e = new KeyEvent(new Button(), KeyEvent.VK_RIGHT, System.currentTimeMillis(), 0,  KeyEvent.VK_RIGHT,'Z');
+        e = new KeyEvent(new Button(), KeyEvent.VK_RIGHT, System.currentTimeMillis(), 0, KeyEvent.VK_RIGHT, 'Z');
         player.keyPressed(e);
 
-        e = new KeyEvent(new Button(), KeyEvent.VK_UP, System.currentTimeMillis(), 0,  KeyEvent.VK_UP,'Z');
+        e = new KeyEvent(new Button(), KeyEvent.VK_UP, System.currentTimeMillis(), 0, KeyEvent.VK_UP, 'Z');
         player.keyPressed(e);
 
-        e = new KeyEvent(new Button(), KeyEvent.VK_DOWN, System.currentTimeMillis(), 0,  KeyEvent.VK_DOWN,'Z');
+        e = new KeyEvent(new Button(), KeyEvent.VK_DOWN, System.currentTimeMillis(), 0, KeyEvent.VK_DOWN, 'Z');
         player.keyPressed(e);
 
-        e = new KeyEvent(new Button(), KeyEvent.VK_U, System.currentTimeMillis(), 0,  KeyEvent.VK_U,'Z');
+        e = new KeyEvent(new Button(), KeyEvent.VK_U, System.currentTimeMillis(), 0, KeyEvent.VK_U, 'Z');
         player.keyPressed(e);
 
         MusicMaker.doNotPlayMusic = true;
-        e = new KeyEvent(new Button(), KeyEvent.VK_M, System.currentTimeMillis(), 0,  KeyEvent.VK_M,'Z');
+        e = new KeyEvent(new Button(), KeyEvent.VK_M, System.currentTimeMillis(), 0, KeyEvent.VK_M, 'Z');
         player.keyPressed(e);
 
-        e = new KeyEvent(new Button(), KeyEvent.VK_SPACE, System.currentTimeMillis(), 0,  KeyEvent.VK_SPACE,'Z');
+        e = new KeyEvent(new Button(), KeyEvent.VK_SPACE, System.currentTimeMillis(), 0, KeyEvent.VK_SPACE, 'Z');
         player.keyPressed(e);
 
         assertTrue(true);
     }
 
     @Test
-    public void testGetDamage()  {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+    public void testGetDamage() {
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
         assertEquals(20, player.getDamage());
     }
 
     @Test
-    public void testFindTarget()  {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+    public void testFindTarget() {
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
         player.isAttacking(true);
         player.findTarget();
@@ -200,31 +199,31 @@ public class PlayerTest {
     }
 
     @Test
-    public void testTestKeyReleased()  {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+    public void testTestKeyReleased() {
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
 
-        KeyEvent e = new KeyEvent(new Button(), KeyEvent.VK_LEFT, System.currentTimeMillis(), 0,  KeyEvent.VK_LEFT,'Z');
+        KeyEvent e = new KeyEvent(new Button(), KeyEvent.VK_LEFT, System.currentTimeMillis(), 0, KeyEvent.VK_LEFT, 'Z');
         player.keyReleased(e);
 
-        e = new KeyEvent(new Button(), KeyEvent.VK_RIGHT, System.currentTimeMillis(), 0,  KeyEvent.VK_RIGHT,'Z');
+        e = new KeyEvent(new Button(), KeyEvent.VK_RIGHT, System.currentTimeMillis(), 0, KeyEvent.VK_RIGHT, 'Z');
         player.keyReleased(e);
 
-        e = new KeyEvent(new Button(), KeyEvent.VK_UP, System.currentTimeMillis(), 0,  KeyEvent.VK_UP,'Z');
+        e = new KeyEvent(new Button(), KeyEvent.VK_UP, System.currentTimeMillis(), 0, KeyEvent.VK_UP, 'Z');
         player.keyReleased(e);
 
-        e = new KeyEvent(new Button(), KeyEvent.VK_DOWN, System.currentTimeMillis(), 0,  KeyEvent.VK_DOWN,'Z');
+        e = new KeyEvent(new Button(), KeyEvent.VK_DOWN, System.currentTimeMillis(), 0, KeyEvent.VK_DOWN, 'Z');
         player.keyReleased(e);
 
-        e = new KeyEvent(new Button(), KeyEvent.VK_U, System.currentTimeMillis(), 0,  KeyEvent.VK_U,'Z');
+        e = new KeyEvent(new Button(), KeyEvent.VK_U, System.currentTimeMillis(), 0, KeyEvent.VK_U, 'Z');
         player.keyReleased(e);
 
         assertTrue(true);
     }
 
     @Test
-    public void testAttachAndDetachObserver()  {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+    public void testAttachAndDetachObserver() {
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
 
         Boss newBaus = new Boss();
@@ -237,8 +236,8 @@ public class PlayerTest {
     }
 
     @Test
-    public void testDetachAllObservers()  {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+    public void testDetachAllObservers() {
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
 
         Boss boss1 = new Boss();
@@ -253,8 +252,8 @@ public class PlayerTest {
     }
 
     @Test
-    public void testNotifyObservers()  {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+    public void testNotifyObservers() {
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
         player.attachObserver(new Boss());
         player.attachObserver(new Boss());
@@ -263,16 +262,16 @@ public class PlayerTest {
     }
 
     @Test
-    public void testGetBotX()  {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+    public void testGetBotX() {
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
         player.getBotX();
         assertTrue(true);
     }
 
     @Test
-    public void testGetBotY()  {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+    public void testGetBotY() {
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
         player.getBotY();
         assertTrue(true);
@@ -280,11 +279,11 @@ public class PlayerTest {
 
     @Test
     public void testMove() {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
 
         List<Wall> walls = new ArrayList<>();
-        List<Door> doors= new ArrayList<>();
+        List<Door> doors = new ArrayList<>();
         List<Obstacle> obstacles = new ArrayList<>();
         List<Decoration> decorations = new ArrayList<>();
         HashMap<Integer, BaseItem> items = new HashMap<>();
@@ -295,7 +294,7 @@ public class PlayerTest {
 
     @Test
     public void testCollideWithWall() {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
 
         List<Wall> walls = new ArrayList<>();
@@ -304,14 +303,14 @@ public class PlayerTest {
         List<Decoration> decorations = new ArrayList<>();
         HashMap<Integer, BaseItem> items = new HashMap<>();
 
-        walls.add(new Wall(2,3,5,5));
+        walls.add(new Wall(2, 3, 5, 5));
 
         assertNull(player.move(walls, doors, obstacles, decorations, items));
     }
 
     @Test
     public void testCollideWithObstacle() {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
 
         List<Wall> walls = new ArrayList<>();
@@ -320,14 +319,14 @@ public class PlayerTest {
         List<Decoration> decorations = new ArrayList<>();
         HashMap<Integer, BaseItem> items = new HashMap<>();
 
-        obstacles.add(new Obstacle(2,3,5,5));
+        obstacles.add(new Obstacle(2, 3, 5, 5));
 
         assertNull(player.move(walls, doors, obstacles, decorations, items));
     }
 
     @Test
     public void testCollideWithLavaObstacle() {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
 
         List<Wall> walls = new ArrayList<>();
@@ -336,7 +335,7 @@ public class PlayerTest {
         List<Decoration> decorations = new ArrayList<>();
         HashMap<Integer, BaseItem> items = new HashMap<>();
 
-        Obstacle o = new Obstacle(2,3,5,5);
+        Obstacle o = new Obstacle(2, 3, 5, 5);
         o.setObstacleType(ObstacleType.LAVA);
         obstacles.add(o);
 
@@ -345,7 +344,7 @@ public class PlayerTest {
 
     @Test
     public void testCollideWithSpikesObstacle() {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
 
         List<Wall> walls = new ArrayList<>();
@@ -354,7 +353,7 @@ public class PlayerTest {
         List<Decoration> decorations = new ArrayList<>();
         HashMap<Integer, BaseItem> items = new HashMap<>();
 
-        Obstacle o = new Obstacle(2,3,5,5);
+        Obstacle o = new Obstacle(2, 3, 5, 5);
         o.setObstacleType(ObstacleType.SPIKES);
         obstacles.add(o);
 
@@ -363,7 +362,7 @@ public class PlayerTest {
 
     @Test
     public void testCollideWithSlimeObstacle() {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
 
         List<Wall> walls = new ArrayList<>();
@@ -372,7 +371,7 @@ public class PlayerTest {
         List<Decoration> decorations = new ArrayList<>();
         HashMap<Integer, BaseItem> items = new HashMap<>();
 
-        Obstacle o = new Obstacle(2,3,5,5);
+        Obstacle o = new Obstacle(2, 3, 5, 5);
         o.setObstacleType(ObstacleType.SLIME);
         obstacles.add(o);
 
@@ -381,7 +380,7 @@ public class PlayerTest {
 
     @Test
     public void testCollideWithDoor() {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
 
         List<Wall> walls = new ArrayList<>();
@@ -390,14 +389,14 @@ public class PlayerTest {
         List<Decoration> decorations = new ArrayList<>();
         HashMap<Integer, BaseItem> items = new HashMap<>();
 
-        doors.add(new Door(DoorDirection.TOP,2,3));
+        doors.add(new Door(DoorDirection.TOP, 2, 3));
 
         assertNull(player.move(walls, doors, obstacles, decorations, items));
     }
 
     @Test
     public void testCollideWithItem() {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
 
         List<Wall> walls = new ArrayList<>();
@@ -406,14 +405,14 @@ public class PlayerTest {
         List<Decoration> decorations = new ArrayList<>();
         HashMap<Integer, BaseItem> items = new HashMap<>();
 
-        items.put(1, new SpeedPotion(new SpeedPotionData(1,2,3)));
+        items.put(1, new SpeedPotion(new SpeedPotionData(1, 2, 3)));
 
         assertEquals(1, player.move(walls, doors, obstacles, decorations, items));
     }
 
     @Test
     public void testCollideWithArmor() {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
 
         List<Wall> walls = new ArrayList<>();
@@ -422,14 +421,14 @@ public class PlayerTest {
         List<Decoration> decorations = new ArrayList<>();
         HashMap<Integer, BaseItem> items = new HashMap<>();
 
-        items.put(1, new Armor(new ArmorData(1,2,3), new CommonTier(), 10, 15, 20));
+        items.put(1, new Armor(new ArmorData(1, 2, 3), new CommonTier(), 10, 15, 20));
 
         assertEquals(1, player.move(walls, doors, obstacles, decorations, items));
     }
 
     @Test
     public void testCollideWithWeapon() {
-        PlayerData data = new PlayerData("JhonnyTest",1,2,3);
+        PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
 
         List<Wall> walls = new ArrayList<>();
@@ -438,7 +437,7 @@ public class PlayerTest {
         List<Decoration> decorations = new ArrayList<>();
         HashMap<Integer, BaseItem> items = new HashMap<>();
 
-        items.put(1, new Weapon(new WeaponData(1,2,3), new CommonTier(), 10, 15));
+        items.put(1, new Weapon(new WeaponData(1, 2, 3), new CommonTier(), 10, 15));
 
         assertEquals(1, player.move(walls, doors, obstacles, decorations, items));
     }

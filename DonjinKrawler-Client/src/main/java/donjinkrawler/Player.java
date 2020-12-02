@@ -31,6 +31,8 @@ import static donjinkrawler.Game.shells;
 
 public class Player implements Subject {
     private final PlayerData data;
+    private final Inventory inventory;
+    private final MusicMaker musicMaker;
     int obstacleCollisionCount = 0;
     private int dx;
     private int dy;
@@ -49,8 +51,6 @@ public class Player implements Subject {
     private Boolean attack = false;
     private Boolean canAttack = false;
     private int attackTimer = 0;
-    private final Inventory inventory;
-    private final MusicMaker musicMaker;
 
     public Player(PlayerData playerData, Client client) {
         this.client = client;
@@ -331,6 +331,10 @@ public class Player implements Subject {
         return this.attackTimer;
     }
 
+    public void setAttackTimer(int timer) {
+        this.attackTimer = timer;
+    }
+
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
@@ -470,10 +474,6 @@ public class Player implements Subject {
 
     public void isAttacking(boolean b) {
         this.attack = b;
-    }
-
-    public void setAttackTimer(int timer) {
-        this.attackTimer = timer;
     }
 
     public MusicMaker getMusic() {

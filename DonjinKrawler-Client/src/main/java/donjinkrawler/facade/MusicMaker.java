@@ -19,7 +19,7 @@ public class MusicMaker {
     }
 
     public void playBossRoomMusic() {
-        if(doNotPlayMusic) {
+        if (doNotPlayMusic) {
             return;
         }
         this.player.stop();
@@ -28,7 +28,7 @@ public class MusicMaker {
     }
 
     public void playItemRoomMusic() {
-        if(doNotPlayMusic) {
+        if (doNotPlayMusic) {
             return;
         }
         this.player.stop();
@@ -37,7 +37,7 @@ public class MusicMaker {
     }
 
     public void playBackgroundMusic() {
-        if(doNotPlayMusic) {
+        if (doNotPlayMusic) {
             return;
         }
         this.player.getState().onPlay();

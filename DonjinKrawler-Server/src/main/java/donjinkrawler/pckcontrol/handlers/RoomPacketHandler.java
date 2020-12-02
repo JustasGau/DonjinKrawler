@@ -6,7 +6,7 @@ import krawlercommon.packets.RoomPacket;
 public class RoomPacketHandler extends PacketHandler {
     @Override
     public boolean handle(Request request) {
-        if(! (request.getObject() instanceof RoomPacket)) {
+        if (!(request.getObject() instanceof RoomPacket)) {
             return this.next(request);
         }
 

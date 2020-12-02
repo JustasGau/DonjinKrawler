@@ -1,8 +1,8 @@
 package donjinkrawler.pckcontrol;
 
+import com.esotericsoftware.kryonet.Connection;
 import donjinkrawler.GameServer;
 import donjinkrawler.pckcontrol.handlers.*;
-import com.esotericsoftware.kryonet.Connection;
 
 public class PacketControlUnit {
 

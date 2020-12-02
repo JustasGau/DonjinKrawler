@@ -11,7 +11,8 @@ public class WavPlayer implements AdvancedMediaPlayer {
     private Clip clip;
 
     @Override
-    public void playMp3(String fileName, boolean repeat) {}
+    public void playMp3(String fileName, boolean repeat) {
+    }
 
     @Override
     public void playWav(String fileName, boolean repeat) {

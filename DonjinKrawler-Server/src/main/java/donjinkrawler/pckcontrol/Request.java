@@ -1,7 +1,7 @@
 package donjinkrawler.pckcontrol;
 
-import donjinkrawler.GameServer;
 import com.esotericsoftware.kryonet.Connection;
+import donjinkrawler.GameServer;
 
 public class Request {
 

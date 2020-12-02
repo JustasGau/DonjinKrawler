@@ -7,7 +7,7 @@ import krawlercommon.packets.ChangeEnemyStrategyPacket;
 public class ChangeEnemyStrategyPacketHandler extends PacketHandler {
     @Override
     public boolean handle(Request request) {
-        if(! (request.getObject() instanceof ChangeEnemyStrategyPacket)) {
+        if (!(request.getObject() instanceof ChangeEnemyStrategyPacket)) {
             return this.next(request);
         }
 

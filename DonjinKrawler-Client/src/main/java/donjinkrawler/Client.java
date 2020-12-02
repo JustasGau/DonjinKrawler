@@ -5,9 +5,9 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import donjinkrawler.packetcontrol.PacketControlUnit;
 import krawlercommon.PlayerData;
-import krawlercommon.map.RoomData;
-import krawlercommon.packets.*;
 import krawlercommon.RegistrationManager;
+import krawlercommon.map.RoomData;
+import krawlercommon.packets.LoginPacket;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,12 +22,11 @@ public class Client {
     private static final int screenHeight = 500;
     private static final int SERVER_TCP_PORT = 54555;
     private static final int SERVER_UDP_PORT = 54777;
-
-    private com.esotericsoftware.kryonet.Client kryoClient;
     private final JFrame frame = new JFrame();
     private final JLabel messageLabel = new JLabel("...");
-    private Game game;
     private final String serverAddress;
+    private com.esotericsoftware.kryonet.Client kryoClient;
+    private Game game;
     private String name;
     private Map<Integer, RoomData> rooms;
 
@@ -35,6 +34,16 @@ public class Client {
         setupKryo();
         this.serverAddress = serverAddress;
         logIn();
+    }
+
+    public static void main(String[] args) throws IOException {
+        String address;
+        if (args.length > 0) {
+            address = args[0];
+        } else {
+            address = InetAddress.getByName("localhost").getHostAddress();
+        }
+        new Client(address);
     }
 
     private void setupKryo() throws IOException {
@@ -89,14 +98,8 @@ public class Client {
                 JOptionPane.PLAIN_MESSAGE);
     }
 
-    public static void main(String[] args) throws IOException {
-        String address;
-        if (args.length > 0) {
-            address = args[0];
-        } else {
-            address = InetAddress.getByName("localhost").getHostAddress();
-        }
-        new Client(address);
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Game getGame() {
@@ -109,10 +112,6 @@ public class Client {
 
     public void setRooms(HashMap<Integer, RoomData> rooms) {
         this.rooms = rooms;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public JFrame getFrame() {

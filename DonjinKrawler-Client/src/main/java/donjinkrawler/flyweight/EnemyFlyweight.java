@@ -24,7 +24,7 @@ public class EnemyFlyweight {
     public String getName() {
         return name;
     }
-    
+
     private String resolveImageName() {
         if (this.name.equals("Small-Zombie")) {
             return "zombie.png";

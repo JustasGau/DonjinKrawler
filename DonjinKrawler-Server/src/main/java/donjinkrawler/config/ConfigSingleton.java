@@ -7,10 +7,9 @@ import java.util.Properties;
 public class ConfigSingleton {
 
     private static final String PROPERTIES_FILE_NAME = "application.properties";
+    private static final ConfigSingleton instance = new ConfigSingleton();
     private Properties properties;
     private Properties previousProperties;
-
-    private static final ConfigSingleton instance = new ConfigSingleton();
 
     private ConfigSingleton() {
         previousProperties = new Properties();

@@ -3,10 +3,10 @@ package donjinkrawler.packetcontrol.handlers;
 import donjinkrawler.packetcontrol.Request;
 import krawlercommon.packets.IdPacket;
 
-public class IdPacketHandler extends PacketHandler{
+public class IdPacketHandler extends PacketHandler {
     @Override
     public boolean handle(Request request) {
-        if(! (request.getObject() instanceof IdPacket)) {
+        if (!(request.getObject() instanceof IdPacket)) {
             return this.next(request);
         }
 

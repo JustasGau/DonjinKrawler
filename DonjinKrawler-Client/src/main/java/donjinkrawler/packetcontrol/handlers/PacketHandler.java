@@ -16,6 +16,7 @@ public abstract class PacketHandler {
 
     /**
      * Subclasses will implement this method with concrete checks.
+     *
      * @param request
      */
     public abstract boolean handle(Request request);
@@ -23,6 +24,7 @@ public abstract class PacketHandler {
     /**
      * Runs check on the next object in chain or ends traversing if we're in
      * last object in chain.
+     *
      * @param request
      */
     protected boolean next(Request request) {

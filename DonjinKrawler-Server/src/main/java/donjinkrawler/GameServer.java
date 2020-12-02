@@ -16,7 +16,7 @@ import krawlercommon.enemies.Enemy;
 import krawlercommon.map.RoomData;
 import krawlercommon.packets.*;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.*;
 
 public class GameServer {
@@ -92,8 +92,7 @@ public class GameServer {
 
     public HashMap<Integer, RoomData> copyRoomMap(HashMap<Integer, RoomData> original) throws CloneNotSupportedException {
         HashMap<Integer, RoomData> copy = new HashMap<>();
-        for (Map.Entry<Integer, RoomData> entry : original.entrySet())
-        {
+        for (Map.Entry<Integer, RoomData> entry : original.entrySet()) {
             RoomData orig = entry.getValue();
             RoomData copyRoom = orig.deepCopy();
             copy.put(entry.getKey(), copyRoom);
@@ -262,16 +261,16 @@ public class GameServer {
         return this.kryoServer;
     }
 
-    public void setCurrentRoom(int room) {
-        this.currentRoom = room;
-    }
-
     public void setCurrentDirection(String direction) {
         this.currentDirection = direction;
     }
 
     public RoomData getCurrentRoom() {
         return this.rooms.get(this.currentRoom);
+    }
+
+    public void setCurrentRoom(int room) {
+        this.currentRoom = room;
     }
 
     public class Timer extends Thread {

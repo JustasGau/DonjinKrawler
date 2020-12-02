@@ -7,7 +7,7 @@ public class EnemyPacketHandler extends PacketHandler {
 
     @Override
     public boolean handle(Request request) {
-        if(! (request.getObject() instanceof EnemyPacket) || !request.isGameActive()) {
+        if (!(request.getObject() instanceof EnemyPacket) || !request.isGameActive()) {
             return this.next(request);
         }
 

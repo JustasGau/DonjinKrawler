@@ -3,16 +3,16 @@ package donjinkrawler.packetcontrol.handlers;
 import donjinkrawler.packetcontrol.Request;
 import krawlercommon.packets.MessagePacket;
 
-public class MessagePacketHandler extends PacketHandler{
+public class MessagePacketHandler extends PacketHandler {
 
     @Override
     public boolean handle(Request request) {
 
-        if(! (request.getObject() instanceof MessagePacket)) {
+        if (!(request.getObject() instanceof MessagePacket)) {
             return this.next(request);
         }
 
-        MessagePacket messagePacket = (MessagePacket) request.getObject() ;
+        MessagePacket messagePacket = (MessagePacket) request.getObject();
 
         if (messagePacket.message.startsWith("MSG")) {
             request.getClient().setMessageLabelText(messagePacket.message.substring(4));

@@ -1,17 +1,17 @@
 package donjinkrawler.adapter;
 
-import donjinkrawler.adapter.tracks.Track;
 import donjinkrawler.adapter.state.ReadyState;
 import donjinkrawler.adapter.state.State;
+import donjinkrawler.adapter.tracks.Track;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AudioPlayer implements MediaPlayer {
 
+    private final List<Track> playlist = new ArrayList<>();
     private MediaAdapter mediaAdapter;
     private State state;
-    private final List<Track> playlist = new ArrayList<>();
     private int currentTrack = 0;
 
     public AudioPlayer() {
@@ -26,7 +26,7 @@ public class AudioPlayer implements MediaPlayer {
 
     @Override
     public void stop() {
-        if(this.mediaAdapter != null) {
+        if (this.mediaAdapter != null) {
             mediaAdapter.stop();
         }
     }

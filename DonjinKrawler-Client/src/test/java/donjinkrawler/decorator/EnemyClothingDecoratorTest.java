@@ -1,8 +1,8 @@
 package donjinkrawler.decorator;
 
 import donjinkrawler.EnemyShell;
-import donjinkrawler.flyweight.EnemySelector;
 import donjinkrawler.flyweight.EnemyFlyweight;
+import donjinkrawler.flyweight.EnemySelector;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
@@ -19,13 +19,14 @@ public class EnemyClothingDecoratorTest {
         EnemyShell enemy = new EnemyShell(name, id, x, y, type);
         return enemy;
     }
-    
+
     @Test
     public void testInit() {
         EnemyShell initialEnemy = getEnemyObject("test", 1, 10, 20);
         SombrerosEnemy test = new SombrerosEnemy(initialEnemy);
         assertSame(initialEnemy, test.wrappee);
     }
+
     @Test
     public void testGetX() {
         SombrerosEnemy test = new SombrerosEnemy(getEnemyObject("test", 1, 10, 20));

@@ -7,7 +7,7 @@ import krawlercommon.packets.MessagePacket;
 public class MessagePacketHandler extends PacketHandler {
     @Override
     public boolean handle(Request request) {
-        if(! (request.getObject() instanceof MessagePacket)) {
+        if (!(request.getObject() instanceof MessagePacket)) {
             return this.next(request);
         }
 

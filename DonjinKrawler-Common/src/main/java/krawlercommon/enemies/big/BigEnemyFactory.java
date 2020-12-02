@@ -1,8 +1,8 @@
 package krawlercommon.enemies.big;
 
 import krawlercommon.enemies.Enemy;
-import krawlercommon.enemies.EnemyType;
 import krawlercommon.enemies.EnemyFactory;
+import krawlercommon.enemies.EnemyType;
 
 public class BigEnemyFactory implements EnemyFactory {
 

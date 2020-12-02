@@ -32,7 +32,8 @@ public class Mp3Player implements AdvancedMediaPlayer {
     }
 
     @Override
-    public void playWav(String fileName, boolean repeat) {}
+    public void playWav(String fileName, boolean repeat) {
+    }
 
     @Override
     public void stop() {

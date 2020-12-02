@@ -15,7 +15,7 @@ public class PonchosEnemy extends EnemyClothingDecorator {
     @Override
     public Map<String, ImageIcon> addClothing() {
         ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("poncho.png").getFile());
-        Image scaledImage = ii.getImage().getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);
+        Image scaledImage = ii.getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
         ii = new ImageIcon(scaledImage);
         Map<String, ImageIcon> clothes = wrappee.addClothing();
         clothes.put("Poncho", ii);
