@@ -62,8 +62,8 @@ public class GameServerTest {
         kryoClient.sendUDP(loginPacket);
         // wait until packet is handled
         Thread.sleep(2000);
-        assertEquals(initialId + 1, ConnectionManager.getInstance().getPlayerIDs());
-        assertNotNull(ConnectionManager.getInstance().getPlayerFromId(initialId));
+        assertNotNull(ConnectionManager.getInstance().getAllPlayers().get(0));
+        assertTrue(ConnectionManager.getInstance().getAllPlayers().get(0).getName().length() > 0);
     }
 
     @Test
