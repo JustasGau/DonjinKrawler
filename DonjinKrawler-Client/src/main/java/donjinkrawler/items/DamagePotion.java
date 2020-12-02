@@ -1,5 +1,6 @@
 package donjinkrawler.items;
 
+import donjinkrawler.visitor.ItemVisitor;
 import krawlercommon.items.DamagePotionData;
 
 public class DamagePotion extends BaseItem {
@@ -24,6 +25,11 @@ public class DamagePotion extends BaseItem {
     @Override
     public String getDescription() {
         return "Adds some damage buff.";
+    }
+
+    @Override
+    public void accept(ItemVisitor v) {
+        v.visit(this);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package donjinkrawler.items;
 
+import donjinkrawler.visitor.ItemVisitor;
 import krawlercommon.KrawlerCloneable;
 import krawlercommon.items.ItemLocationData;
 
@@ -31,6 +32,7 @@ public abstract class BaseItem implements KrawlerCloneable {
 
     public abstract String getDescription();
 
+    public abstract void accept(ItemVisitor v);
 
     @Override
     public BaseItem clone() throws CloneNotSupportedException {

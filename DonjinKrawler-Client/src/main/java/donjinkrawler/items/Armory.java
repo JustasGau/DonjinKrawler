@@ -1,6 +1,7 @@
 package donjinkrawler.items;
 
 import donjinkrawler.items.tiers.Tier;
+import donjinkrawler.visitor.ItemVisitor;
 
 public abstract class Armory extends BaseItem {
 
@@ -20,6 +21,9 @@ public abstract class Armory extends BaseItem {
         armory.tier = this.tier;
         return armory;
     }
+
+    @Override
+    public abstract void accept(ItemVisitor v);
 
     @Override
     public abstract Armory deepCopy() throws CloneNotSupportedException;

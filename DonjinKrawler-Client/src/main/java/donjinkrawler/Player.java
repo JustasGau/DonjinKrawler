@@ -7,6 +7,8 @@ import donjinkrawler.command.MoveCommand;
 import donjinkrawler.command.PlayerCommander;
 import donjinkrawler.facade.MusicMaker;
 import donjinkrawler.items.*;
+import donjinkrawler.visitor.ItemVisitor;
+import donjinkrawler.visitor.ItemVisitorImpl;
 import krawlercommon.PlayerData;
 import krawlercommon.composite.FinalBonus;
 import krawlercommon.composite.RawBonus;
@@ -54,6 +56,7 @@ public class Player implements Subject {
     private final MusicMaker musicMaker;
     private RawBonus armorBonus = null;
     private RawBonus weaponBonus = null;
+    private ItemVisitor itemVisitor;
 
     public Player(PlayerData playerData, Client client) {
         this.client = client;
@@ -62,6 +65,7 @@ public class Player implements Subject {
         this.musicMaker = new MusicMaker();
 
         data = playerData;
+        itemVisitor = new ItemVisitorImpl(data, inventory, armorBonus, weaponBonus);
         loadImage();
     }
 
@@ -128,7 +132,7 @@ public class Player implements Subject {
     private Integer isCollidingWithItem(HashMap<Integer, BaseItem> objects) {
         for (HashMap.Entry<Integer, BaseItem> itemData : objects.entrySet()) {
             if (isCollidingWith(itemData.getValue())) {
-                handleItemCollision(itemData.getValue());
+                itemData.getValue().accept(itemVisitor);
                 return itemData.getKey();
             }
         }

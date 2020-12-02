@@ -1,6 +1,7 @@
 package donjinkrawler.items;
 
 import donjinkrawler.items.tiers.Tier;
+import donjinkrawler.visitor.ItemVisitor;
 import krawlercommon.items.WeaponData;
 
 public class Weapon extends Armory {
@@ -35,6 +36,11 @@ public class Weapon extends Armory {
         return "Tier: " + this.tier.getName() + "\n"
                 + "Damage: " + this.getDamage() + "\n"
                 + "Speed: " + this.getSpeed();
+    }
+
+    @Override
+    public void accept(ItemVisitor v) {
+        v.visit(this);
     }
 
     @Override

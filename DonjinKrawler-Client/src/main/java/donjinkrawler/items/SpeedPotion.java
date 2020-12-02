@@ -1,5 +1,6 @@
 package donjinkrawler.items;
 
+import donjinkrawler.visitor.ItemVisitor;
 import krawlercommon.items.SpeedPotionData;
 
 public class SpeedPotion extends BaseItem {
@@ -24,6 +25,11 @@ public class SpeedPotion extends BaseItem {
     @Override
     public String getDescription() {
         return "Adds some speed buff.";
+    }
+
+    @Override
+    public void accept(ItemVisitor v) {
+        v.visit(this);
     }
 
     @Override
