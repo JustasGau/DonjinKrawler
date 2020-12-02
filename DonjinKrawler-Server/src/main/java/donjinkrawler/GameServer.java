@@ -1,7 +1,6 @@
 package donjinkrawler;
 
 import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import donjinkrawler.config.ConfigSingleton;
 import donjinkrawler.logging.LoggerSingleton;
@@ -9,6 +8,8 @@ import donjinkrawler.memento.History;
 import donjinkrawler.memento.Memento;
 import donjinkrawler.memento.SavedObject;
 import donjinkrawler.serverpacketcontrol.PacketControlChain;
+import donjinkrawler.proxy.BaseListener;
+import donjinkrawler.proxy.ListenerProxy;
 import krawlercommon.ConnectionManager;
 import krawlercommon.PlayerData;
 import krawlercommon.RegistrationManager;
@@ -58,7 +59,7 @@ public class GameServer {
         GameServer gameServer = this;
 
         if (!useProxyListener) {
-            kryoServer.addListener(new Listener() {
+            kryoServer.addListener(new BaseListener() {
 
                 public void received(Connection connection, Object object) {
                     pcu.handle(gameServer, object, connection);
@@ -90,7 +91,8 @@ public class GameServer {
         history.undo();
     }
 
-    public HashMap<Integer, RoomData> copyRoomMap(HashMap<Integer, RoomData> original) throws CloneNotSupportedException {
+    public HashMap<Integer, RoomData> copyRoomMap(HashMap<Integer, RoomData> original)
+            throws CloneNotSupportedException {
         HashMap<Integer, RoomData> copy = new HashMap<>();
         for (Map.Entry<Integer, RoomData> entry : original.entrySet()) {
             RoomData orig = entry.getValue();
@@ -108,7 +110,7 @@ public class GameServer {
     }
 
     public void restore(SavedObject state) throws InterruptedException {
-        Boolean changed = false;
+        boolean changed = false;
         currentDirection = state.getDirection();
         rooms = state.getRooms();
         if (currentRoom != state.getCurrentRoom()) {
@@ -154,17 +156,8 @@ public class GameServer {
             loginPacket.name = loginPacket.name + rand.nextInt(69420);
         }
         PlayerData player = ConnectionManager.getInstance().getPlayerFromConnection(connection);
-        if (player == null) {
-            player = new PlayerData(
-                    loginPacket.name,
-                    ConnectionManager.getInstance().getIncrementingPlayerIDs(),
-                    250,
-                    250
-            );
-            ConnectionManager.getInstance().addPlayer(connection, player);
-        } else {
-            player.setName(loginPacket.name);
-        }
+        player.setName(loginPacket.name);
+
         sendMapToPlayer(connection);
         sendWelcomeMessages(connection);
         sendIdentificationMessage(connection, player);
@@ -196,7 +189,6 @@ public class GameServer {
     }
 
     private void sendWelcomeMessages(Connection connection) {
-        MessageSender.sendMessageToSingle(connection, kryoServer, "You joined the server");
         MessageSender.sendMessageToAllExcept(connection, kryoServer, "A player has joined the server");
     }
 

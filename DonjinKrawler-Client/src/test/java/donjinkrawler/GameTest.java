@@ -120,7 +120,7 @@ public class GameTest {
     private void verifyShellDrawn(Game game) {
         Mockito.verify(mockGraphics, atLeast(2)).drawImage(any(), eq(250), eq(250), eq(game));
         Mockito.verify(mockGraphics, atLeast(1)).setColor(eq(Color.BLUE));
-        Mockito.verify(mockGraphics).drawString(eq("Enemy 69420"), eq(200), eq(200 + 30));
+        Mockito.verify(mockGraphics).drawString(eq("type 69420"), eq(200), eq(200 + 30));
         Mockito.verify(mockGraphics).drawImage(any(), eq(190), eq(190), eq(game));
         Mockito.verify(mockGraphics, atLeast(1)).setColor(eq(Color.YELLOW));
         Mockito.verify(mockGraphics).drawString(eq("Hello world!"), eq(200), eq(200 + 30 + 20));
