@@ -1,13 +1,13 @@
-package donjinkrawler.packetcontrol;
+package donjinkrawler.clientpacketcontrol;
 
 import donjinkrawler.Client;
-import donjinkrawler.packetcontrol.handlers.*;
+import donjinkrawler.clientpacketcontrol.handlers.*;
 
-public class PacketControlUnit {
+public class PacketControlChain {
 
     private final PacketHandler packetHandler;
 
-    public PacketControlUnit() {
+    public PacketControlChain() {
         PacketHandler packetHandler = (new MessagePacketHandler());
 
         packetHandler.linkWith(new MapPacketHandler())

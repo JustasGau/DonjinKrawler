@@ -8,7 +8,7 @@ import donjinkrawler.logging.LoggerSingleton;
 import donjinkrawler.memento.History;
 import donjinkrawler.memento.Memento;
 import donjinkrawler.memento.SavedObject;
-import donjinkrawler.pckcontrol.PacketControlUnit;
+import donjinkrawler.serverpacketcontrol.PacketControlChain;
 import krawlercommon.ConnectionManager;
 import krawlercommon.PlayerData;
 import krawlercommon.RegistrationManager;
@@ -54,7 +54,7 @@ public class GameServer {
         kryoServer.bind(KRYO_TCP_PORT, KRYO_UDP_PORT);
         RegistrationManager.registerKryo(kryoServer.getKryo());
 
-        PacketControlUnit pcu = new PacketControlUnit();
+        PacketControlChain pcu = new PacketControlChain();
         GameServer gameServer = this;
 
         if (!useProxyListener) {

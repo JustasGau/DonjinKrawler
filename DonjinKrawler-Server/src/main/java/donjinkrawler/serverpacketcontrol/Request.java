@@ -1,4 +1,4 @@
-package donjinkrawler.pckcontrol;
+package donjinkrawler.serverpacketcontrol;
 
 import com.esotericsoftware.kryonet.Connection;
 import donjinkrawler.GameServer;

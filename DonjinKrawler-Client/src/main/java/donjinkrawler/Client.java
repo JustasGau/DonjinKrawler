@@ -3,7 +3,7 @@ package donjinkrawler;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
-import donjinkrawler.packetcontrol.PacketControlUnit;
+import donjinkrawler.clientpacketcontrol.PacketControlChain;
 import krawlercommon.PlayerData;
 import krawlercommon.RegistrationManager;
 import krawlercommon.map.RoomData;
@@ -54,12 +54,12 @@ public class Client {
         kryoClient.start();
         kryoClient.connect(5000, serverAddress, SERVER_TCP_PORT, SERVER_UDP_PORT);
 
-        PacketControlUnit pcu = new PacketControlUnit();
+        PacketControlChain packetControlChain = new PacketControlChain();
         Client client = this;
 
         kryoClient.addListener(new Listener() {
             public void received(Connection connection, Object object) {
-                pcu.handle(client, object);
+                packetControlChain.handle(client, object);
             }
         });
     }

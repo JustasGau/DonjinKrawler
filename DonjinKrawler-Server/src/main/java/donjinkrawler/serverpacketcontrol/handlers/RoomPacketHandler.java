@@ -1,6 +1,6 @@
-package donjinkrawler.pckcontrol.handlers;
+package donjinkrawler.serverpacketcontrol.handlers;
 
-import donjinkrawler.pckcontrol.Request;
+import donjinkrawler.serverpacketcontrol.Request;
 import krawlercommon.packets.RoomPacket;
 
 public class RoomPacketHandler extends PacketHandler {

@@ -1,6 +1,6 @@
-package donjinkrawler.packetcontrol.handlers;
+package donjinkrawler.clientpacketcontrol.handlers;
 
-import donjinkrawler.packetcontrol.Request;
+import donjinkrawler.clientpacketcontrol.Request;
 import krawlercommon.packets.MessagePacket;
 
 public class MessagePacketHandler extends PacketHandler {

@@ -1,4 +1,4 @@
-package donjinkrawler.packetcontrol;
+package donjinkrawler.clientpacketcontrol;
 
 import donjinkrawler.Client;
 import donjinkrawler.Game;

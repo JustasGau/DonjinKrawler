@@ -1,6 +1,6 @@
-package donjinkrawler.packetcontrol.handlers;
+package donjinkrawler.clientpacketcontrol.handlers;
 
-import donjinkrawler.packetcontrol.Request;
+import donjinkrawler.clientpacketcontrol.Request;
 import krawlercommon.packets.CreatePlayerPacket;
 
 public class CreatePlayerPacketHandler extends PacketHandler {

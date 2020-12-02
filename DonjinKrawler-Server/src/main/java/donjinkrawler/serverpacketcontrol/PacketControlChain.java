@@ -1,14 +1,14 @@
-package donjinkrawler.pckcontrol;
+package donjinkrawler.serverpacketcontrol;
 
 import com.esotericsoftware.kryonet.Connection;
 import donjinkrawler.GameServer;
-import donjinkrawler.pckcontrol.handlers.*;
+import donjinkrawler.serverpacketcontrol.handlers.*;
 
-public class PacketControlUnit {
+public class PacketControlChain {
 
     private final PacketHandler packetHandler;
 
-    public PacketControlUnit() {
+    public PacketControlChain() {
         PacketHandler packetHandler = (new LoginPacketHandler());
 
         packetHandler.linkWith(new MessagePacketHandler())
