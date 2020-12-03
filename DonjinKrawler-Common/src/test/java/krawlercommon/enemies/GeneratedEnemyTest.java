@@ -1,6 +1,5 @@
 package krawlercommon.enemies;
 
-import krawlercommon.strategies.EnemyStrategy;
 import krawlercommon.strategies.MoveTowardPlayer;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -16,20 +15,6 @@ public class GeneratedEnemyTest {
         Boss boss = new Boss();
         boss.setName("Name");
         assertEquals("Name", boss.getName());
-    }
-
-    @Test
-    public void testSetInterval() {
-        Boss boss = new Boss();
-        boss.setInterval(42);
-        assertEquals(42, boss.updateIntervalSeconds);
-    }
-
-    @Test
-    public void testSetStrategies() {
-        Boss boss = new Boss();
-        boss.setStrategies(new HashMap<Enemy.Phases, EnemyStrategy>());
-        assertEquals(3, boss.strategies.size());
     }
 
     @Test

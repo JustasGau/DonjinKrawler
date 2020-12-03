@@ -1,10 +1,8 @@
 package donjinkrawler.memento;
 
-import krawlercommon.PlayerData;
 import krawlercommon.map.RoomData;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class SavedObject {
     HashMap<Integer, RoomData>  rooms;
@@ -17,15 +15,15 @@ public class SavedObject {
         this.direction = direction;
     }
 
-    public HashMap<Integer, RoomData> getRooms(){
+    public HashMap<Integer, RoomData> getRooms() {
         return rooms;
     }
 
-    public int getCurrentRoom(){
+    public int getCurrentRoom() {
         return currentRoom;
     }
 
-    public String getDirection(){
+    public String getDirection() {
         return direction;
     }
 }
