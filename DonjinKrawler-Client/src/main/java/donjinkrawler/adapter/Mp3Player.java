@@ -13,15 +13,9 @@ public class Mp3Player implements AdvancedMediaPlayer {
     @Override
     public void playMp3(String fileName) {
         try {
-<<<<<<< HEAD
-            File soundFile = new File(ClassLoader.getSystemResource("sounds/".concat(fileName)).getFile());
-            AudioInputStream audioInput = AudioSystem.getAudioInputStream(soundFile);
-            clip = AudioSystem.getClip();
-=======
             InputStream stream = getClass().getResourceAsStream("/sounds/".concat(fileName));
             AudioInputStream audioInput = AudioSystem.getAudioInputStream(new BufferedInputStream(stream));
-            Clip clip = AudioSystem.getClip();
->>>>>>> edf5af2 (Added support for packaging to jar correctly)
+            clip = AudioSystem.getClip();
             clip.open(audioInput);
             clip.start();
         } catch (Exception e) {
