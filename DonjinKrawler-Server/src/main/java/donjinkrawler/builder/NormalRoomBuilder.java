@@ -4,8 +4,8 @@ import krawlercommon.enemies.Enemy;
 import krawlercommon.enemies.EnemyGenerator;
 import krawlercommon.enemies.big.BigEnemyFactory;
 import krawlercommon.enemies.small.SmallEnemyFactory;
-import krawlercommon.items.ItemLocationData;
 import krawlercommon.items.ItemGenerator;
+import krawlercommon.items.ItemLocationData;
 import krawlercommon.map.Obstacle;
 import krawlercommon.map.ObstacleType;
 import krawlercommon.map.RoomType;
@@ -18,9 +18,9 @@ import java.util.Random;
 
 public class NormalRoomBuilder extends RoomBuilder {
 
-    private Map<Integer, Pair> wallPrefabs;
     private final int MAX_WALL_COORD = 300;
     private final int MIN_WALL_COORD = 100;
+    private Map<Integer, Pair> wallPrefabs;
     private Random rand = new Random();
 
     public NormalRoomBuilder() {

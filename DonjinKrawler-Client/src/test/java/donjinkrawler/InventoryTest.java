@@ -21,14 +21,14 @@ public class InventoryTest {
     @Test
     public void testAddWeapon() {
         Inventory inventory = new Inventory();
-        inventory.addWeapon(new Weapon(new WeaponData(1,2,3), new CommonTier(), 15, 20));
+        inventory.addWeapon(new Weapon(new WeaponData(1, 2, 3), new CommonTier(), 15, 20));
         Assertions.assertTrue(true);
     }
 
     @Test
     public void testAddArmor() {
         Inventory inventory = new Inventory();
-        inventory.addArmor(new Armor(new ArmorData(1,2,3), new CommonTier(), 15, 20, 25));
+        inventory.addArmor(new Armor(new ArmorData(1, 2, 3), new CommonTier(), 15, 20, 25));
         Assertions.assertTrue(true);
     }
 

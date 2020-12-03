@@ -3,14 +3,6 @@ package krawlercommon.items;
 import java.util.Random;
 
 public class ItemGenerator {
-    private enum ItemType {
-        ARMOR,
-        DMGPOT,
-        HPPOT,
-        SPDPOT,
-        WEAPON
-    }
-
     public static ItemLocationData generateRandomItem(int id) {
         Random rand = new Random();
         return generateRandomItem(id, rand.nextInt(300) + 30, rand.nextInt(300) + 30);
@@ -48,5 +40,13 @@ public class ItemGenerator {
         } else {
             return new SpeedPotionData(id, x, y);
         }
+    }
+
+    private enum ItemType {
+        ARMOR,
+        DMGPOT,
+        HPPOT,
+        SPDPOT,
+        WEAPON
     }
 }

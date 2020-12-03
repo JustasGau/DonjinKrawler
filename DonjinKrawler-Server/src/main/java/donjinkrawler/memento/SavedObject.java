@@ -5,7 +5,7 @@ import krawlercommon.map.RoomData;
 import java.util.HashMap;
 
 public class SavedObject {
-    HashMap<Integer, RoomData>  rooms;
+    HashMap<Integer, RoomData> rooms;
     int currentRoom;
     String direction;
 

@@ -2,7 +2,7 @@ package donjinkrawler.adapter.state;
 
 import donjinkrawler.adapter.AudioPlayer;
 
-public class ReadyState extends State{
+public class ReadyState extends State {
     public ReadyState(AudioPlayer player) {
         super(player);
     }

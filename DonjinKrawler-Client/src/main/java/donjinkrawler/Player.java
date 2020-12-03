@@ -35,6 +35,8 @@ import static donjinkrawler.Game.shells;
 
 public class Player implements Subject {
     private final PlayerData data;
+    private final Inventory inventory;
+    private final MusicMaker musicMaker;
     int obstacleCollisionCount = 0;
     private int dx;
     private int dy;
@@ -52,8 +54,6 @@ public class Player implements Subject {
     private Boolean attack = false;
     private Boolean canAttack = false;
     private int attackTimer = 0;
-    private final Inventory inventory;
-    private final MusicMaker musicMaker;
     private RawBonus armorBonus = null;
     private RawBonus weaponBonus = null;
     private ItemVisitor itemVisitor;
@@ -215,7 +215,7 @@ public class Player implements Subject {
         if (obstacleCollisionCount % 25 == 0) {
             commander.execute(new DamageCommand(this, health));
             obstacleCollisionCount = 0;
-            audioPlayer.play("wav", "hurt.wav");
+            audioPlayer.play("wav", "hurt.wav", false);
             if (data.getHealth() < 50) {
                 notifyObservers();
                 setHasNotifiedObservers(true);
@@ -364,6 +364,10 @@ public class Player implements Subject {
         return this.attackTimer;
     }
 
+    public void setAttackTimer(int timer) {
+        this.attackTimer = timer;
+    }
+
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
@@ -507,7 +511,7 @@ public class Player implements Subject {
         this.attack = b;
     }
 
-    public void setAttackTimer(int timer) {
-        this.attackTimer = timer;
+    public MusicMaker getMusic() {
+        return this.musicMaker;
     }
 }

@@ -34,7 +34,6 @@ public class GameMapGeneratorTest {
     }
 
 
-
     private boolean areRoomsLoopingNew(List<String> stringList) {
         for (int i = 0; i < stringList.size(); i++) {
             if (stringList.get(i).charAt(i) == '1') {

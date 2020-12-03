@@ -196,9 +196,9 @@ public class Game extends JPanel implements ActionListener {
             player.setHasNotifiedObservers(false);
             newRoomObj.getRoomData().getEnemies().forEach(player::attachObserver);
             if (newRoom.getRoomType().equals(RoomType.BOSS)) {
-                musicMaker.playBossRoomMusic();
+                player.getMusic().playBossRoomMusic();
             } else if (newRoom.getRoomType().equals(RoomType.ITEM)) {
-                musicMaker.playItemRoomMusic();
+                player.getMusic().playItemRoomMusic();
             }
         } else {
             newRoomObj = new Room(newRoom);

@@ -10,13 +10,13 @@ public interface AbstractShellInterface {
 
     int getX();
 
-    int getY();
-
-    String getName();
-
     void setX(int x);
 
+    int getY();
+
     void setY(int y);
+
+    String getName();
 
     Image getImage();
 
@@ -30,9 +30,9 @@ public interface AbstractShellInterface {
 
     double getHealth();
 
-    void damage(double damage);
-
     void setHealth(double val);
+
+    void damage(double damage);
 
     Image getAttackImage();
 

@@ -7,6 +7,7 @@ import donjinkrawler.logging.LoggerSingleton;
 import donjinkrawler.memento.History;
 import donjinkrawler.memento.Memento;
 import donjinkrawler.memento.SavedObject;
+import donjinkrawler.serverpacketcontrol.PacketControlChain;
 import donjinkrawler.proxy.BaseListener;
 import donjinkrawler.proxy.ListenerProxy;
 import krawlercommon.ConnectionManager;
@@ -53,11 +54,15 @@ public class GameServer {
         kryoServer.start();
         kryoServer.bind(KRYO_TCP_PORT, KRYO_UDP_PORT);
         RegistrationManager.registerKryo(kryoServer.getKryo());
+
+        PacketControlChain pcu = new PacketControlChain();
+        GameServer gameServer = this;
+
         if (!useProxyListener) {
             kryoServer.addListener(new BaseListener() {
 
                 public void received(Connection connection, Object object) {
-                    handleReceivedPacket(connection, object);
+                    pcu.handle(gameServer, object, connection);
                 }
 
                 public void disconnected(Connection connection) {
@@ -68,7 +73,7 @@ public class GameServer {
         } else {
             kryoServer.addListener(new ListenerProxy() {
                 public void received(Connection connection, Object object) {
-                    handleReceivedPacket(connection, object);
+                    pcu.handle(gameServer, object, connection);
                 }
 
                 public void disconnected(Connection connection) {
@@ -125,58 +130,11 @@ public class GameServer {
         }
     }
 
-    private void handleReceivedPacket(Connection connection, Object object) {
-        if (object instanceof LoginPacket) {
-            handleLogin(connection, (LoginPacket) object);
-        } else if (object instanceof MessagePacket) {
-            handleMessage(connection, (MessagePacket) object);
-        } else if (object instanceof MoveCharacter) {
-            handlePosUpdate(connection, object);
-        } else if (object instanceof RoomPacket) {
-            handleRoomChange(connection, (RoomPacket) object);
-        } else if (object instanceof ChangeEnemyStrategyPacket) {
-            handleEnemyStrategyChange((ChangeEnemyStrategyPacket) object);
-        } else if (object instanceof CharacterAttackPacket) {
-            handlePlayerAttack(connection, (CharacterAttackPacket) object);
-        } else if (object instanceof DamageEnemyPacket) {
-            handlePlayerDamageEnemy((DamageEnemyPacket) object);
-        }
-    }
-
     private void initMap() {
         GameMapGenerator generator = new GameMapGenerator(mapSize);
         List<String> gameMapString = generator.generate();
 
         rooms = generator.generateRoomsFromString(gameMapString);
-    }
-
-    private void handleLogin(Connection connection, LoginPacket object) {
-        createNewPlayer(connection, object);
-        if (!timerAdded) {
-            new Timer();
-            timerAdded = true;
-        }
-    }
-
-    private void handleMessage(Connection connection, MessagePacket messagePacket) {
-        String playerName = ConnectionManager.getInstance().getPlayerFromConnection(connection).getName();
-        messagePacket.message = messagePacket.message + " " + playerName;
-        kryoServer.sendToAllExceptUDP(connection.getID(), messagePacket);
-    }
-
-    private void handlePosUpdate(Connection connection, Object object) {
-        MoveCharacter packet = (MoveCharacter) object;
-        PlayerData player = ConnectionManager.getInstance().getPlayerFromConnection(connection);
-        player.setX(packet.x);
-        player.setY(packet.y);
-        kryoServer.sendToAllExceptTCP(connection.getID(), object);
-    }
-
-    private void handleRoomChange(Connection connection, RoomPacket roomPacket) {
-        currentRoom = roomPacket.id;
-        currentDirection = roomPacket.direction;
-        sendEnemies(true);
-        kryoServer.sendToAllExceptUDP(connection.getID(), roomPacket);
     }
 
     private void handleDisconnect(Connection connection) {
@@ -192,32 +150,7 @@ public class GameServer {
         }
     }
 
-    private void handleEnemyStrategyChange(ChangeEnemyStrategyPacket packet) {
-        for (Enemy enemy : rooms.get(currentRoom).getEnemies()) {
-            if (enemy != null && enemy.getID() == packet.id) {
-                enemy.setCurrentStrategy(packet.strategy);
-                break;
-            }
-        }
-    }
-
-    private void handlePlayerAttack(Connection connection, CharacterAttackPacket packet) {
-        kryoServer.sendToAllExceptUDP(connection.getID(), packet);
-    }
-
-    private void handlePlayerDamageEnemy(DamageEnemyPacket packet) {
-        for (Enemy enemy : rooms.get(currentRoom).getEnemies()) {
-            if (enemy != null && enemy.getID() == packet.id) {
-                enemy.damage(packet.damage);
-                if (enemy.getHealth() < 0) {
-                    rooms.get(currentRoom).getEnemies().remove(enemy);
-                }
-                break;
-            }
-        }
-    }
-
-    private void createNewPlayer(Connection connection, LoginPacket loginPacket) {
+    public void createNewPlayer(Connection connection, LoginPacket loginPacket) {
         // TODO: maybe add common config for starting position?
         if (!isValidName(loginPacket.name)) {
             loginPacket.name = loginPacket.name + rand.nextInt(69420);
@@ -281,7 +214,7 @@ public class GameServer {
         }
     }
 
-    private void sendEnemies(Boolean create) {
+    public void sendEnemies(Boolean create) {
         EnemyPacket enemyPacket = new EnemyPacket();
         if (create) {
             enemyPacket.setCreate();
@@ -307,6 +240,29 @@ public class GameServer {
                 }
             }
         }
+    }
+
+    public void addTimer() {
+        if (!timerAdded) {
+            new Timer();
+            timerAdded = true;
+        }
+    }
+
+    public com.esotericsoftware.kryonet.Server getKryo() {
+        return this.kryoServer;
+    }
+
+    public void setCurrentDirection(String direction) {
+        this.currentDirection = direction;
+    }
+
+    public RoomData getCurrentRoom() {
+        return this.rooms.get(this.currentRoom);
+    }
+
+    public void setCurrentRoom(int room) {
+        this.currentRoom = room;
     }
 
     public class Timer extends Thread {
