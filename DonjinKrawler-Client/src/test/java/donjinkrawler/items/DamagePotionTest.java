@@ -1,6 +1,5 @@
 package donjinkrawler.items;
 
-import donjinkrawler.items.DamagePotion;
 import krawlercommon.items.DamagePotionData;
 import org.junit.jupiter.api.Test;
 

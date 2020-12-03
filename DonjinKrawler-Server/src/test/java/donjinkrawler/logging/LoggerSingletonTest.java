@@ -17,9 +17,9 @@ import static org.mockito.Mockito.when;
 
 public class LoggerSingletonTest {
 
-    static ConfigSingleton configSingleton;
     private static final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private static final PrintStream originalOut = System.out;
+    static ConfigSingleton configSingleton;
 
     @BeforeAll
     static void setUp() {

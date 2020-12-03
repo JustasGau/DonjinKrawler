@@ -11,11 +11,10 @@ import krawlercommon.map.RoomType;
 import java.util.*;
 
 public class GameMapGenerator {
+    private final int walkers = 2;
     private LoggerSingleton logger = LoggerSingleton.getInstance();
-
     private int size = 10;
     private final int walkerSteps = size * 4;
-    private final int walkers = 2;
 
     public GameMapGenerator(int size) {
         this.size = size;

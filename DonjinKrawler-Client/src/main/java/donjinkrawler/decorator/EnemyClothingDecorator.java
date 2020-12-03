@@ -26,23 +26,23 @@ public abstract class EnemyClothingDecorator implements AbstractShellInterface {
     }
 
     @Override
-    public int getY() {
-        return wrappee.getY();
-    }
-
-    @Override
-    public String getName() {
-        return wrappee.getName();
-    }
-
-    @Override
     public void setX(int x) {
         wrappee.setX(x);
     }
 
     @Override
+    public int getY() {
+        return wrappee.getY();
+    }
+
+    @Override
     public void setY(int y) {
         wrappee.setY(y);
+    }
+
+    @Override
+    public String getName() {
+        return wrappee.getName();
     }
 
     @Override
@@ -76,13 +76,13 @@ public abstract class EnemyClothingDecorator implements AbstractShellInterface {
     }
 
     @Override
-    public void damage(double damage) {
-        wrappee.damage(damage);
+    public void setHealth(double val) {
+        wrappee.setHealth(val);
     }
 
     @Override
-    public void setHealth(double val) {
-        wrappee.setHealth(val);
+    public void damage(double damage) {
+        wrappee.damage(damage);
     }
 
     @Override

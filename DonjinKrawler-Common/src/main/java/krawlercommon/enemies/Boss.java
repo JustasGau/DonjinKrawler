@@ -1,6 +1,9 @@
 package krawlercommon.enemies;
 
-import krawlercommon.strategies.*;
+import krawlercommon.strategies.Attack;
+import krawlercommon.strategies.EnemyStrategy;
+import krawlercommon.strategies.MoveTowardPlayer;
+import krawlercommon.strategies.RangeAttack;
 
 import java.util.Map;
 

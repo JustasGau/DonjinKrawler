@@ -1,7 +1,7 @@
 package donjinkrawler.items;
 
 import donjinkrawler.items.tiers.CommonTier;
-import krawlercommon.items.*;
+import krawlercommon.items.ArmorData;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

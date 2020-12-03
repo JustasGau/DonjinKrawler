@@ -13,7 +13,10 @@ import krawlercommon.map.*;
 import krawlercommon.packets.*;
 import krawlercommon.strategies.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class RegistrationManager {

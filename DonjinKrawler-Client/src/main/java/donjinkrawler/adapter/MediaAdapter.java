@@ -17,13 +17,14 @@ public class MediaAdapter implements MediaPlayer {
     }
 
     @Override
-    public void play(String audioType, String fileName) {
+    public void play(String audioType, String fileName, boolean repeat) {
+
         switch (audioType) {
             case "wav":
-                advancedMusicPlayer.playWav(fileName);
+                advancedMusicPlayer.playWav(fileName, repeat);
                 break;
             case "mp3":
-                advancedMusicPlayer.playMp3(fileName);
+                advancedMusicPlayer.playMp3(fileName, repeat);
                 break;
             default:
                 throw new IllegalStateException("Unsupported audio type");

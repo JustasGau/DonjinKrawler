@@ -14,9 +14,9 @@ public class InventoryFrame extends JFrame {
     private static final int INVENTORY_HEIGHT = 420;
 
     private final JList<String> inventoryList;
+    JTextArea infoField;
     private Weapon weapon;
     private Armor armor;
-    JTextArea infoField;
 
     public InventoryFrame() {
         this.setup();

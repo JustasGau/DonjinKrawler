@@ -4,10 +4,10 @@ import krawlercommon.enemies.Enemy;
 
 public class RangeAttack implements EnemyStrategy {
 
+    Enemy enemy;
+
     public RangeAttack() {
     }
-
-    Enemy enemy;
 
     @Override
     public String getStrategy() {

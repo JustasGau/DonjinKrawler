@@ -1,7 +1,6 @@
 package donjinkrawler.items;
 
 import donjinkrawler.items.tiers.CommonTier;
-import krawlercommon.items.ArmorData;
 import krawlercommon.items.WeaponData;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +32,7 @@ public class WeaponTest {
     public void testDescription() {
         WeaponData data = new WeaponData(1, 2, 15);
         Weapon original = new Weapon(data, new CommonTier(), 15, 20);
-        assertEquals( "Tier: " + original.tier.getName() + "\n"
+        assertEquals("Tier: " + original.tier.getName() + "\n"
                 + "Damage: " + original.getDamage() + "\n"
                 + "Speed: " + original.getSpeed(), original.getDescription());
     }

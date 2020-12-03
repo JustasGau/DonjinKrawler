@@ -161,16 +161,16 @@ public abstract class Enemy extends EnemyTemplate implements Observer, KrawlerCl
         this.health = health;
     }
 
+    @Override
+    public Enemy clone() throws CloneNotSupportedException {
+        return (Enemy) super.clone();
+    }
+
     public enum Phases {
         RANDOM,
         TOWARDS,
         AWAY,
         ATTACK,
         RANGED
-    }
-
-    @Override
-    public Enemy clone() throws CloneNotSupportedException {
-        return (Enemy) super.clone();
     }
 }

@@ -14,7 +14,7 @@ public class SingletonThreadSafetyTest {
     private static class LoggerThread extends Thread {
 
         private final String name;
-        
+
         private LoggerThread(String name) {
             this.name = name;
         }

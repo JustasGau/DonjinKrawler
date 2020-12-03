@@ -1,14 +1,13 @@
 package donjinkrawler.facade;
 
 import donjinkrawler.adapter.AudioPlayer;
+import donjinkrawler.adapter.state.PlayingState;
 
 public class MusicMaker {
 
     public static Boolean doNotPlayMusic = false;
 
     private final AudioPlayer player;
-    private final Music bossRoomMusic;
-    private final Music itemRoomMusic;
 
     public MusicMaker() {
         this.player = new AudioPlayer();
@@ -17,29 +16,28 @@ public class MusicMaker {
         player.addTrack("wav", "background-music-2.wav");
         player.addTrack("wav", "background-music-3.wav");
         player.addTrack("wav", "background-music-4.wav");
-
-        bossRoomMusic = new BossRoomMusic();
-        itemRoomMusic = new ItemRoomMusic();
     }
 
     public void playBossRoomMusic() {
-        if(doNotPlayMusic) {
+        if (doNotPlayMusic) {
             return;
         }
         this.player.stop();
-        bossRoomMusic.play();
+        this.player.play("wav", "boss-fight.wav", true);
+        this.player.changeState(new PlayingState(this.player));
     }
 
     public void playItemRoomMusic() {
-        if(doNotPlayMusic) {
+        if (doNotPlayMusic) {
             return;
         }
         this.player.stop();
-        itemRoomMusic.play();
+        this.player.play("wav", "item-room.wav", true);
+        this.player.changeState(new PlayingState(this.player));
     }
 
     public void playBackgroundMusic() {
-        if(doNotPlayMusic) {
+        if (doNotPlayMusic) {
             return;
         }
         this.player.getState().onPlay();

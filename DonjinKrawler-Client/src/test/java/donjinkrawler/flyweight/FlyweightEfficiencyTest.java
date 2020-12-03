@@ -12,7 +12,7 @@ public class FlyweightEfficiencyTest {
     static int ENEMIES_TO_DRAW = 1000000;
     static int TYPE_NUM = 7;
 
-// Guestimated sizes of the object properties
+    // Guestimated sizes of the object properties
 //    int x - 4
 //    int y - 4
 //    double health - 8
@@ -20,18 +20,18 @@ public class FlyweightEfficiencyTest {
 //    Name is in flyweight
 //    String name - 24
     public static void main(String[] args) throws InterruptedException {
-        int cycle = (ENEMIES_TO_DRAW/TYPE_NUM);
+        int cycle = (ENEMIES_TO_DRAW / TYPE_NUM);
         System.out.println("Cycle: " + cycle);
         List<AbstractShellInterface> shells = new ArrayList<>();
         long start = System.nanoTime();
         for (int i = 0; i < cycle; i++) {
-            shells.add(getEnemyObject("Small-Zombie",  0, 0, 0));
-            shells.add(getEnemyObject("Big-Zombie",  0, 0, 0));
-            shells.add(getEnemyObject("Small-Skeleton",  0, 0, 0));
-            shells.add(getEnemyObject("Big-Skeleton",  0, 0, 0));
-            shells.add(getEnemyObject("Small-Chicken",  0, 0, 0));
-            shells.add(getEnemyObject("Big-Chicken",  0, 0, 0));
-            shells.add(getEnemyObject("Boss",  0, 0, 0));
+            shells.add(getEnemyObject("Small-Zombie", 0, 0, 0));
+            shells.add(getEnemyObject("Big-Zombie", 0, 0, 0));
+            shells.add(getEnemyObject("Small-Skeleton", 0, 0, 0));
+            shells.add(getEnemyObject("Big-Skeleton", 0, 0, 0));
+            shells.add(getEnemyObject("Small-Chicken", 0, 0, 0));
+            shells.add(getEnemyObject("Big-Chicken", 0, 0, 0));
+            shells.add(getEnemyObject("Boss", 0, 0, 0));
         }
         long end = System.nanoTime();
         long elapsedTime = end - start;
@@ -42,13 +42,13 @@ public class FlyweightEfficiencyTest {
         shells = new ArrayList<>();
         start = System.nanoTime();
         for (int i = 0; i < cycle; i++) {
-            shells.add(new EnemyShellForTest("Small-Zombie",  0, 0, 0));
-            shells.add(new EnemyShellForTest("Big-Zombie",  0, 0, 0));
-            shells.add(new EnemyShellForTest("Small-Skeleton",  0, 0, 0));
-            shells.add(new EnemyShellForTest("Big-Skeleton",  0, 0, 0));
-            shells.add(new EnemyShellForTest("Small-Chicken",  0, 0, 0));
-            shells.add(new EnemyShellForTest("Big-Chicken",  0, 0, 0));
-            shells.add(new EnemyShellForTest("Boss",  0, 0, 0));
+            shells.add(new EnemyShellForTest("Small-Zombie", 0, 0, 0));
+            shells.add(new EnemyShellForTest("Big-Zombie", 0, 0, 0));
+            shells.add(new EnemyShellForTest("Small-Skeleton", 0, 0, 0));
+            shells.add(new EnemyShellForTest("Big-Skeleton", 0, 0, 0));
+            shells.add(new EnemyShellForTest("Small-Chicken", 0, 0, 0));
+            shells.add(new EnemyShellForTest("Big-Chicken", 0, 0, 0));
+            shells.add(new EnemyShellForTest("Boss", 0, 0, 0));
         }
         end = System.nanoTime();
         elapsedTime = end - start;

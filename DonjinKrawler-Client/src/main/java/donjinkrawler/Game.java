@@ -5,8 +5,8 @@ import donjinkrawler.decorator.MaracasEnemy;
 import donjinkrawler.decorator.PonchosEnemy;
 import donjinkrawler.decorator.SombrerosEnemy;
 import donjinkrawler.facade.MusicMaker;
-import donjinkrawler.flyweight.EnemySelector;
 import donjinkrawler.flyweight.EnemyFlyweight;
+import donjinkrawler.flyweight.EnemySelector;
 import donjinkrawler.logging.LoggerSingleton;
 import donjinkrawler.map.GameMap;
 import donjinkrawler.map.Room;
@@ -17,29 +17,32 @@ import krawlercommon.map.RoomData;
 import krawlercommon.map.RoomType;
 import krawlercommon.packets.MoveCharacter;
 import krawlercommon.packets.RoomPacket;
-import krawlercommon.strategies.*;
+import krawlercommon.strategies.EnemyStrategy;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import javax.swing.*;
 import javax.swing.Timer;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Game extends JPanel implements ActionListener {
-    LoggerSingleton logger = LoggerSingleton.getInstance();
+    public static Map<Integer, AbstractShellInterface> shells = new ConcurrentHashMap<>();
     static com.esotericsoftware.kryonet.Client client;
-    private final Timer timer;
     private static Player player = null;
-    private GameMap gameMap;
-    private final int DELAY = 10;
     private static int TARGET_FPS = 60;
     private static long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
+    private final Timer timer;
+    private final int DELAY = 10;
     private final Random random = new Random();
-    public static Map<Integer, AbstractShellInterface> shells = new ConcurrentHashMap<>();
-    private MusicMaker musicMaker = new MusicMaker();
     private final JLabel label;
+    LoggerSingleton logger = LoggerSingleton.getInstance();
+    private GameMap gameMap;
+    private MusicMaker musicMaker = new MusicMaker();
 
     public Game(com.esotericsoftware.kryonet.Client client,
                 JLabel label,
@@ -71,6 +74,14 @@ public class Game extends JPanel implements ActionListener {
         }
     }
 
+    private static void sendPositionUpdate() {
+        MoveCharacter msg = new MoveCharacter();
+        msg.id = player.getId();
+        msg.x = player.getX();
+        msg.y = player.getY();
+        client.sendTCP(msg);
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -92,7 +103,7 @@ public class Game extends JPanel implements ActionListener {
         }
     }
 
-    public void updateMap(HashMap<Integer, RoomData> rooms){
+    public void updateMap(HashMap<Integer, RoomData> rooms) {
         this.gameMap = new GameMap(new Room(rooms.get(0)));
     }
 
@@ -124,34 +135,6 @@ public class Game extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         gameUpdate();
-    }
-
-    public static class GameLoop extends Thread {
-        long now;
-        long updateTime;
-        long wait;
-
-        public GameLoop() {
-            start();
-        }
-
-        public void run() {
-            //Main loop to space out updates and entity checking
-            while (true) {
-                now = System.nanoTime();
-                player.incrementTimer();
-                sendPositionUpdate();
-
-                updateTime = System.nanoTime() - now;
-                wait = (OPTIMAL_TIME - updateTime) / 1000000;
-
-                try {
-                    Thread.sleep(wait);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     private void gameUpdate() {
@@ -212,22 +195,14 @@ public class Game extends JPanel implements ActionListener {
             player.setHasNotifiedObservers(false);
             newRoomObj.getRoomData().getEnemies().forEach(player::attachObserver);
             if (newRoom.getRoomType().equals(RoomType.BOSS)) {
-                musicMaker.playBossRoomMusic();
+                player.getMusic().playBossRoomMusic();
             } else if (newRoom.getRoomType().equals(RoomType.ITEM)) {
-                musicMaker.playItemRoomMusic();
+                player.getMusic().playItemRoomMusic();
             }
         } else {
             newRoomObj = new Room(newRoom);
         }
         return newRoomObj;
-    }
-
-    private static void sendPositionUpdate() {
-        MoveCharacter msg = new MoveCharacter();
-        msg.id = player.getId();
-        msg.x = player.getX();
-        msg.y = player.getY();
-        client.sendTCP(msg);
     }
 
     private void movePlayerShells(int x, int y) {
@@ -244,18 +219,6 @@ public class Game extends JPanel implements ActionListener {
         playerShell.setX(player.getX());
         playerShell.setY(player.getY());
         shells.put(player.getId(), playerShell);
-    }
-
-    private class TAdapter extends KeyAdapter {
-        @Override
-        public void keyReleased(KeyEvent e) {
-            player.keyReleased(e);
-        }
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-            player.keyPressed(e);
-        }
     }
 
     public void changeRoom(RoomPacket roomPacket) {
@@ -382,6 +345,46 @@ public class Game extends JPanel implements ActionListener {
 
     public Room getCurrentRoom() {
         return gameMap.getCurrentRoom();
+    }
+
+    public static class GameLoop extends Thread {
+        long now;
+        long updateTime;
+        long wait;
+
+        public GameLoop() {
+            start();
+        }
+
+        public void run() {
+            //Main loop to space out updates and entity checking
+            while (true) {
+                now = System.nanoTime();
+                player.incrementTimer();
+                sendPositionUpdate();
+
+                updateTime = System.nanoTime() - now;
+                wait = (OPTIMAL_TIME - updateTime) / 1000000;
+
+                try {
+                    Thread.sleep(wait);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private class TAdapter extends KeyAdapter {
+        @Override
+        public void keyReleased(KeyEvent e) {
+            player.keyReleased(e);
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            player.keyPressed(e);
+        }
     }
 
 }
