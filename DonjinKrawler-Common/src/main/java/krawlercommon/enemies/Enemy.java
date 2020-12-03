@@ -16,7 +16,7 @@ public abstract class Enemy extends EnemyTemplate implements Observer, KrawlerCl
     Random random = new Random();
     public transient Map<Phases, EnemyStrategy> strategies;
     transient EnemyStrategy currentStrategy;
-    public int updateIntervalSeconds;
+    protected int updateIntervalSeconds;
     int tick = 0;
     String info;
     private String name;
