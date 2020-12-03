@@ -5,6 +5,9 @@ import javax.sound.sampled.Clip;
 import java.io.File;
 
 public class WavPlayer implements AdvancedMediaPlayer {
+
+    private Clip clip;
+
     @Override
     public void playMp3(String fileName) {}
 
@@ -12,11 +15,15 @@ public class WavPlayer implements AdvancedMediaPlayer {
     public void playWav(String fileName) {
         try {
             File audioFile = new File(ClassLoader.getSystemResource("sounds/".concat(fileName)).getFile());
-            Clip clip = AudioSystem.getClip();
+            this.clip = AudioSystem.getClip();
             clip.open(AudioSystem.getAudioInputStream(audioFile));
             clip.start();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void stop() {
+        this.clip.stop();
     }
 }

@@ -1,6 +1,7 @@
 package donjinkrawler;
 
 import com.esotericsoftware.kryonet.Connection;
+import donjinkrawler.proxy.ListenerProxy;
 import krawlercommon.ConnectionManager;
 import krawlercommon.PlayerData;
 import krawlercommon.packets.ServerFullPacket;
