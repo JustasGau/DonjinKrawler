@@ -347,6 +347,10 @@ public class Game extends JPanel implements ActionListener {
         return gameMap.getCurrentRoom();
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
     public static class GameLoop extends Thread {
         long now;
         long updateTime;

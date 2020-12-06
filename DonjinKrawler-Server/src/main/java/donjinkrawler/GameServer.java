@@ -175,7 +175,7 @@ public class GameServer {
 
             @Override
             public void receive(RoomMate from, String message) {
-                System.out.println(from.getUsername() + " >>>> " + message); // TODO: Send packet
+                kryoServer.sendToTCP(connection.getID(), new ChatMessagePacket(message, from.getUsername()));
             }
         });
 

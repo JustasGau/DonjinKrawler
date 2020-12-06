@@ -492,4 +492,8 @@ public class Player implements Subject {
     public MusicMaker getMusic() {
         return this.musicMaker;
     }
+
+    public Chat getChat() {
+        return this.chat;
+    }
 }
