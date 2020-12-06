@@ -36,6 +36,7 @@ public class RegistrationManager {
         kryo.register(CharacterAttackPacket.class);
         kryo.register(DamageEnemyPacket.class);
         kryo.register(ServerFullPacket.class);
+        kryo.register(ChatMessagePacket.class);
 
         // DonjinKrawler classes
         kryo.register(PlayerData.class);

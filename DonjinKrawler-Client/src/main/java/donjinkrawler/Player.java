@@ -64,7 +64,7 @@ public class Player implements Subject {
         this.observerCollection = new ObserverCollection();
         this.inventory = new Inventory();
         this.musicMaker = new MusicMaker();
-        this.chat = new Chat(this.getName());
+        this.chat = new Chat(this.client, this.getName(), this.getId());
 
         loadImage();
     }
