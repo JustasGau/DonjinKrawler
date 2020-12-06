@@ -12,6 +12,7 @@ import krawlercommon.packets.LoginPacket;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -22,7 +23,7 @@ public class Console {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         CommandParser commandParser = new CommandParser();
-        Client client = getClient();
+        Client client = getClient(args);
         System.out.println("Console started. Waiting for commands");
         System.out.println("Type 'help' to learn more");
 
@@ -36,17 +37,30 @@ public class Console {
         }
     }
 
-    public static Client getClient() {
+    public static String getAddress(String[] args) {
+        if (args.length > 0) {
+            return args[0];
+        } else {
+            try {
+                return InetAddress.getByName("localhost").getHostAddress();
+            } catch (UnknownHostException ex) {
+                return "localhost";
+            }
+        }
+    }
+
+    public static Client getClient(String[] args) {
         Client client = new Client(65536, 65536);
         client.getKryo().setReferences(true);
         RegistrationManager.registerKryo(client.getKryo());
         client.start();
+
         try {
-            client.connect(5000, InetAddress.getByName("localhost").getHostAddress(), SERVER_TCP_PORT, SERVER_UDP_PORT);
+            client.connect(5000, getAddress(args), SERVER_TCP_PORT, SERVER_UDP_PORT);
             System.out.println("Console successfully connected to server");
 
             LoginPacket loginPacket = new LoginPacket();
-            loginPacket.name = "Admin";
+            loginPacket.name = "Blogasis Policininkas";
             client.sendTCP(loginPacket);
 
             client.addListener(new Listener() {

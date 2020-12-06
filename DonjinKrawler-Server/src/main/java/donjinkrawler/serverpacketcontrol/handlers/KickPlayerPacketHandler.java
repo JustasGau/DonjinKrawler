@@ -5,6 +5,8 @@ import krawlercommon.ConnectionManager;
 import krawlercommon.packets.DisconnectPacket;
 import krawlercommon.packets.KickPlayerPacket;
 
+import com.esotericsoftware.kryonet.Connection;
+
 public class KickPlayerPacketHandler extends PacketHandler {
     @Override
     public boolean handle(Request request) {
@@ -15,8 +17,18 @@ public class KickPlayerPacketHandler extends PacketHandler {
         DisconnectPacket disconnectPacket = new DisconnectPacket();
         disconnectPacket.id = ((KickPlayerPacket) request.getObject()).id;
 
-        request.getGameServer().getKryo().sendToAllExceptTCP(request.getConnection().getID(), disconnectPacket);
-        ConnectionManager.getInstance().removeConnectionById(disconnectPacket.id);
+        Integer playerConnectionId = ConnectionManager.getInstance().getConnectionIdByPlayerId(disconnectPacket.id);
+        Connection[] allConnections = request.getGameServer().getKryo().getConnections();
+
+        for (Connection connection : allConnections) {
+            if (connection.getID() == playerConnectionId) {
+                connection.close();
+                break;
+            }
+        }
+
+        request.getGameServer().getKryo().sendToAllExceptTCP(playerConnectionId, disconnectPacket);
+        ConnectionManager.getInstance().removeConnectionById(playerConnectionId);
 
         return true;
     }
