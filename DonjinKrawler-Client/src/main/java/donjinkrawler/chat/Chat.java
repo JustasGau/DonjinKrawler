@@ -60,6 +60,8 @@ public class Chat extends JFrame {
                 messageBox.setText("");
             }
         });
+
+        this.getRootPane().setDefaultButton(sendMessage);
     }
 
     public void open() {
