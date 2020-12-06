@@ -493,7 +493,8 @@ public class Player implements Subject {
         return this.musicMaker;
     }
 
-    public Chat getChat() {
-        return this.chat;
+    public void receiveMessage(String from, String message) {
+        audioPlayer.play("wav", "message.wav", false);
+        this.chat.addMessage(from, message);
     }
 }

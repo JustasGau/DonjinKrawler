@@ -12,7 +12,7 @@ public class ChatMessagePacketHandler extends PacketHandler {
         }
 
         ChatMessagePacket packet = (ChatMessagePacket) request.getObject();
-        request.getGame().getPlayer().getChat().addMessage(packet.from, packet.message);
+        request.getGame().getPlayer().receiveMessage(packet.from, packet.message);
 
         return true;
     }
