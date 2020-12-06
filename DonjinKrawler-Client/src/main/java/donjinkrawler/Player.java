@@ -58,13 +58,14 @@ public class Player implements Subject {
     private int attackTimer = 0;
 
     public Player(PlayerData playerData, Client client) {
+        data = playerData;
+
         this.client = client;
         this.observerCollection = new ObserverCollection();
         this.inventory = new Inventory();
         this.musicMaker = new MusicMaker();
-        this.chat = new Chat();
+        this.chat = new Chat(this.getName());
 
-        data = playerData;
         loadImage();
     }
 
