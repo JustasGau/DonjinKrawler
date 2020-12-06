@@ -2,6 +2,7 @@ package donjinkrawler;
 
 import com.esotericsoftware.kryonet.Client;
 import donjinkrawler.adapter.AudioPlayer;
+import donjinkrawler.chat.Chat;
 import donjinkrawler.command.DamageCommand;
 import donjinkrawler.command.MoveCommand;
 import donjinkrawler.command.PlayerCommander;
@@ -29,7 +30,6 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static donjinkrawler.Game.shells;
 
@@ -37,6 +37,7 @@ public class Player implements Subject {
     private final PlayerData data;
     private final Inventory inventory;
     private final MusicMaker musicMaker;
+    private final Chat chat;
     int obstacleCollisionCount = 0;
     private int dx;
     private int dy;
@@ -61,6 +62,7 @@ public class Player implements Subject {
         this.observerCollection = new ObserverCollection();
         this.inventory = new Inventory();
         this.musicMaker = new MusicMaker();
+        this.chat = new Chat();
 
         data = playerData;
         loadImage();
@@ -388,6 +390,10 @@ public class Player implements Subject {
 
         if (key == KeyEvent.VK_SLASH) {
             this.musicMaker.lockPlayer();
+        }
+
+        if (key == KeyEvent.VK_C) {
+            this.chat.open();
         }
 
         if (key == KeyEvent.VK_SPACE) {
