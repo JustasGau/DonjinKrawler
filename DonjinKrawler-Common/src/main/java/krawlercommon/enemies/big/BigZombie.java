@@ -1,9 +1,11 @@
 package krawlercommon.enemies.big;
 
-import krawlercommon.enemies.Enemy;
-import krawlercommon.strategies.EnemyStrategy;
+import krawlercommon.enemies.Zombie;
+import krawlercommon.strategies.*;
 
-public class BigZombie extends Enemy {
+import java.util.Map;
+
+final public class BigZombie extends Zombie {
 
     public BigZombie() {
         this.setName("Big-Zombie");
@@ -19,5 +21,23 @@ public class BigZombie extends Enemy {
     @Override
     public Object deepCopy() throws CloneNotSupportedException {
         return null;
+    }
+
+    public void setInterval() {
+        this.updateIntervalSeconds = 2;
+    }
+
+    public void setStrategies() {
+        this.strategies = Map.of(
+                Phases.AWAY, new MoveAwayFromPlayer(),
+                Phases.RANDOM, new MoveRandomly(),
+                Phases.TOWARDS, new MoveTowardPlayer(),
+                Phases.ATTACK, new Attack()
+        );
+    }
+
+    @Override
+    public void debug() {
+        System.out.println("Big zombie:" + this.getID() + " has been created");
     }
 }

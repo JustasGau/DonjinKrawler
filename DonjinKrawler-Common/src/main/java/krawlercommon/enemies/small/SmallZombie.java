@@ -1,9 +1,11 @@
 package krawlercommon.enemies.small;
 
 import krawlercommon.enemies.Zombie;
-import krawlercommon.strategies.EnemyStrategy;
+import krawlercommon.strategies.*;
 
-public class SmallZombie extends Zombie {
+import java.util.Map;
+
+final public class SmallZombie extends Zombie {
 
     public SmallZombie() {
         this.setName("Small-Zombie");
@@ -19,5 +21,23 @@ public class SmallZombie extends Zombie {
     @Override
     public Object deepCopy() throws CloneNotSupportedException {
         return null;
+    }
+
+    public void setInterval() {
+        this.updateIntervalSeconds = 2;
+    }
+
+    public void setStrategies() {
+        this.strategies = Map.of(
+                Phases.AWAY, new MoveAwayFromPlayer(),
+                Phases.RANDOM, new MoveRandomly(),
+                Phases.TOWARDS, new MoveTowardPlayer(),
+                Phases.ATTACK, new Attack()
+        );
+    }
+
+    @Override
+    public void debug() {
+        System.out.println("Small zombie:" + this.getID() + " has been created");
     }
 }

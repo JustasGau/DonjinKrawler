@@ -18,7 +18,8 @@ public class PacketControlChain {
                 .linkWith(new CharacterAttackPacketHandler())
                 .linkWith(new DamageEnemyPacketHandler())
                 .linkWith(new GetPlayersPacketHandler())
-                .linkWith(new KickPlayerPacketHandler());
+                .linkWith(new KickPlayerPacketHandler())
+                .linkWith(new DamageEnemyPacketHandler());
 
         this.packetHandler = packetHandler;
     }

@@ -11,6 +11,9 @@ import donjinkrawler.items.BaseItem;
 import donjinkrawler.items.Weapon;
 import krawlercommon.PlayerData;
 import krawlercommon.enemies.Enemy;
+import krawlercommon.iterator.Iterator;
+import krawlercommon.iterator.door.DoorCollection;
+import krawlercommon.iterator.observer.ObserverCollection;
 import krawlercommon.map.*;
 import krawlercommon.observer.Observer;
 import krawlercommon.observer.Subject;
@@ -26,6 +29,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static donjinkrawler.Game.shells;
 
@@ -41,7 +45,7 @@ public class Player implements Subject {
     private Image image;
     private Boolean hasChangedPosition = false;
     private Boolean hasNotifiedObservers = false;
-    private ArrayList<Observer> observers;
+    private ObserverCollection observerCollection;
     private Client client;
     private AudioPlayer audioPlayer = new AudioPlayer();
     private PlayerCommander commander = new PlayerCommander();
@@ -54,7 +58,7 @@ public class Player implements Subject {
 
     public Player(PlayerData playerData, Client client) {
         this.client = client;
-        this.observers = new ArrayList<>();
+        this.observerCollection = new ObserverCollection();
         this.inventory = new Inventory();
         this.musicMaker = new MusicMaker();
 
@@ -71,7 +75,7 @@ public class Player implements Subject {
         attackIMG = ii.getImage();
     }
 
-    public Integer move(List<Wall> walls, List<Door> doors, List<Obstacle> obstacles, List<Decoration> decorations,
+    public Integer move(List<Wall> walls, DoorCollection doors, List<Obstacle> obstacles, List<Decoration> decorations,
                         HashMap<Integer, BaseItem> items) {
         if (isCollidingWithObstacle(obstacles)) {
             return null;
@@ -94,8 +98,9 @@ public class Player implements Subject {
         return null;
     }
 
-    private boolean isCollidingWithDoor(List<Door> doors) {
-        for (Door door : doors) {
+    private boolean isCollidingWithDoor(DoorCollection doors) {
+        for (Iterator i = doors.getIterator(); i.hasNext();){
+            Door door = (Door) i.getNext();
             if (isCollidingWith(door)) {
                 if (backwards) {
                     commander.undo();
@@ -440,27 +445,28 @@ public class Player implements Subject {
     }
 
     public ArrayList<Observer> getObservers() {
-        return this.observers;
+        return new ArrayList<>(observerCollection.observers.values());
     }
 
     @Override
     public void attachObserver(Observer observer) {
-        this.observers.add(observer);
+        this.observerCollection.add(observer);
     }
 
     @Override
     public void detachObserver(Observer observer) {
-        this.observers.remove(observer);
+        this.observerCollection.remove(observer);
     }
 
     @Override
     public void detachAllObservers() {
-        this.observers = new ArrayList<>();
+        this.observerCollection = new ObserverCollection();
     }
 
     @Override
     public void notifyObservers() {
-        for (Observer observer : observers) {
+        for (Iterator i = observerCollection.getIterator(); i.hasNext();) {
+            Observer observer = (Observer) i.getNext();
             if (observer != null) {
                 EnemyStrategy enemyStrategy = new MoveTowardPlayer();
                 observer.update(enemyStrategy);
