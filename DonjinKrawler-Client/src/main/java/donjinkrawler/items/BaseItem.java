@@ -35,7 +35,7 @@ public abstract class BaseItem implements KrawlerCloneable {
 
     public abstract String getDescription();
 
-    public abstract void accept(ItemVisitor v);
+    public abstract void accept(ItemVisitor visitor);
 
     @Override
     public BaseItem clone() throws CloneNotSupportedException {
