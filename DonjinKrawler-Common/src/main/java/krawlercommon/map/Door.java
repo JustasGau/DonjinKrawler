@@ -27,8 +27,9 @@ public final class Door {
             InputStream stream = getClass().getResourceAsStream("/door.png");
             ImageIcon ii = new ImageIcon(ImageIO.read(stream));
             doorImage = ii.getImage();
-        } catch (Exception ignored) {
-
+        } catch (Exception e) {
+            System.out.println("Failed loading image");
+            e.printStackTrace();
         }
     }
 
