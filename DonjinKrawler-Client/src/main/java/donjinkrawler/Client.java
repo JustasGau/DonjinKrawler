@@ -16,7 +16,7 @@ import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Client {
+public final class Client {
 
     private static final int screenWidth = 500;
     private static final int screenHeight = 500;

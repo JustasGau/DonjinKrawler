@@ -1,12 +1,17 @@
 package donjinkrawler.flyweight;
 
+import donjinkrawler.logging.LoggerSingleton;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.InputStream;
 
 public class EnemyFlyweight {
+    private LoggerSingleton logger = LoggerSingleton.getInstance();
+
     private String name;
+
     private Image image;
 
     public EnemyFlyweight(String name) {
@@ -19,8 +24,9 @@ public class EnemyFlyweight {
             InputStream stream = getClass().getResourceAsStream("/".concat(this.resolveImageName()));
             ImageIcon ii = new ImageIcon(ImageIO.read(stream));
             image = ii.getImage();
-        } catch (Exception ignored) {
-
+        } catch (Exception e) {
+            logger.error("Failed loading image");
+            logger.error(e);
         }
     }
 

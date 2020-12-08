@@ -1,5 +1,6 @@
 package donjinkrawler.items;
 
+import donjinkrawler.logging.LoggerSingleton;
 import donjinkrawler.visitor.ItemVisitor;
 import krawlercommon.KrawlerCloneable;
 import krawlercommon.items.ItemLocationData;
@@ -10,6 +11,7 @@ import java.awt.*;
 import java.io.InputStream;
 
 public abstract class BaseItem implements KrawlerCloneable {
+    private LoggerSingleton logger = LoggerSingleton.getInstance();
 
     protected ItemLocationData itemData;
     protected Image image;
@@ -19,8 +21,9 @@ public abstract class BaseItem implements KrawlerCloneable {
             InputStream stream = getClass().getResourceAsStream("/".concat(imagePath));
             ImageIcon ii = new ImageIcon(ImageIO.read(stream));
             image = ii.getImage();
-        } catch (Exception ignored) {
-
+        } catch (Exception e) {
+            logger.error("Failed loading image");
+            logger.error(e);
         }
     }
 

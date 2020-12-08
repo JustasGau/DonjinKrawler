@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Game extends JPanel implements ActionListener {
+public final class Game extends JPanel implements ActionListener {
     public static Map<Integer, AbstractShellInterface> shells = new ConcurrentHashMap<>();
     static com.esotericsoftware.kryonet.Client client;
     private static Player player = null;

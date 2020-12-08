@@ -1,6 +1,6 @@
 package krawlercommon.composite;
 
-public class RawBonus extends BaseAttribute {
+public final class RawBonus extends BaseAttribute {
 
     public RawBonus() {
         this(0, 0);

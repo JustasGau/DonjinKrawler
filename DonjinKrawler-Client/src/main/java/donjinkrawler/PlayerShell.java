@@ -1,5 +1,7 @@
 package donjinkrawler;
 
+import donjinkrawler.logging.LoggerSingleton;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -7,6 +9,7 @@ import java.io.InputStream;
 import java.util.Map;
 
 public class PlayerShell extends AbstractShell {
+    private LoggerSingleton logger = LoggerSingleton.getInstance();
 
     public PlayerShell(String name) {
         this.name = name;
@@ -20,8 +23,9 @@ public class PlayerShell extends AbstractShell {
             image = ii.getImage();
             ii = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/attack.png")));
             attackIMG = ii.getImage();
-        } catch (Exception ignored) {
-
+        } catch (Exception e) {
+            logger.error("Failed loading image");
+            logger.error(e);
         }
     }
 

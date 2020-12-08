@@ -24,8 +24,8 @@ public class HealthPotion extends BaseItem {
     }
 
     @Override
-    public void accept(ItemVisitor v) {
-        v.visit(this);
+    public void accept(ItemVisitor visitor) {
+        visitor.visit(this);
     }
 
     @Override

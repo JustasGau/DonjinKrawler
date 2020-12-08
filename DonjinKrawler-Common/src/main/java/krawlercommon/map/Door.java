@@ -5,7 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.InputStream;
 
-public class Door {
+public final class Door {
     private int x;
     private int y;
     private DoorDirection direction;

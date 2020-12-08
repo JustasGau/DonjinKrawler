@@ -3,7 +3,7 @@ package krawlercommon.composite;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class FinalBonus extends BaseAttribute {
+public final class FinalBonus extends BaseAttribute {
 
     private Attribute parent;
     private long time;

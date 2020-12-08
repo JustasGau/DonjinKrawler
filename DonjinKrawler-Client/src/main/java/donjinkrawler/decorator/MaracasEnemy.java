@@ -2,6 +2,7 @@ package donjinkrawler.decorator;
 
 import donjinkrawler.AbstractShellInterface;
 import donjinkrawler.ShellType;
+import donjinkrawler.logging.LoggerSingleton;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MaracasEnemy extends EnemyClothingDecorator {
+    private final LoggerSingleton logger = LoggerSingleton.getInstance();
 
     public MaracasEnemy(AbstractShellInterface source) {
         super(source);
@@ -26,8 +28,9 @@ public class MaracasEnemy extends EnemyClothingDecorator {
             Map<String, ImageIcon> clothes = wrappee.addClothing();
             clothes.put("Maracas", ii);
             return clothes;
-        } catch (Exception ignored) {
-
+        } catch (Exception e) {
+            logger.error("Failed loading image");
+            logger.error(e);
         }
         return new HashMap<>();
     }

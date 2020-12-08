@@ -7,6 +7,7 @@ import donjinkrawler.command.MoveCommand;
 import donjinkrawler.command.PlayerCommander;
 import donjinkrawler.facade.MusicMaker;
 import donjinkrawler.items.*;
+import donjinkrawler.logging.LoggerSingleton;
 import donjinkrawler.visitor.ItemVisitor;
 import donjinkrawler.visitor.ItemVisitorImpl;
 import krawlercommon.PlayerData;
@@ -37,6 +38,8 @@ import java.util.List;
 import static donjinkrawler.Game.shells;
 
 public class Player implements Subject {
+    private final LoggerSingleton logger = LoggerSingleton.getInstance();
+
     private final PlayerData data;
     private final Inventory inventory;
     private final MusicMaker musicMaker;
@@ -81,8 +84,9 @@ public class Player implements Subject {
             width = image.getWidth(null);
             ii = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/attack.png")));
             attackIMG = ii.getImage();
-        } catch (Exception ignored) {
-
+        } catch (Exception e) {
+            logger.error("Failed loading image");
+            logger.error(e);
         }
     }
 

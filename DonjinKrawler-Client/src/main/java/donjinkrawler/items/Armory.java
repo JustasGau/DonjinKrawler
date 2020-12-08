@@ -23,7 +23,7 @@ public abstract class Armory extends BaseItem {
     }
 
     @Override
-    public abstract void accept(ItemVisitor v);
+    public abstract void accept(ItemVisitor visitor);
 
     @Override
     public abstract Armory deepCopy() throws CloneNotSupportedException;

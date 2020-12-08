@@ -6,7 +6,7 @@ import krawlercommon.PlayerData;
 import krawlercommon.composite.FinalBonus;
 import krawlercommon.composite.RawBonus;
 
-public class ItemVisitorImpl implements ItemVisitor {
+public final class ItemVisitorImpl implements ItemVisitor {
 
     private PlayerData data;
     private Inventory inventory;
