@@ -41,7 +41,7 @@ public class Chat extends JFrame {
         chatBox.setFont(new Font("Serif", Font.PLAIN, 15));
 
         this.setTitle("Chat");
-        this.setResizable(true);
+        this.setResizable(false);
         this.setSize(CHAT_WIDTH, CHAT_HEIGHT);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
