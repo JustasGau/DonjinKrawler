@@ -10,6 +10,7 @@ import donjinkrawler.flyweight.EnemySelector;
 import donjinkrawler.logging.LoggerSingleton;
 import donjinkrawler.map.GameMap;
 import donjinkrawler.map.Room;
+import donjinkrawler.visitor.ClothingVisitorImpl;
 import krawlercommon.PlayerData;
 import krawlercommon.enemies.Enemy;
 import krawlercommon.map.DoorDirection;
@@ -96,15 +97,15 @@ public final class Game extends JPanel implements ActionListener {
         for (AbstractShellInterface sh : shells.values()) {
             if (gameMap.getCurrentRoom().getRoomData().getRoomType() != RoomType.ITEM) {
                 drawShell(g2d, sh);
-                sh.drawClothes(g2d, this);
+                sh.drawClothes(new ClothingVisitorImpl(g2d, this, sh));
             } else if (!(sh instanceof EnemyShell)) {
                 drawShell(g2d, sh);
             }
         }
     }
 
-    public void updateMap(HashMap<Integer, RoomData> rooms) {
-        this.gameMap = new GameMap(new Room(rooms.get(0)));
+    public void updateMap(HashMap<Integer, RoomData> rooms, int room) {
+        this.gameMap = new GameMap(new Room(rooms.get(room)));
     }
 
     private void drawCurrentPlayer(Graphics g) {

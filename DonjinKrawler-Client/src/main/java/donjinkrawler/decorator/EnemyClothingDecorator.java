@@ -1,11 +1,11 @@
 package donjinkrawler.decorator;
 
 import donjinkrawler.AbstractShellInterface;
-import donjinkrawler.Game;
+import donjinkrawler.decorator.clothes.Clothing;
+import donjinkrawler.visitor.ClothingVisitor;
 
-import javax.swing.*;
 import java.awt.*;
-import java.util.Map;
+import java.util.List;
 
 public abstract class EnemyClothingDecorator implements AbstractShellInterface {
 
@@ -16,7 +16,7 @@ public abstract class EnemyClothingDecorator implements AbstractShellInterface {
     }
 
     @Override
-    public Map<String, ImageIcon> addClothing() {
+    public List<Clothing> addClothing() {
         return wrappee.addClothing();
     }
 
@@ -66,8 +66,8 @@ public abstract class EnemyClothingDecorator implements AbstractShellInterface {
     }
 
     @Override
-    public void drawClothes(Graphics2D g2d, Game game) {
-        wrappee.drawClothes(g2d, game);
+    public void drawClothes(ClothingVisitor visitor) {
+        wrappee.drawClothes(visitor);
     }
 
     @Override

@@ -7,9 +7,11 @@ import krawlercommon.enemies.small.SmallEnemyFactory;
 import krawlercommon.items.ItemGenerator;
 import krawlercommon.items.ItemLocationData;
 import krawlercommon.map.Obstacle;
-import krawlercommon.map.ObstacleType;
 import krawlercommon.map.RoomType;
 import krawlercommon.map.Wall;
+import krawlercommon.map.obstacles.Lava;
+import krawlercommon.map.obstacles.Slime;
+import krawlercommon.map.obstacles.Spikes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,8 +20,8 @@ import java.util.Random;
 
 public class NormalRoomBuilder extends RoomBuilder {
 
-    private final int MAX_WALL_COORD = 275;
-    private final int MIN_WALL_COORD = 125;
+    private final int MAX_WALL_COORD = 270;
+    private final int MIN_WALL_COORD = 130;
     private Map<Integer, Pair> wallPrefabs;
     private Random rand = new Random();
 
@@ -47,7 +49,7 @@ public class NormalRoomBuilder extends RoomBuilder {
         for (int i = 0; i < 5; i++) {
             int x = rand.nextInt(MAX_WALL_COORD) + MIN_WALL_COORD;
             int y = rand.nextInt(MAX_WALL_COORD) + MIN_WALL_COORD;
-            while ((x > 175 && x < 225) && (y > 175 && y < 225) ) {
+            while ((x > 175 && x < 235) || (y > 175 && y < 235)) {
                 x = rand.nextInt(MAX_WALL_COORD) + MIN_WALL_COORD;
                 y = rand.nextInt(MAX_WALL_COORD) + MIN_WALL_COORD;
             }
@@ -75,12 +77,20 @@ public class NormalRoomBuilder extends RoomBuilder {
     @Override
     public RoomBuilder buildObstacles() {
         for (int i = 0; i < 5; i++) {
-            Obstacle obstacle = new Obstacle();
+            String typeNumber = String.valueOf(rand.nextInt(3) + 1);
+            Obstacle obstacle;
+            if (typeNumber.equals("1")) {
+                obstacle = new Lava();
+            } else if (typeNumber.equals("2")) {
+                obstacle = new Spikes();
+            } else {
+                obstacle = new Slime();
+            }
+
             obstacle.setX(rand.nextInt(350) + 30);
             obstacle.setY(rand.nextInt(350) + 30);
             obstacle.setWidth(35);
             obstacle.setHeight(35);
-            obstacle.setObstacleType(ObstacleType.getTypeByNumber(String.valueOf(rand.nextInt(3) + 1)));
             roomData.getObstacles().add(obstacle);
             // TODO: check if wall is here already
         }
