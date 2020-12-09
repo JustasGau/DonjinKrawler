@@ -119,7 +119,7 @@ public class Player implements Subject {
     }
 
     private boolean isCollidingWithDoor(DoorCollection doors) {
-        for (Iterator i = doors.getIterator(); i.hasNext();){
+        for (Iterator i = doors.getIterator(); i.hasNext(); ) {
             Door door = (Door) i.getNext();
             if (isCollidingWith(door)) {
                 if (backwards) {
@@ -512,7 +512,7 @@ public class Player implements Subject {
 
     @Override
     public void notifyObservers() {
-        for (Iterator i = observerCollection.getIterator(); i.hasNext();) {
+        for (Iterator i = observerCollection.getIterator(); i.hasNext(); ) {
             Observer observer = (Observer) i.getNext();
             if (observer != null) {
                 EnemyStrategy enemyStrategy = new MoveTowardPlayer();

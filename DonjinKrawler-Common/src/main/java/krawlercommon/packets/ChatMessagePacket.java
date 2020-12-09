@@ -5,7 +5,8 @@ public class ChatMessagePacket {
     public int id;
     public String from;
 
-    public ChatMessagePacket() { }
+    public ChatMessagePacket() {
+    }
 
     public ChatMessagePacket(String message, int id) {
         this.message = message;

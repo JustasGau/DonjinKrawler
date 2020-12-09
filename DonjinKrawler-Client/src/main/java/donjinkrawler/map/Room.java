@@ -80,7 +80,7 @@ public class Room implements KrawlerCloneable {
     }
 
     public DoorDirection update(Player player) {
-        for (Iterator i = doorCollection.getIterator(); i.hasNext();) {
+        for (Iterator i = doorCollection.getIterator(); i.hasNext(); ) {
             Door door = (Door) i.getNext();
             if (door.checkCollision(player.getX(), player.getY(), player.getBotX(),
                     player.getBotY(), player.getWidth(), player.getWidth())) {
@@ -158,7 +158,7 @@ public class Room implements KrawlerCloneable {
     }
 
     private void drawDoors(Graphics2D g2d) {
-        for (Iterator i = doorCollection.getIterator(); i.hasNext();) {
+        for (Iterator i = doorCollection.getIterator(); i.hasNext(); ) {
             Door door = (Door) i.getNext();
             g2d.drawImage(door.getImage(), door.getX(), door.getY(), null);
         }

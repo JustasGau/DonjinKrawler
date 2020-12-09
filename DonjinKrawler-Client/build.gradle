@@ -20,5 +20,5 @@ dependencies {
 
 mainClassName = 'donjinkrawler.Client'
 
-sourceSets.main.resources.srcDirs += [ "src/" ]
-sourceSets.main.resources.includes += [ "**/*.png", "**/*.wav", "**/*.mp3" ]
+sourceSets.main.resources.srcDirs += ["src/"]
+sourceSets.main.resources.includes += ["**/*.png", "**/*.wav", "**/*.mp3"]

@@ -7,7 +7,7 @@ public final class ChatRoom implements ChatMediator {
 
     private final Map<Integer, RoomMate> roomMates;
 
-    public ChatRoom(){
+    public ChatRoom() {
         this.roomMates = new HashMap<>();
     }
 
@@ -23,9 +23,9 @@ public final class ChatRoom implements ChatMediator {
 
     @Override
     public void sendMessage(RoomMate sender, String message) {
-        for(RoomMate receiver : this.roomMates.values()) {
+        for (RoomMate receiver : this.roomMates.values()) {
             // Message should not be received by the user sending it
-            if(receiver != sender){
+            if (receiver != sender) {
                 receiver.receive(sender, message);
             }
         }

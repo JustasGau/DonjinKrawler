@@ -12,6 +12,7 @@ public abstract class EnemyTemplate {
 
     protected abstract void setStrategies();
 
-    public void debug(){}
+    public void debug() {
+    }
 
 }

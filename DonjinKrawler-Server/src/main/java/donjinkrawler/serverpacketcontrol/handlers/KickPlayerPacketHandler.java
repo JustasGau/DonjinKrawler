@@ -1,11 +1,10 @@
 package donjinkrawler.serverpacketcontrol.handlers;
 
+import com.esotericsoftware.kryonet.Connection;
 import donjinkrawler.serverpacketcontrol.Request;
 import krawlercommon.ConnectionManager;
 import krawlercommon.packets.DisconnectPacket;
 import krawlercommon.packets.KickPlayerPacket;
-
-import com.esotericsoftware.kryonet.Connection;
 
 public class KickPlayerPacketHandler extends PacketHandler {
     @Override

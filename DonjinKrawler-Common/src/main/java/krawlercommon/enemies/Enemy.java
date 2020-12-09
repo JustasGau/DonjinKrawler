@@ -13,10 +13,10 @@ import java.util.UUID;
 
 public abstract class Enemy extends EnemyTemplate implements Observer, KrawlerCloneable {
 
-    Random random = new Random();
     public transient Map<Phases, EnemyStrategy> strategies;
-    transient EnemyStrategy currentStrategy;
     protected int updateIntervalSeconds;
+    Random random = new Random();
+    transient EnemyStrategy currentStrategy;
     int tick = 0;
     String info;
     private String name;
