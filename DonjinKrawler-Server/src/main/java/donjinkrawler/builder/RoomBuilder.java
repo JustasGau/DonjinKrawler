@@ -56,10 +56,10 @@ public abstract class RoomBuilder {
 
     private List<Bounds> getPairList() {
         List<Bounds> pairList = new ArrayList<>();
-        pairList.add(new Bounds(20, 150, 20, 150));
-        pairList.add(new Bounds(20, 150, 330, 480));
-        pairList.add(new Bounds(330, 480, 20, 150));
-        pairList.add(new Bounds(330, 480, 330, 480));
+        pairList.add(new Bounds(40, 150, 40, 150));
+        pairList.add(new Bounds(40, 150, 330, 460));
+        pairList.add(new Bounds(330, 460, 40, 150));
+        pairList.add(new Bounds(330, 460, 330, 460));
         return pairList;
     }
 

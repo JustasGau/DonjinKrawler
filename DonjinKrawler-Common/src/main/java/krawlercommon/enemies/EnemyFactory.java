@@ -1,5 +1,5 @@
 package krawlercommon.enemies;
 
 public interface EnemyFactory {
-    public Enemy make(EnemyType enemyType);
+    Enemy make(EnemyType enemyType);
 }

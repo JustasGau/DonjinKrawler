@@ -1,13 +1,19 @@
 package krawlercommon.enemies;
 
+import krawlercommon.map.Decoration;
+import krawlercommon.map.Wall;
 import krawlercommon.strategies.Attack;
 import krawlercommon.strategies.EnemyStrategy;
 import krawlercommon.strategies.MoveTowardPlayer;
 import krawlercommon.strategies.RangeAttack;
 
+import java.util.ArrayList;
 import java.util.Map;
 
-final public class Boss extends Enemy {
+public final class Boss extends Enemy {
+
+    private ArrayList<Decoration> decorations = new ArrayList<>();
+    private ArrayList<Wall> walls = new ArrayList<>();
 
     public Boss() {
         this.setX(225);
@@ -16,6 +22,17 @@ final public class Boss extends Enemy {
         this.setDamage(15.0);
         this.initEnemy();
         this.setPhase(Phases.TOWARDS);
+    }
+
+    public Boss(ArrayList<Decoration> decorations, ArrayList<Wall> walls) {
+        this();
+        this.decorations = decorations;
+        this.walls = walls;
+    }
+
+    @Override
+    public void move() {
+        super.move(decorations, walls);
     }
 
     @Override

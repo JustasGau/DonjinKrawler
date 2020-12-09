@@ -4,7 +4,7 @@ import krawlercommon.visitor.ObstacleVisitor;
 
 public abstract class Obstacle extends CollidableObject {
 
-    protected String imageNumber = "2";
+    protected String imageNumber = null;
 
     public Obstacle() {
 

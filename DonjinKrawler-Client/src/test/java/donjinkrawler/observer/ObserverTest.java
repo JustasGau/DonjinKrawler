@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
+import java.io.IOException;
+
 public class ObserverTest {
     @Mock
     com.esotericsoftware.kryonet.Client client;
@@ -23,16 +25,16 @@ public class ObserverTest {
     }
 
     @Test
-    public void attachObserverTest() {
-        Player player = new Player(playerData, client);
+    public void attachObserverTest() throws IOException {
+        Player player = new Player(playerData, client, new donjinkrawler.Client(".."));
         Enemy enemy = new SmallChicken();
         player.attachObserver(enemy);
         Assertions.assertTrue(player.getObservers().contains(enemy));
     }
 
     @Test
-    public void detachObserverTest() {
-        Player player = new Player(playerData, client);
+    public void detachObserverTest() throws IOException {
+        Player player = new Player(playerData, client, new donjinkrawler.Client(".."));
         Enemy enemy = new SmallChicken();
         player.attachObserver(enemy);
         player.detachObserver(enemy);
@@ -40,8 +42,8 @@ public class ObserverTest {
     }
 
     @Test
-    public void detachAllObserversTest() {
-        Player player = new Player(playerData, client);
+    public void detachAllObserversTest() throws IOException {
+        Player player = new Player(playerData, client, new donjinkrawler.Client(".."));
         Enemy enemy1 = new SmallChicken();
         Enemy enemy2 = new BigChicken();
         player.attachObserver(enemy1);
@@ -51,8 +53,8 @@ public class ObserverTest {
     }
 
     @Test
-    public void notifyObserversTest() {
-        Player player = new Player(playerData, client);
+    public void notifyObserversTest() throws IOException {
+        Player player = new Player(playerData, client, new donjinkrawler.Client(".."));
         Enemy enemy = new SmallChicken();
         player.attachObserver(enemy);
         var initialEnemyStrategy = enemy.getInfo();

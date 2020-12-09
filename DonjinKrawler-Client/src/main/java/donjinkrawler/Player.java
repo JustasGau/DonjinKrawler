@@ -445,8 +445,8 @@ public class Player implements Subject {
     public void findTarget() {
         if (attack) {
             for (AbstractShellInterface enemy : shells.values()) {
-                if ((enemy.getX() >= (data.getX() - 10)) && enemy.getX() <= (data.getX() + 10)
-                        && enemy.getY() >= (data.getY() - 10) && enemy.getY() < (data.getY() + 10)) {
+                if ((enemy.getX() >= (data.getX() - 20)) && enemy.getX() <= (data.getX() + 20)
+                        && enemy.getY() >= (data.getY() - 20) && enemy.getY() < (data.getY() + 20)) {
                     DamageEnemyPacket packet = new DamageEnemyPacket();
                     packet.id = enemy.getID();
                     packet.damage = getDamage();

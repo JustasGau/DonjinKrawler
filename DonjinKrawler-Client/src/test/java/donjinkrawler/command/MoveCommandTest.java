@@ -5,21 +5,23 @@ import donjinkrawler.Player;
 import krawlercommon.PlayerData;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MoveCommandTest {
 
     @Test
-    public void testMoveCommandConstructor1() {
-        Player testPlayer = new Player(new PlayerData(), new Client());
+    public void testMoveCommandConstructor1() throws IOException {
+        Player testPlayer = new Player(new PlayerData(), new Client(), new donjinkrawler.Client(".."));
         MoveCommand mv = new MoveCommand(testPlayer, 30, 20);
         assertEquals(30, mv.dx);
         assertEquals(20, mv.dy);
     }
 
     @Test
-    public void testMoveCommandConstructor2() {
-        Player testPlayer = new Player(new PlayerData(), new Client());
+    public void testMoveCommandConstructor2() throws IOException {
+        Player testPlayer = new Player(new PlayerData(), new Client(), new donjinkrawler.Client(".."));
         testPlayer.setX(50);
         testPlayer.setY(60);
         MoveCommand mv = new MoveCommand(testPlayer, 30, 20);
@@ -28,9 +30,9 @@ public class MoveCommandTest {
     }
 
     @Test
-    public void testMoveCommandExecute() {
+    public void testMoveCommandExecute() throws IOException {
         PlayerCommander commander = new PlayerCommander();
-        Player testPlayer = new Player(new PlayerData(), new Client());
+        Player testPlayer = new Player(new PlayerData(), new Client(), new donjinkrawler.Client(".."));
         testPlayer.setX(100);
         testPlayer.setY(200);
         MoveCommand mv = new MoveCommand(testPlayer, 30, 20);
@@ -40,9 +42,9 @@ public class MoveCommandTest {
     }
 
     @Test
-    public void testMoveCommandUndo() {
+    public void testMoveCommandUndo() throws IOException {
         PlayerCommander commander = new PlayerCommander();
-        Player testPlayer = new Player(new PlayerData(), new Client());
+        Player testPlayer = new Player(new PlayerData(), new Client(), new donjinkrawler.Client(".."));
         testPlayer.setX(100);
         testPlayer.setY(200);
         MoveCommand mv = new MoveCommand(testPlayer, 30, 20);

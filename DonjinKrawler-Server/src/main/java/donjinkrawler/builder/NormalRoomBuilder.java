@@ -105,9 +105,9 @@ public class NormalRoomBuilder extends RoomBuilder {
 
     @Override
     RoomBuilder buildEnemies() {
-        EnemyGenerator smallEnemyGenerator = new EnemyGenerator(new SmallEnemyFactory());
+        EnemyGenerator smallEnemyGenerator = new EnemyGenerator(new SmallEnemyFactory(this.roomData.getDecorations(), this.roomData.getWalls()));
         ArrayList<Enemy> smallEnemies = smallEnemyGenerator.generateRandomEnemies(5);
-        EnemyGenerator bigEnemyGenerator = new EnemyGenerator(new BigEnemyFactory());
+        EnemyGenerator bigEnemyGenerator = new EnemyGenerator(new BigEnemyFactory(this.roomData.getDecorations(), this.roomData.getWalls()));
         ArrayList<Enemy> bigEnemies = bigEnemyGenerator.generateRandomEnemies(rand.nextInt(3));
         roomData.getEnemies().addAll(smallEnemies);
         roomData.getEnemies().addAll(bigEnemies);

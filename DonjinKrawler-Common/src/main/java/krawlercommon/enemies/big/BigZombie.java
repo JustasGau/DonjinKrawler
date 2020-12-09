@@ -1,21 +1,38 @@
 package krawlercommon.enemies.big;
 
 import krawlercommon.enemies.Zombie;
+import krawlercommon.map.Decoration;
+import krawlercommon.map.Wall;
 import krawlercommon.strategies.*;
 
+import java.util.ArrayList;
 import java.util.Map;
 
-final public class BigZombie extends Zombie {
+public final class BigZombie extends Zombie {
+
+    ArrayList<Decoration> decorations = new ArrayList<>();
+    ArrayList<Wall> walls = new ArrayList<>();
 
     public BigZombie() {
         this.setName("Big-Zombie");
         this.setDamage(30.0);
     }
 
+    public BigZombie(ArrayList<Decoration> decorations, ArrayList<Wall> walls) {
+        this();
+        this.decorations = decorations;
+        this.walls = walls;
+    }
+
     @Override
     public void update(EnemyStrategy strategy) {
         strategy.init(this);
         strategy.execute();
+    }
+
+    @Override
+    public void move() {
+        super.move(decorations, walls);
     }
 
     @Override

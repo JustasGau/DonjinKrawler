@@ -20,6 +20,8 @@ import org.mockito.Mockito;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,9 +51,9 @@ public class GameTest {
 
 
     @BeforeEach
-    public void setup() throws CloneNotSupportedException {
+    public void setup() throws CloneNotSupportedException, IOException {
         testRoomData = new RoomData();
-        EnemyGenerator enemyGenerator = new EnemyGenerator(new SmallEnemyFactory());
+        EnemyGenerator enemyGenerator = new EnemyGenerator(new SmallEnemyFactory(new ArrayList<>(), new ArrayList<>()));
         testRoomData.getEnemies().addAll(enemyGenerator.generateRandomEnemies(5));
         testRoomData.setTileTexture(1);
         testRoomData.setRoomType(RoomType.NORMAL);
@@ -68,7 +70,7 @@ public class GameTest {
         when(mockGraphics.create()).thenReturn(mockGraphics);
         PlayerData playerData = new PlayerData("Arvydas", 1, 250, 250);
         client = mock(com.esotericsoftware.kryonet.Client.class);
-        fakePlayer = new Player(playerData, client);
+        fakePlayer = new Player(playerData, client, new donjinkrawler.Client("20202020"));
         when(client.sendTCP(any())).thenReturn(1);
     }
 
@@ -80,7 +82,7 @@ public class GameTest {
     @Test
     public void testIfEnemiesAreMultiplying() {
         RoomData roomData = new RoomData();
-        EnemyGenerator enemyGenerator = new EnemyGenerator(new SmallEnemyFactory());
+        EnemyGenerator enemyGenerator = new EnemyGenerator(new SmallEnemyFactory(new ArrayList<>(), new ArrayList<>()));
         roomData.getEnemies().addAll(enemyGenerator.generateRandomEnemies(5));
         Map<Integer, RoomData> rooms = new HashMap<>();
         rooms.put(0, roomData);
