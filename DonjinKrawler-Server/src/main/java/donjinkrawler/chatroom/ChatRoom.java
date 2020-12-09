@@ -3,7 +3,7 @@ package donjinkrawler.chatroom;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ChatRoom implements ChatMediator {
+public final class ChatRoom implements ChatMediator {
 
     private final Map<Integer, RoomMate> roomMates;
 
