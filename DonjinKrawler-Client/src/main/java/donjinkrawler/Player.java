@@ -75,7 +75,6 @@ public class Player implements Subject {
         this.musicMaker = new MusicMaker();
         this.chat = new Chat(this.client, this.getName(), this.getId());
 
-        data = playerData;
         itemVisitor = new ItemVisitorImpl(data, inventory, armorBonus, weaponBonus);
         loadImage();
     }
