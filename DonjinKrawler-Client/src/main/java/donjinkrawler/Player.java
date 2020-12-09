@@ -24,6 +24,7 @@ import krawlercommon.observer.Subject;
 import krawlercommon.packets.ChangeEnemyStrategyPacket;
 import krawlercommon.packets.CharacterAttackPacket;
 import krawlercommon.packets.DamageEnemyPacket;
+import krawlercommon.packets.KickPlayerPacket;
 import krawlercommon.strategies.EnemyStrategy;
 import krawlercommon.strategies.MoveTowardPlayer;
 
@@ -45,6 +46,7 @@ public class Player implements Subject {
     private final Inventory inventory;
     private final MusicMaker musicMaker;
     private final Chat chat;
+    private final donjinkrawler.Client gameClient;
     int obstacleCollisionCount = 0;
     private int dx;
     private int dy;
@@ -65,11 +67,13 @@ public class Player implements Subject {
     private RawBonus armorBonus = null;
     private RawBonus weaponBonus = null;
     private ItemVisitor itemVisitor;
+    private boolean isDead;
 
-    public Player(PlayerData playerData, Client client) {
+    public Player(PlayerData playerData, Client client, donjinkrawler.Client gameClient) {
         data = playerData;
 
         this.client = client;
+        this.gameClient = gameClient;
         this.observerCollection = new ObserverCollection();
         this.inventory = new Inventory();
         this.musicMaker = new MusicMaker();
@@ -96,7 +100,7 @@ public class Player implements Subject {
 
     public Integer move(List<Wall> walls, DoorCollection doors, List<Obstacle> obstacles, List<Decoration> decorations,
                         HashMap<Integer, BaseItem> items) {
-        if (isCollidingWithObstacle(obstacles)) {
+        if(isDead) {
             return null;
         }
         if (isCollidingWithDoor(doors)) {
@@ -108,6 +112,9 @@ public class Player implements Subject {
         Integer itemId = isCollidingWithItem(items);
         if (itemId != null) {
             return itemId;
+        }
+        if (isCollidingWithObstacle(obstacles)) {
+            return null;
         }
         if (backwards) {
             commander.undo();
@@ -352,7 +359,18 @@ public class Player implements Subject {
     }
 
     public void setHealth(double val) {
+        if(val <= 0) {
+            this.die();
+        }
         data.setHealth(val);
+    }
+
+    private void die() {
+        data.setHealth(0);
+        this.isDead = true;
+        audioPlayer.play("wav", "game-over.wav", false);
+        this.client.sendTCP(new KickPlayerPacket(this.getId()));
+        this.gameClient.shutDown();
     }
 
     public void setHasNotifiedObservers(Boolean hasNotifiedObservers) {
@@ -381,6 +399,11 @@ public class Player implements Subject {
     }
 
     public void keyPressed(KeyEvent e) {
+
+        if(isDead) {
+            return;
+        }
+
         int key = e.getKeyCode();
 
         if (key == KeyEvent.VK_I) {
