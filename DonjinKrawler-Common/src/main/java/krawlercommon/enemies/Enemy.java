@@ -5,24 +5,18 @@ import krawlercommon.KrawlerCloneable;
 import krawlercommon.observer.Observer;
 import krawlercommon.packets.ChangeEnemyStrategyPacket;
 import krawlercommon.strategies.EnemyStrategy;
-import krawlercommon.strategies.MoveAwayFromPlayer;
-import krawlercommon.strategies.MoveRandomly;
 import krawlercommon.strategies.MoveTowardPlayer;
 
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
-public abstract class Enemy implements Observer, KrawlerCloneable {
+public abstract class Enemy extends EnemyTemplate implements Observer, KrawlerCloneable {
 
     Random random = new Random();
-    transient Map<Phases, EnemyStrategy> strategies = Map.of(
-            Phases.AWAY, new MoveAwayFromPlayer(),
-            Phases.RANDOM, new MoveRandomly(),
-            Phases.TOWARDS, new MoveTowardPlayer()
-    );
+    public transient Map<Phases, EnemyStrategy> strategies;
     transient EnemyStrategy currentStrategy;
-    int updateIntervalSeconds = 2;
+    protected int updateIntervalSeconds;
     int tick = 0;
     String info;
     private String name;
@@ -46,14 +40,6 @@ public abstract class Enemy implements Observer, KrawlerCloneable {
 
     public int getID() {
         return id;
-    }
-
-    public void setInterval(int interval) {
-        updateIntervalSeconds = interval;
-    }
-
-    public void setStrategies(Map<Phases, EnemyStrategy> strat) {
-        strategies = strat;
     }
 
     public double getDamage() {

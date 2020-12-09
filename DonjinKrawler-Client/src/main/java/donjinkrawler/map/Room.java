@@ -7,6 +7,8 @@ import donjinkrawler.items.BaseItem;
 import donjinkrawler.items.ItemMaker;
 import krawlercommon.KrawlerCloneable;
 import krawlercommon.items.ItemLocationData;
+import krawlercommon.iterator.Iterator;
+import krawlercommon.iterator.door.DoorCollection;
 import krawlercommon.map.*;
 
 import javax.imageio.ImageIO;
@@ -22,7 +24,7 @@ import java.util.Map;
 public class Room implements KrawlerCloneable {
 
     private RoomData roomData;
-    private ArrayList<Door> doors = new ArrayList<>();
+    private DoorCollection doorCollection = new DoorCollection();
     private Map<String, BufferedImage> wallImages = new HashMap<>();
     private Map<String, BufferedImage> tileImages = new HashMap<>();
     private Map<String, BufferedImage> obstacleImages = new HashMap<>();
@@ -37,20 +39,20 @@ public class Room implements KrawlerCloneable {
     }
 
     public void initDoors() {
-        if (!doors.isEmpty()) {
-            doors = new ArrayList<>();
+        if (!doorCollection.doors.isEmpty()) {
+            doorCollection = new DoorCollection();
         }
         if (roomData.getTop() != null) {
-            doors.add(new Door(DoorDirection.TOP, 250, 0));
+            doorCollection.doors.add(new Door(DoorDirection.TOP, 250, 0));
         }
         if (roomData.getBottom() != null) {
-            doors.add(new Door(DoorDirection.BOTTOM, 250, 460));
+            doorCollection.doors.add(new Door(DoorDirection.BOTTOM, 250, 460));
         }
         if (roomData.getRight() != null) {
-            doors.add(new Door(DoorDirection.RIGHT, 480, 250));
+            doorCollection.doors.add(new Door(DoorDirection.RIGHT, 480, 250));
         }
         if (roomData.getLeft() != null) {
-            doors.add(new Door(DoorDirection.LEFT, 0, 250));
+            doorCollection.doors.add(new Door(DoorDirection.LEFT, 0, 250));
         }
     }
 
@@ -75,7 +77,8 @@ public class Room implements KrawlerCloneable {
     }
 
     public DoorDirection update(Player player) {
-        for (Door door : doors) {
+        for (Iterator i = doorCollection.getIterator(); i.hasNext();) {
+            Door door = (Door) i.getNext();
             if (door.checkCollision(player.getX(), player.getY(), player.getBotX(),
                     player.getBotY(), player.getWidth(), player.getWidth())) {
                 return door.getDirection();
@@ -152,7 +155,8 @@ public class Room implements KrawlerCloneable {
     }
 
     private void drawDoors(Graphics2D g2d) {
-        for (Door door : doors) {
+        for (Iterator i = doorCollection.getIterator(); i.hasNext();) {
+            Door door = (Door) i.getNext();
             g2d.drawImage(door.getImage(), door.getX(), door.getY(), null);
         }
     }
@@ -176,8 +180,8 @@ public class Room implements KrawlerCloneable {
         return roomData.getWalls();
     }
 
-    public ArrayList<Door> getDoors() {
-        return doors;
+    public DoorCollection getDoors() {
+        return doorCollection;
     }
 
     public ArrayList<Obstacle> getObstacles() {
@@ -196,7 +200,7 @@ public class Room implements KrawlerCloneable {
     public Room deepCopy() throws CloneNotSupportedException {
         Room clone = (Room) super.clone();
         clone.setRoomData(roomData.deepCopy());
-        clone.doors = new ArrayList<>();
+        clone.doorCollection = new DoorCollection();
         clone.initDoors();
         clone.wallImages = new HashMap<>();
         cloneImageMap(wallImages, clone.wallImages);
@@ -242,7 +246,7 @@ public class Room implements KrawlerCloneable {
         List<String> addressValues = new ArrayList<>();
         addressValues.add("Room hashcode: " + System.identityHashCode(this));
         addressValues.add("RoomData hashcode: " + System.identityHashCode(roomData));
-        addressValues.add("Doors hashcode: " + System.identityHashCode(doors));
+        addressValues.add("Doors hashcode: " + System.identityHashCode(doorCollection));
         addressValues.add("WallImages hashcode: " + System.identityHashCode(wallImages));
         addressValues.add("TileImages hashcode: " + System.identityHashCode(tileImages));
         addressValues.add("DecorationImages hashcode: " + System.identityHashCode(decorationImages));
