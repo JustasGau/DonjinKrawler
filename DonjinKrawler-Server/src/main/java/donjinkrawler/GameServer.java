@@ -114,23 +114,13 @@ public class GameServer {
     }
 
     public void restore(SavedObject state) throws InterruptedException {
-        boolean changed = false;
         currentDirection = state.getDirection();
         rooms = state.getRooms();
         if (currentRoom != state.getCurrentRoom()) {
-            changed = true;
             currentRoom = state.getCurrentRoom();
         }
         sendMapToPlayers();
-        if (changed) {
-            sendEnemies(true);
-            RoomPacket roomPacket = new RoomPacket();
-            roomPacket.direction = currentDirection;
-            roomPacket.id = currentRoom;
-            kryoServer.sendToAllUDP(roomPacket);
-        } else {
-            sendEnemies(false);
-        }
+        sendEnemies(true);
     }
 
     private void initMap() {
@@ -201,6 +191,7 @@ public class GameServer {
         mapPacket.gridSize = mapSize;
         mapPacket.rooms = rooms;
         mapPacket.update = true;
+        mapPacket.room = currentRoom;
         kryoServer.sendToAllTCP(mapPacket);
     }
 

@@ -14,7 +14,7 @@ public class MapPacketHandler extends PacketHandler {
         MapPacket mapPacket = (MapPacket) request.getObject();
 
         if (mapPacket.update) {
-            request.getGame().updateMap(mapPacket.rooms);
+            request.getGame().updateMap(mapPacket.rooms, mapPacket.room);
         } else {
             request.getClient().setRooms(mapPacket.rooms);
         }

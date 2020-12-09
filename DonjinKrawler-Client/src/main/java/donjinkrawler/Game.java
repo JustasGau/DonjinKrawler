@@ -103,8 +103,8 @@ public final class Game extends JPanel implements ActionListener {
         }
     }
 
-    public void updateMap(HashMap<Integer, RoomData> rooms) {
-        this.gameMap = new GameMap(new Room(rooms.get(0)));
+    public void updateMap(HashMap<Integer, RoomData> rooms, int room) {
+        this.gameMap = new GameMap(new Room(rooms.get(room)));
     }
 
     private void drawCurrentPlayer(Graphics g) {

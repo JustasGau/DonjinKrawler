@@ -18,8 +18,8 @@ import java.util.Random;
 
 public class NormalRoomBuilder extends RoomBuilder {
 
-    private final int MAX_WALL_COORD = 275;
-    private final int MIN_WALL_COORD = 125;
+    private final int MAX_WALL_COORD = 270;
+    private final int MIN_WALL_COORD = 130;
     private Map<Integer, Pair> wallPrefabs;
     private Random rand = new Random();
 
@@ -47,7 +47,7 @@ public class NormalRoomBuilder extends RoomBuilder {
         for (int i = 0; i < 5; i++) {
             int x = rand.nextInt(MAX_WALL_COORD) + MIN_WALL_COORD;
             int y = rand.nextInt(MAX_WALL_COORD) + MIN_WALL_COORD;
-            while ((x > 175 && x < 225) && (y > 175 && y < 225) ) {
+            while ((x > 165 && x < 240) && (y > 165 && y < 240)) {
                 x = rand.nextInt(MAX_WALL_COORD) + MIN_WALL_COORD;
                 y = rand.nextInt(MAX_WALL_COORD) + MIN_WALL_COORD;
             }
