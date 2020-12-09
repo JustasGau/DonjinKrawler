@@ -1,10 +1,17 @@
 package donjinkrawler.proxy;
 
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 import krawlercommon.ConnectionManager;
 import krawlercommon.packets.ServerFullPacket;
 
-public class ListenerProxy extends BaseListener {
+public class ListenerProxy extends Listener {
+
+    BaseListener baseListener;
+
+    public ListenerProxy(BaseListener baseListener) {
+        this.baseListener = baseListener;
+    }
 
     @Override
     public synchronized void connected(Connection connection) {
@@ -12,7 +19,7 @@ public class ListenerProxy extends BaseListener {
         if (ConnectionManager.getInstance().getAllPlayers().size() > 3) {
             connection.sendTCP(new ServerFullPacket());
         } else {
-            super.connected(connection);
+            baseListener.connected(connection);
         }
     }
 }

@@ -1,6 +1,7 @@
 package donjinkrawler;
 
 import com.esotericsoftware.kryonet.Connection;
+import donjinkrawler.proxy.BaseListener;
 import donjinkrawler.proxy.ListenerProxy;
 import krawlercommon.ConnectionManager;
 import krawlercommon.PlayerData;
@@ -31,7 +32,7 @@ public class ListenerProxyTest {
         ConnectionManager.getInstance().addPlayer(connection, new PlayerData());
         when(connection.getID()).thenReturn(4);
         ConnectionManager.getInstance().addPlayer(connection, new PlayerData());
-        ListenerProxy proxy = new ListenerProxy();
+        ListenerProxy proxy = new ListenerProxy(new BaseListener());
         when(connection.getID()).thenReturn(5);
         proxy.connected(connection);
         ConnectionManager.getInstance().removeConnectionById(4);

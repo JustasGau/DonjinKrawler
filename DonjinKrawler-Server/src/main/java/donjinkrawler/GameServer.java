@@ -75,7 +75,7 @@ public class GameServer {
 
             });
         } else {
-            kryoServer.addListener(new ListenerProxy() {
+            kryoServer.addListener(new ListenerProxy(new BaseListener()) {
                 public void received(Connection connection, Object object) {
                     pcu.handle(gameServer, object, connection);
                 }
