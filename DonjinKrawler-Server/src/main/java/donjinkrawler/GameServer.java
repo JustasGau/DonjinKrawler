@@ -122,7 +122,6 @@ public class GameServer {
             currentRoom = state.getCurrentRoom();
         }
         sendMapToPlayers();
-        Thread.sleep(1000);
         if (changed) {
             sendEnemies(true);
             RoomPacket roomPacket = new RoomPacket();

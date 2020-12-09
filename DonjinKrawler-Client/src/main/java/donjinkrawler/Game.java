@@ -224,7 +224,10 @@ public final class Game extends JPanel implements ActionListener {
 
     public void changeRoom(RoomPacket roomPacket) {
         String direction = roomPacket.direction;
-        DoorDirection doorDirection = DoorDirection.valueOf(roomPacket.direction);
+        if (roomPacket.direction == null) {
+            direction = "RIGHT";
+        }
+        DoorDirection doorDirection = DoorDirection.valueOf(direction);
         RoomData currentRoomData = gameMap.getCurrentRoom().getRoomFromDirection(doorDirection);
         gameMap.setCurrentRoom(new Room(currentRoomData));
 
@@ -387,7 +390,9 @@ public final class Game extends JPanel implements ActionListener {
 
                 updateTime = System.nanoTime() - now;
                 wait = (OPTIMAL_TIME - updateTime) / 1000000;
-
+                if (wait < 0) {
+                    wait = 16;
+                }
                 try {
                     Thread.sleep(wait);
                 } catch (Exception e) {
