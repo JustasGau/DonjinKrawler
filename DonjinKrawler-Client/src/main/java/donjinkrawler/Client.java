@@ -20,7 +20,7 @@ import java.util.Map;
 public final class Client {
 
     private static final int screenWidth = 500;
-    private static final int screenHeight = 500;
+    private static final int screenHeight = 530;
     private static final int SERVER_TCP_PORT = 54555;
     private static final int SERVER_UDP_PORT = 54777;
     private final JFrame frame = new JFrame();

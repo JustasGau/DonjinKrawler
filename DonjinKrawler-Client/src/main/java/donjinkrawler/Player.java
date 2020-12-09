@@ -103,9 +103,6 @@ public class Player implements Subject {
         if(isDead) {
             return null;
         }
-        if (isCollidingWithObstacle(obstacles)) {
-            return null;
-        }
         if (isCollidingWithDoor(doors)) {
             return null;
         }
@@ -115,6 +112,9 @@ public class Player implements Subject {
         Integer itemId = isCollidingWithItem(items);
         if (itemId != null) {
             return itemId;
+        }
+        if (isCollidingWithObstacle(obstacles)) {
+            return null;
         }
         if (backwards) {
             commander.undo();
