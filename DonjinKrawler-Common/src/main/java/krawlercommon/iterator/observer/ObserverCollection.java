@@ -4,7 +4,6 @@ import krawlercommon.iterator.IterableCollection;
 import krawlercommon.iterator.Iterator;
 import krawlercommon.observer.Observer;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ObserverCollection implements IterableCollection {

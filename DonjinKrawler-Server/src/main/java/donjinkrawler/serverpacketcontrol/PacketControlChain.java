@@ -16,10 +16,10 @@ public class PacketControlChain {
                 .linkWith(new RoomPacketHandler())
                 .linkWith(new ChangeEnemyStrategyPacketHandler())
                 .linkWith(new CharacterAttackPacketHandler())
-                .linkWith(new DamageEnemyPacketHandler())
                 .linkWith(new GetPlayersPacketHandler())
                 .linkWith(new KickPlayerPacketHandler())
-                .linkWith(new DamageEnemyPacketHandler());
+                .linkWith(new DamageEnemyPacketHandler())
+                .linkWith(new ChatMessagePacketHandler());
 
         this.packetHandler = packetHandler;
     }

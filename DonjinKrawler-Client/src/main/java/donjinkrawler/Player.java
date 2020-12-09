@@ -2,6 +2,7 @@ package donjinkrawler;
 
 import com.esotericsoftware.kryonet.Client;
 import donjinkrawler.adapter.AudioPlayer;
+import donjinkrawler.chat.Chat;
 import donjinkrawler.command.DamageCommand;
 import donjinkrawler.command.MoveCommand;
 import donjinkrawler.command.PlayerCommander;
@@ -43,6 +44,7 @@ public class Player implements Subject {
     private final PlayerData data;
     private final Inventory inventory;
     private final MusicMaker musicMaker;
+    private final Chat chat;
     int obstacleCollisionCount = 0;
     private int dx;
     private int dy;
@@ -65,10 +67,13 @@ public class Player implements Subject {
     private ItemVisitor itemVisitor;
 
     public Player(PlayerData playerData, Client client) {
+        data = playerData;
+
         this.client = client;
         this.observerCollection = new ObserverCollection();
         this.inventory = new Inventory();
         this.musicMaker = new MusicMaker();
+        this.chat = new Chat(this.client, this.getName(), this.getId());
 
         data = playerData;
         itemVisitor = new ItemVisitorImpl(data, inventory, armorBonus, weaponBonus);
@@ -114,7 +119,7 @@ public class Player implements Subject {
     }
 
     private boolean isCollidingWithDoor(DoorCollection doors) {
-        for (Iterator i = doors.getIterator(); i.hasNext();){
+        for (Iterator i = doors.getIterator(); i.hasNext(); ) {
             Door door = (Door) i.getNext();
             if (isCollidingWith(door)) {
                 if (backwards) {
@@ -428,6 +433,10 @@ public class Player implements Subject {
             this.musicMaker.lockPlayer();
         }
 
+        if (key == KeyEvent.VK_C) {
+            this.chat.open();
+        }
+
         if (key == KeyEvent.VK_SPACE) {
             if (canAttack) {
                 attack = true;
@@ -503,7 +512,7 @@ public class Player implements Subject {
 
     @Override
     public void notifyObservers() {
-        for (Iterator i = observerCollection.getIterator(); i.hasNext();) {
+        for (Iterator i = observerCollection.getIterator(); i.hasNext(); ) {
             Observer observer = (Observer) i.getNext();
             if (observer != null) {
                 EnemyStrategy enemyStrategy = new MoveTowardPlayer();
@@ -522,5 +531,10 @@ public class Player implements Subject {
 
     public MusicMaker getMusic() {
         return this.musicMaker;
+    }
+
+    public void receiveMessage(String from, String message) {
+        audioPlayer.play("wav", "message.wav", false);
+        this.chat.addMessage(from, message);
     }
 }

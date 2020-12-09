@@ -40,6 +40,7 @@ public class RegistrationManager {
         kryo.register(CharacterAttackPacket.class);
         kryo.register(DamageEnemyPacket.class);
         kryo.register(ServerFullPacket.class);
+        kryo.register(ChatMessagePacket.class);
         kryo.register(GetPlayersPacket.class);
         kryo.register(KickPlayerPacket.class);
 

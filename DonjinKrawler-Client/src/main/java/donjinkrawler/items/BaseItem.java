@@ -11,10 +11,9 @@ import java.awt.*;
 import java.io.InputStream;
 
 public abstract class BaseItem implements KrawlerCloneable {
-    private LoggerSingleton logger = LoggerSingleton.getInstance();
-
     protected ItemLocationData itemData;
     protected Image image;
+    private LoggerSingleton logger = LoggerSingleton.getInstance();
 
     protected void loadImage(String imagePath) {
         try {

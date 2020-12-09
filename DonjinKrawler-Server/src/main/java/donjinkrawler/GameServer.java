@@ -2,14 +2,16 @@ package donjinkrawler;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.minlog.Log;
+import donjinkrawler.chatroom.ChatRoom;
+import donjinkrawler.chatroom.RoomMate;
 import donjinkrawler.config.ConfigSingleton;
 import donjinkrawler.logging.LoggerSingleton;
 import donjinkrawler.memento.History;
 import donjinkrawler.memento.Memento;
 import donjinkrawler.memento.SavedObject;
-import donjinkrawler.serverpacketcontrol.PacketControlChain;
 import donjinkrawler.proxy.BaseListener;
 import donjinkrawler.proxy.ListenerProxy;
+import donjinkrawler.serverpacketcontrol.PacketControlChain;
 import krawlercommon.ConnectionManager;
 import krawlercommon.PlayerData;
 import krawlercommon.RegistrationManager;
@@ -38,6 +40,7 @@ public class GameServer {
     private long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
     private boolean useProxyListener = false;
     private History history;
+    private ChatRoom chatRoom;
 
     public void startServer() throws IOException {
         Log.set(Log.LEVEL_ERROR);
@@ -45,6 +48,7 @@ public class GameServer {
         setupKryo();
         initMap();
         history = new History();
+        chatRoom = new ChatRoom();
         new TerminalReader();
         logger.info("Server is running");
     }
@@ -162,6 +166,19 @@ public class GameServer {
         sendWelcomeMessages(connection);
         sendIdentificationMessage(connection, player);
         logger.debug("Player " + player.getName() + " has joined the server");
+
+        this.chatRoom.addRoomMate(player.getId(), new RoomMate(this.chatRoom, player.getName()) {
+            @Override
+            public void send(String message) {
+                this.mediator.sendMessage(this, message);
+            }
+
+            @Override
+            public void receive(RoomMate from, String message) {
+                kryoServer.sendToTCP(connection.getID(), new ChatMessagePacket(message, from.getUsername()));
+            }
+        });
+
         sendPlayerToExistingClients(connection, player);
         sendExistingPlayersToClient(connection.getID(), player);
         sendEnemiesToPlayer(connection, true);
@@ -263,6 +280,10 @@ public class GameServer {
 
     public void setCurrentRoom(int room) {
         this.currentRoom = room;
+    }
+
+    public ChatRoom getChatRoom() {
+        return this.chatRoom;
     }
 
     public class Timer extends Thread {

@@ -30,7 +30,7 @@ public class FileUtils {
             myPath = Paths.get(uri);
         }
         Stream<Path> walk = Files.walk(myPath, 1);
-        for (Iterator<Path> it = walk.iterator(); it.hasNext();) {
+        for (Iterator<Path> it = walk.iterator(); it.hasNext(); ) {
             Path path = it.next();
             if (!path.toString().equals("/" + folder)) {
                 urls.add(path.toUri().toURL());
