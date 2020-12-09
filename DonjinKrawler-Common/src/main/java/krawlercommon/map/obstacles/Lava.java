@@ -5,7 +5,6 @@ import krawlercommon.visitor.ObstacleVisitor;
 
 public final class Lava extends Obstacle {
 
-
     @Override
     public void accept(ObstacleVisitor visitor) {
         visitor.visit(this);

@@ -6,7 +6,7 @@ import krawlercommon.map.obstacles.Slime;
 import krawlercommon.map.obstacles.Spikes;
 import krawlercommon.visitor.ObstacleVisitor;
 
-public class ObstacleVisitorImpl implements ObstacleVisitor {
+public final class ObstacleVisitorImpl implements ObstacleVisitor {
 
     Player player;
 
