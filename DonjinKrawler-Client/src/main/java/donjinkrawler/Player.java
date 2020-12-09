@@ -337,7 +337,7 @@ public class Player implements Subject {
         data.setHealth(0);
         this.isDead = true;
         audioPlayer.play("wav", "game-over.wav", false);
-        this.client.sendTCP(new KickPlayerPacket(this.getId()));
+        this.client.sendTCP(new KickPlayerPacket(this.getId(), true));
         this.gameClient.shutDown();
     }
 
