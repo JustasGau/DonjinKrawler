@@ -39,4 +39,6 @@ public interface AbstractShellInterface {
     boolean isAttacking();
 
     void setIsAttacking(boolean attack);
+
+    ShellType getShellType();
 }

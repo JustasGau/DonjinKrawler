@@ -2,7 +2,9 @@ package donjinkrawler;
 
 import org.junit.jupiter.api.Test;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.io.IOException;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,12 +13,12 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 public class PlayerShellTest {
 
     @Test
-    public void testLoadImage() {
+    public void testLoadImage() throws IOException {
         PlayerShell shell = new PlayerShell("Test");
         shell.loadImage();
-        ImageIcon fake = new ImageIcon(ClassLoader.getSystemResource("craft.png").getFile());
+        ImageIcon fake = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/craft.png")));
         assertEquals(fake.getImage().getClass().getName(), shell.getImage().getClass().getName());
-        ImageIcon fake2 = new ImageIcon(ClassLoader.getSystemResource("attack.png").getFile());
+        ImageIcon fake2 = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/attack.png")));
         shell.setIsAttacking(true);
         assertEquals(fake2.getImage().getClass().getName(), shell.getAttackImage().getClass().getName());
         shell.setIsAttacking(false);

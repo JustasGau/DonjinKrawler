@@ -1,6 +1,7 @@
 package donjinkrawler.items;
 
 import donjinkrawler.items.tiers.Tier;
+import donjinkrawler.visitor.ItemVisitor;
 import krawlercommon.items.ArmorData;
 
 public class Armor extends Armory {
@@ -39,6 +40,11 @@ public class Armor extends Armory {
         armor.hp = this.hp;
         armor.mana = this.mana;
         return armor;
+    }
+
+    @Override
+    public void accept(ItemVisitor visitor) {
+        visitor.visit(this);
     }
 
     @Override

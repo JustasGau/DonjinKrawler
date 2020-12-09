@@ -1,10 +1,8 @@
 package donjinkrawler.adapter;
 
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineEvent;
-import javax.sound.sampled.LineListener;
-import java.io.File;
+import javax.sound.sampled.*;
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 
 public class WavPlayer implements AdvancedMediaPlayer {
 
@@ -17,17 +15,15 @@ public class WavPlayer implements AdvancedMediaPlayer {
     @Override
     public void playWav(String fileName, boolean repeat) {
         try {
-            File audioFile = new File(ClassLoader.getSystemResource("sounds/".concat(fileName)).getFile());
+            InputStream stream = getClass().getResourceAsStream("/sounds/".concat(fileName));
+            AudioInputStream audioInput = AudioSystem.getAudioInputStream(new BufferedInputStream(stream));
             this.clip = AudioSystem.getClip();
-            clip.open(AudioSystem.getAudioInputStream(audioFile));
+            clip.open(audioInput);
 
-            clip.addLineListener(new LineListener() {
-                @Override
-                public void update(LineEvent lineEvent) {
-                    if (lineEvent.getType().equals(LineEvent.Type.STOP) && repeat) {
-                        clip.setMicrosecondPosition(0);
-                        clip.start();
-                    }
+            clip.addLineListener(lineEvent -> {
+                if (lineEvent.getType().equals(LineEvent.Type.STOP) && repeat) {
+                    clip.setMicrosecondPosition(0);
+                    clip.start();
                 }
             });
 

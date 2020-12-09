@@ -1,6 +1,10 @@
 package krawlercommon;
 
 import com.esotericsoftware.kryo.Kryo;
+import krawlercommon.composite.Attribute;
+import krawlercommon.composite.BaseAttribute;
+import krawlercommon.composite.FinalBonus;
+import krawlercommon.composite.RawBonus;
 import krawlercommon.enemies.*;
 import krawlercommon.enemies.big.BigChicken;
 import krawlercommon.enemies.big.BigSkeleton;
@@ -70,6 +74,10 @@ public class RegistrationManager {
         kryo.register(RangeAttack.class);
         kryo.register(Enemy.Phases.class);
         kryo.register(Boss.class);
+        kryo.register(Attribute.class);
+        kryo.register(FinalBonus.class);
+        kryo.register(RawBonus.class);
+        kryo.register(BaseAttribute.class);
 
         // jdk classes
         kryo.register(ArrayList.class);

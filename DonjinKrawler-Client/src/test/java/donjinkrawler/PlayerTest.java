@@ -16,9 +16,12 @@ import krawlercommon.iterator.door.DoorCollection;
 import krawlercommon.map.*;
 import org.junit.jupiter.api.Test;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,20 +71,22 @@ public class PlayerTest {
     }
 
     @Test
-    public void testGetImage() {
+    public void testGetImage() throws IOException {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
-        ImageIcon fake = new ImageIcon(ClassLoader.getSystemResource("craft.png").getFile());
+        InputStream is = getClass().getResourceAsStream("/craft.png");
+        ImageIcon fake = new ImageIcon(ImageIO.read(is));
         assertEquals(fake.getImage().getClass().getName(), player.getImage().getClass().getName());
     }
 
     @Test
-    public void testGetAttackImage() {
+    public void testGetAttackImage() throws IOException {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
         player.setAttackTimer(11);
         assertNull(player.getAttackImage());
-        ImageIcon fake = new ImageIcon(ClassLoader.getSystemResource("craft.png").getFile());
+        InputStream is = getClass().getResourceAsStream("/craft.png");
+        ImageIcon fake = new ImageIcon(ImageIO.read(is));
         player.isAttacking(true);
         player.setAttackTimer(1);
         assertEquals(fake.getImage().getClass().getName(), player.getAttackImage().getClass().getName());
@@ -187,7 +192,7 @@ public class PlayerTest {
     public void testGetDamage() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client());
-        assertEquals(20, player.getDamage());
+        assertEquals(5, player.getDamage());
     }
 
     @Test
