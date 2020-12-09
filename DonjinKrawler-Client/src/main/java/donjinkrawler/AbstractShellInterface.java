@@ -1,12 +1,14 @@
 package donjinkrawler;
 
-import javax.swing.*;
+import donjinkrawler.decorator.clothes.Clothing;
+import donjinkrawler.visitor.ClothingVisitor;
+
 import java.awt.*;
-import java.util.Map;
+import java.util.List;
 
 public interface AbstractShellInterface {
 
-    Map<String, ImageIcon> addClothing();
+    List<Clothing> addClothing();
 
     int getX();
 
@@ -26,7 +28,7 @@ public interface AbstractShellInterface {
 
     void setInfo(String info);
 
-    void drawClothes(Graphics2D g2d, Game game);
+    void drawClothes(ClothingVisitor visitor);
 
     double getHealth();
 

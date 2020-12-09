@@ -1,8 +1,10 @@
 package krawlercommon.map;
 
-public class Obstacle extends CollidableObject {
+import krawlercommon.visitor.ObstacleVisitor;
 
-    private ObstacleType obstacleType;
+public abstract class Obstacle extends CollidableObject {
+
+    protected String imageNumber = "2";
 
     public Obstacle() {
 
@@ -12,18 +14,14 @@ public class Obstacle extends CollidableObject {
         super(x, y, width, height);
     }
 
-    public ObstacleType getObstacleType() {
-        return obstacleType;
-    }
-
-    public void setObstacleType(ObstacleType obstacleType) {
-        this.obstacleType = obstacleType;
-    }
+    public abstract void accept(ObstacleVisitor visitor);
 
     @Override
     public Obstacle clone() throws CloneNotSupportedException {
-        Obstacle clone = (Obstacle) super.clone();
-        clone.setObstacleType(obstacleType);
-        return clone;
+        return (Obstacle) super.clone();
+    }
+
+    public String getImageNumber() {
+        return imageNumber;
     }
 }

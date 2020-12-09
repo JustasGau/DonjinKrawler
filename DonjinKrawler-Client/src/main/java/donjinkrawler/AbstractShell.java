@@ -1,8 +1,10 @@
 package donjinkrawler;
 
-import javax.swing.*;
+import donjinkrawler.decorator.clothes.Clothing;
+import donjinkrawler.visitor.ClothingVisitor;
+
 import java.awt.*;
-import java.util.Map;
+import java.util.List;
 
 public abstract class AbstractShell implements AbstractShellInterface {
 
@@ -53,9 +55,9 @@ public abstract class AbstractShell implements AbstractShellInterface {
         this.info = info;
     }
 
-    public abstract void drawClothes(Graphics2D g2d, Game game);
+    public abstract void drawClothes(ClothingVisitor visitor);
 
-    public abstract Map<String, ImageIcon> addClothing();
+    public abstract List<Clothing> addClothing();
 
     public double getHealth() {
         return health;
