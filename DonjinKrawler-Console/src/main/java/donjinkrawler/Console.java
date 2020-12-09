@@ -16,9 +16,11 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Scanner;
 
-public class Console {
+public final class Console {
     private static final int SERVER_TCP_PORT = 54555;
     private static final int SERVER_UDP_PORT = 54777;
+    private static final int CLIENT_WRITE_BUFFER_SIZE = 65536;
+    private static final int CLIENT_OBJECT_BUFFER_SIZE = 65536;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -50,7 +52,7 @@ public class Console {
     }
 
     public static Client getClient(String[] args) {
-        Client client = new Client(65536, 65536);
+        Client client = new Client(CLIENT_WRITE_BUFFER_SIZE, CLIENT_OBJECT_BUFFER_SIZE);
         client.getKryo().setReferences(true);
         RegistrationManager.registerKryo(client.getKryo());
         client.start();

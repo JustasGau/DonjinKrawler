@@ -2,7 +2,7 @@ package donjinkrawler;
 
 import donjinkrawler.interpreter.*;
 
-public class CommandParser {
+public final class CommandParser {
     private String command = "";
     private String argument = "";
 
