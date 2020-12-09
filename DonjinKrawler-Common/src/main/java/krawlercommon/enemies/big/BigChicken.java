@@ -27,8 +27,7 @@ public final class BigChicken extends Chicken {
     public void move() {
         super.move(decorations, walls);
     }
-
-
+    
     @Override
     public void update(EnemyStrategy strategy) {
         strategy.init(this);
