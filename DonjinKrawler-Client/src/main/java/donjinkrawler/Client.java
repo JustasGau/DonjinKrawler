@@ -11,6 +11,7 @@ import krawlercommon.packets.LoginPacket;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.HashMap;
@@ -65,7 +66,6 @@ public final class Client {
     }
 
     public void initUI(int currentRoom, PlayerData playerData) {
-
         frame.setTitle("Donjin Krawler. Player - " + name);
         frame.setSize(screenWidth, screenHeight);
 
@@ -75,9 +75,14 @@ public final class Client {
 
         messageLabel.setBackground(Color.lightGray);
         frame.getContentPane().add(messageLabel, BorderLayout.SOUTH);
-        game = new Game(kryoClient, messageLabel, new Player(playerData, kryoClient), rooms, currentRoom);
+        game = new Game(kryoClient, messageLabel, new Player(playerData, kryoClient, this), rooms, currentRoom);
         frame.add(game);
         frame.setVisible(true);
+    }
+
+    public void shutDown() {
+        JOptionPane.showMessageDialog(frame, "YOU DIED!", "GAME OVER", JOptionPane.PLAIN_MESSAGE);
+        frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
     }
 
     private void logIn() {
