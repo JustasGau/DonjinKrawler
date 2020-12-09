@@ -10,7 +10,9 @@ public class PacketControlChain {
     public PacketControlChain() {
         PacketHandler packetHandler = (new MessagePacketHandler());
 
-        packetHandler.linkWith(new MapPacketHandler())
+        packetHandler
+                .linkWith(new ServerFullPacketHandler())
+                .linkWith(new MapPacketHandler())
                 .linkWith(new IdPacketHandler())
                 .linkWith(new MoveCharacterPacketHandler())
                 .linkWith(new ChatMessagePacketHandler())
@@ -20,8 +22,8 @@ public class PacketControlChain {
                 .linkWith(new DisconnectPacketPacketHandler())
                 .linkWith(new RoomPacketHandler())
                 .linkWith(new ChangeEnemyStrategyPacketHandler())
-                .linkWith(new CharacterAttackPacketHandler())
-                .linkWith(new ServerFullPacketHandler());
+                .linkWith(new CharacterAttackPacketHandler());
+
 
         this.packetHandler = packetHandler;
     }

@@ -149,6 +149,9 @@ public class GameServer {
             loginPacket.name = loginPacket.name + rand.nextInt(69420);
         }
         PlayerData player = ConnectionManager.getInstance().getPlayerFromConnection(connection);
+        if (player == null) {
+            return;
+        }
         player.setName(loginPacket.name);
 
         sendMapToPlayer(connection);
@@ -216,7 +219,9 @@ public class GameServer {
             if (tempPlayer != player) {
                 CreatePlayerPacket createPlayerPacket = new CreatePlayerPacket();
                 createPlayerPacket.player = tempPlayer;
-                kryoServer.sendToTCP(id, createPlayerPacket);
+                if (tempPlayer.getName().length() > 0) {
+                    kryoServer.sendToTCP(id, createPlayerPacket);
+                }
             }
         }
     }
