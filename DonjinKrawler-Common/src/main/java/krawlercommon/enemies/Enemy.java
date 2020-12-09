@@ -2,14 +2,15 @@ package krawlercommon.enemies;
 
 import com.esotericsoftware.kryonet.Server;
 import krawlercommon.KrawlerCloneable;
+import krawlercommon.map.CollidableObject;
+import krawlercommon.map.Decoration;
+import krawlercommon.map.Wall;
 import krawlercommon.observer.Observer;
 import krawlercommon.packets.ChangeEnemyStrategyPacket;
 import krawlercommon.strategies.EnemyStrategy;
 import krawlercommon.strategies.MoveTowardPlayer;
 
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public abstract class Enemy extends EnemyTemplate implements Observer, KrawlerCloneable {
 
@@ -22,8 +23,8 @@ public abstract class Enemy extends EnemyTemplate implements Observer, KrawlerCl
     private String name;
     private double damage;
     private int id = (int) UUID.randomUUID().getMostSignificantBits();
-    private int x = random.nextInt(450);
-    private int y = random.nextInt(450);
+    private int x = random.nextInt(430) + 20;
+    private int y = random.nextInt(430) + 20;
     private int dx;
     private int dy;
     private Phases strategyPhase = Phases.RANDOM;
@@ -132,13 +133,34 @@ public abstract class Enemy extends EnemyTemplate implements Observer, KrawlerCl
         this.info = info;
     }
 
-    public void move() {
-        if ((dx < 0 && x - dx > 2) || (dx > 0 && x + 20 + dx < 500)) {
-            x += dx;
+    public abstract void move();
+
+    public void move(ArrayList<Decoration> decorations, ArrayList<Wall> walls) {
+        if (isCollidingWithImmovableObject(walls) || isCollidingWithImmovableObject(decorations)) {
+            return;
         }
-        if ((dy < 0 && y - dy > 2) || (dy > 0 && y + 20 + 50 + dy < 500)) {
-            y += dy;
+        x += dx;
+        y += dy;
+    }
+
+    private boolean isCollidingWithImmovableObject(List<? extends CollidableObject> objects) {
+        for (CollidableObject object : objects) {
+            if (isCollidingWith(object)) {
+                return true;
+            }
         }
+        return false;
+    }
+
+    private boolean isCollidingWith(CollidableObject obj) {
+        // FIXME: UGLY HACK WITH HARDCODED WIDTH
+        // 20 = enemy image width
+        int topCornerX = x + dx;
+        int topCornerY = y + dy;
+        int botCornerX = x + 20 + dx;
+        int botCornerY = y + 20 + dy;
+        return obj.getTopX() < botCornerX && obj.getBotX() > topCornerX
+                && obj.getTopY() < botCornerY && obj.getBotY() > topCornerY;
     }
 
     public void setDx(int val) {

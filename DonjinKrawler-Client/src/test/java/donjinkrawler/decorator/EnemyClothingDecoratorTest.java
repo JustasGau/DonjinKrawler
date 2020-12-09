@@ -1,6 +1,7 @@
 package donjinkrawler.decorator;
 
 import donjinkrawler.EnemyShell;
+import donjinkrawler.decorator.clothes.Clothing;
 import donjinkrawler.flyweight.EnemyFlyweight;
 import donjinkrawler.flyweight.EnemySelector;
 import org.junit.jupiter.api.Disabled;
@@ -10,7 +11,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.util.Map;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -114,7 +115,7 @@ public class EnemyClothingDecoratorTest {
     public void testAddClothing() {
         MaracasEnemy test = new MaracasEnemy(getEnemyObject("Big-Zombie", 1, 10, 20));
         ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("maracas.png").getFile());
-        Map<String, ImageIcon> clothes = test.addClothing();
+        List<Clothing> clothes = test.addClothing();
         assertEquals(1, clothes.size());
     }
 }

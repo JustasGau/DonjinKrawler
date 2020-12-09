@@ -7,7 +7,7 @@ import donjinkrawler.command.DamageCommand;
 import donjinkrawler.command.MoveCommand;
 import donjinkrawler.command.PlayerCommander;
 import donjinkrawler.facade.MusicMaker;
-import donjinkrawler.items.*;
+import donjinkrawler.items.BaseItem;
 import donjinkrawler.logging.LoggerSingleton;
 import donjinkrawler.visitor.ItemVisitor;
 import donjinkrawler.visitor.ItemVisitorImpl;
@@ -103,7 +103,7 @@ public class Player implements Subject {
 
     public Integer move(List<Wall> walls, DoorCollection doors, List<Obstacle> obstacles, List<Decoration> decorations,
                         HashMap<Integer, BaseItem> items) {
-        if(isDead) {
+        if (isDead) {
             return null;
         }
         if (isCollidingWithDoor(doors)) {
@@ -327,7 +327,7 @@ public class Player implements Subject {
     }
 
     public void setHealth(double val) {
-        if(val <= 0) {
+        if (val <= 0) {
             this.die();
         }
         data.setHealth(val);
@@ -368,7 +368,7 @@ public class Player implements Subject {
 
     public void keyPressed(KeyEvent e) {
 
-        if(isDead) {
+        if (isDead) {
             return;
         }
 
@@ -445,8 +445,8 @@ public class Player implements Subject {
     public void findTarget() {
         if (attack) {
             for (AbstractShellInterface enemy : shells.values()) {
-                if ((enemy.getX() >= (data.getX() - 10)) && enemy.getX() <= (data.getX() + 10)
-                        && enemy.getY() >= (data.getY() - 10) && enemy.getY() < (data.getY() + 10)) {
+                if ((enemy.getX() >= (data.getX() - 20)) && enemy.getX() <= (data.getX() + 20)
+                        && enemy.getY() >= (data.getY() - 20) && enemy.getY() < (data.getY() + 20)) {
                     DamageEnemyPacket packet = new DamageEnemyPacket();
                     packet.id = enemy.getID();
                     packet.damage = getDamage();

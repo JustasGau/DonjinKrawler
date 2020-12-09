@@ -1,11 +1,12 @@
 package donjinkrawler;
 
+import donjinkrawler.decorator.clothes.Clothing;
 import org.junit.jupiter.api.Test;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.io.IOException;
-import java.util.Map;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -28,7 +29,7 @@ public class PlayerShellTest {
     @Test
     public void testAddClothing() {
         PlayerShell shell = new PlayerShell("Test");
-        Map<String, ImageIcon> c = shell.addClothing();
+        List<Clothing> c = shell.addClothing();
         assertNull(c);
     }
 

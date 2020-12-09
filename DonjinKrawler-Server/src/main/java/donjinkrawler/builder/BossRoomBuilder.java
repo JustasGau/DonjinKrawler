@@ -71,7 +71,7 @@ public class BossRoomBuilder extends RoomBuilder {
 
     @Override
     RoomBuilder buildEnemies() {
-        Boss boss = new Boss();
+        Boss boss = new Boss(roomData.getDecorations(), roomData.getWalls());
         roomData.getEnemies().add(boss);
         return this;
     }

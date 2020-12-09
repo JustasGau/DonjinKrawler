@@ -5,6 +5,8 @@ import krawlercommon.enemies.EnemyType;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -12,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 public class GeneratedSmallEnemyFactoryTest {
     @Test
     public void testMake() {
-        Enemy actualMakeResult = (new SmallEnemyFactory()).make(EnemyType.CHICKEN);
+        Enemy actualMakeResult = (new SmallEnemyFactory(new ArrayList<>(), new ArrayList<>())).make(EnemyType.CHICKEN);
         assertEquals(5.0, actualMakeResult.getDamage());
         assertEquals(100.0, actualMakeResult.getHealth());
         assertEquals("Small-Chicken", actualMakeResult.getName());
@@ -20,12 +22,12 @@ public class GeneratedSmallEnemyFactoryTest {
 
     @Test
     public void testMake2() {
-        assertNull((new SmallEnemyFactory()).make(null));
+        assertNull((new SmallEnemyFactory(new ArrayList<>(), new ArrayList<>())).make(null));
     }
 
     @Test
     public void testMake3() {
-        Enemy actualMakeResult = (new SmallEnemyFactory()).make(EnemyType.SKELETON);
+        Enemy actualMakeResult = (new SmallEnemyFactory(new ArrayList<>(), new ArrayList<>())).make(EnemyType.SKELETON);
         assertEquals(20.0, actualMakeResult.getDamage());
         assertEquals(100.0, actualMakeResult.getHealth());
         assertEquals("Small-Skeleton", actualMakeResult.getName());
@@ -33,7 +35,7 @@ public class GeneratedSmallEnemyFactoryTest {
 
     @Test
     public void testMake4() {
-        Enemy actualMakeResult = (new SmallEnemyFactory()).make(EnemyType.ZOMBIE);
+        Enemy actualMakeResult = (new SmallEnemyFactory(new ArrayList<>(), new ArrayList<>())).make(EnemyType.ZOMBIE);
         assertEquals(15.0, actualMakeResult.getDamage());
         assertEquals(100.0, actualMakeResult.getHealth());
         assertEquals("Small-Zombie", actualMakeResult.getName());
@@ -41,7 +43,7 @@ public class GeneratedSmallEnemyFactoryTest {
 
     @Test
     public void testMake5() {
-        assertNull((new SmallEnemyFactory()).make(EnemyType.BOSS));
+        assertNull((new SmallEnemyFactory(new ArrayList<>(), new ArrayList<>())).make(EnemyType.BOSS));
     }
 }
 

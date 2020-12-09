@@ -6,6 +6,7 @@ import krawlercommon.items.ArmorData;
 import krawlercommon.items.DamagePotionData;
 import krawlercommon.items.ItemLocationData;
 import krawlercommon.map.*;
+import krawlercommon.map.obstacles.Lava;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -92,8 +93,7 @@ public class RoomTest {
         when(roomData.getId()).thenReturn(69);
         when(roomData.getWalls()).thenReturn(new ArrayList<>(List.of(new Wall(10, 10, 10, 10))));
         when(roomData.getDecorations()).thenReturn(new ArrayList<>(List.of(new Decoration(10, 10, 10, 10))));
-        Obstacle obstacle = new Obstacle(20, 10, 10, 10);
-        obstacle.setObstacleType(ObstacleType.LAVA);
+        Obstacle obstacle = new Lava(20, 10, 10, 10);
         when(roomData.getObstacles()).thenReturn(new ArrayList<>(List.of(obstacle)));
 
         Graphics2D graphics = mock(Graphics2D.class);
@@ -152,8 +152,7 @@ public class RoomTest {
         when(roomData.getId()).thenReturn(69);
         when(roomData.getWalls()).thenReturn(new ArrayList<>(List.of(new Wall(10, 10, 10, 10))));
         when(roomData.getDecorations()).thenReturn(new ArrayList<>(List.of(new Decoration(10, 10, 10, 10))));
-        Obstacle obstacle = new Obstacle(20, 10, 10, 10);
-        obstacle.setObstacleType(ObstacleType.LAVA);
+        Obstacle obstacle = new Lava(20, 10, 10, 10);
         when(roomData.getObstacles()).thenReturn(new ArrayList<>(List.of(obstacle)));
         HashMap<Integer, ItemLocationData> items = new HashMap<>();
         DamagePotionData potionData = new DamagePotionData(1, 250, 250);
