@@ -53,6 +53,17 @@ public class ConnectionManager {
         return playerConnectionMap.get(connection.getID());
     }
 
+    public Integer getConnectionIdByPlayerId(Integer id) {
+        for (Integer connectionId : playerConnectionMap.keySet()) {
+            PlayerData playerData = playerConnectionMap.get(connectionId);
+            if (playerData.getId() == id) {
+                return connectionId;
+            }
+        }
+
+        return -1;
+    }
+
     public PlayerData getPlayerFromId(int id) {
         return playerConnectionMap.get(id);
     }
