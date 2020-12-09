@@ -21,7 +21,7 @@ public class Chat extends JFrame {
         southPanel.setBackground(Color.BLUE);
         southPanel.setLayout(new GridBagLayout());
 
-        JTextField messageBox = new JTextField(30);
+        JTextField messageBox = new JTextField(25);
         JButton sendMessage = new JButton("Send Message");
         this.chatBox = new JTextArea();
         this.chatBox.setEditable(false);
@@ -41,7 +41,7 @@ public class Chat extends JFrame {
         chatBox.setFont(new Font("Serif", Font.PLAIN, 15));
 
         this.setTitle("Chat");
-        this.setResizable(false);
+        this.setResizable(true);
         this.setSize(CHAT_WIDTH, CHAT_HEIGHT);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

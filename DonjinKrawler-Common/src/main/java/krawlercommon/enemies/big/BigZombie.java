@@ -38,6 +38,6 @@ final public class BigZombie extends Zombie {
 
     @Override
     public void debug() {
-        // ystem.out.println("Big zombie:" + this.getID() + " has been created");
+//         System.out.println("Big zombie:" + this.getID() + " has been created");
     }
 }
