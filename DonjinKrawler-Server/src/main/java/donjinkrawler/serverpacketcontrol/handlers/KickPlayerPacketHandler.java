@@ -21,6 +21,7 @@ public class KickPlayerPacketHandler extends PacketHandler {
 
         for (Connection connection : allConnections) {
             if (connection.getID() == playerConnectionId) {
+                request.getGameServer().getKryo().sendToTCP(connection.getID(), new KickPlayerPacket());
                 connection.close();
                 break;
             }

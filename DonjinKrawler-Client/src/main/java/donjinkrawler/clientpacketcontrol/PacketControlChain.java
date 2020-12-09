@@ -14,6 +14,7 @@ public class PacketControlChain {
                 .linkWith(new IdPacketHandler())
                 .linkWith(new MoveCharacterPacketHandler())
                 .linkWith(new ChatMessagePacketHandler())
+                .linkWith(new KickPlayerPacketHandler())
                 .linkWith(new EnemyPacketHandler())
                 .linkWith(new CreatePlayerPacketHandler())
                 .linkWith(new DisconnectPacketPacketHandler())

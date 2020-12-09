@@ -1,7 +1,10 @@
 package donjinkrawler.builder;
 
 import krawlercommon.enemies.Boss;
-import krawlercommon.map.*;
+import krawlercommon.map.Decoration;
+import krawlercommon.map.Obstacle;
+import krawlercommon.map.RoomType;
+import krawlercommon.map.Wall;
 import krawlercommon.map.obstacles.Lava;
 
 public class BossRoomBuilder extends RoomBuilder {

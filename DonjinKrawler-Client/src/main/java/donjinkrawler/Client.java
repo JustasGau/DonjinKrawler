@@ -85,6 +85,12 @@ public final class Client {
         frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
     }
 
+    public void kickOut() {
+        game.getPlayer().kill();
+        JOptionPane.showMessageDialog(frame, "You have been kicked form the game.", "Warning!", JOptionPane.PLAIN_MESSAGE);
+        frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+    }
+
     private void logIn() {
         name = getName();
         if ((name != null) && (name.length() > 0)) {

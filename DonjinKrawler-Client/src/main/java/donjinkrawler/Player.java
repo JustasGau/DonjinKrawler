@@ -7,7 +7,7 @@ import donjinkrawler.command.DamageCommand;
 import donjinkrawler.command.MoveCommand;
 import donjinkrawler.command.PlayerCommander;
 import donjinkrawler.facade.MusicMaker;
-import donjinkrawler.items.*;
+import donjinkrawler.items.BaseItem;
 import donjinkrawler.logging.LoggerSingleton;
 import donjinkrawler.visitor.ItemVisitor;
 import donjinkrawler.visitor.ItemVisitorImpl;
@@ -103,7 +103,7 @@ public class Player implements Subject {
 
     public Integer move(List<Wall> walls, DoorCollection doors, List<Obstacle> obstacles, List<Decoration> decorations,
                         HashMap<Integer, BaseItem> items) {
-        if(isDead) {
+        if (isDead) {
             return null;
         }
         if (isCollidingWithDoor(doors)) {
@@ -327,7 +327,7 @@ public class Player implements Subject {
     }
 
     public void setHealth(double val) {
-        if(val <= 0) {
+        if (val <= 0) {
             this.die();
         }
         data.setHealth(val);
@@ -368,7 +368,7 @@ public class Player implements Subject {
 
     public void keyPressed(KeyEvent e) {
 
-        if(isDead) {
+        if (isDead) {
             return;
         }
 
@@ -521,6 +521,11 @@ public class Player implements Subject {
 
     public MusicMaker getMusic() {
         return this.musicMaker;
+    }
+
+    public void kill() {
+        this.data.setHealth(0);
+        this.isDead = true;
     }
 
     public void receiveMessage(String from, String message) {

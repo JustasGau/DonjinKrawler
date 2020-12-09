@@ -12,7 +12,7 @@ public class LoginPacketHandler extends PacketHandler {
 
         LoginPacket loginPacket = (LoginPacket) request.getObject();
 
-        if(loginPacket.isAdmin) {
+        if (loginPacket.isAdmin) {
             request.getGameServer().addTimer();
             return true;
         }

@@ -9,9 +9,8 @@ import java.awt.*;
 import java.io.InputStream;
 
 public abstract class Clothing {
-    LoggerSingleton logger = LoggerSingleton.getInstance();
-
     protected ImageIcon image;
+    LoggerSingleton logger = LoggerSingleton.getInstance();
 
     public abstract Image getImage();
 
@@ -21,7 +20,7 @@ public abstract class Clothing {
         try {
             InputStream stream = getClass().getResourceAsStream("/" + imageName + ".png");
             ImageIcon ii = new ImageIcon(ImageIO.read(stream));
-            Image scaledImage = ii.getImage().getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);
+            Image scaledImage = ii.getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
             this.image = new ImageIcon(scaledImage);
         } catch (Exception e) {
             logger.error("Failed loading image");

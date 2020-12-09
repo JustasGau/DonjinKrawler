@@ -8,6 +8,7 @@ public class KickPlayerPacket {
         this.id = id;
     }
 
-    public KickPlayerPacket() { }
+    public KickPlayerPacket() {
+    }
 
 }
