@@ -12,6 +12,11 @@ public class LoginPacketHandler extends PacketHandler {
 
         LoginPacket loginPacket = (LoginPacket) request.getObject();
 
+        if(loginPacket.isAdmin) {
+            request.getGameServer().addTimer();
+            return true;
+        }
+
         request.getGameServer().createNewPlayer(request.getConnection(), loginPacket);
         request.getGameServer().addTimer();
 

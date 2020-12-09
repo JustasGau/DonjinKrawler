@@ -61,9 +61,7 @@ public final class Console {
             client.connect(5000, getAddress(args), SERVER_TCP_PORT, SERVER_UDP_PORT);
             System.out.println("Console successfully connected to server");
 
-            LoginPacket loginPacket = new LoginPacket();
-            loginPacket.name = "Blogasis Policininkas";
-            client.sendTCP(loginPacket);
+            client.sendTCP(new LoginPacket("Blogasis Policininkas", true));
 
             client.addListener(new Listener() {
                 @Override
