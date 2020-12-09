@@ -2,6 +2,7 @@ package donjinkrawler.builder;
 
 import krawlercommon.enemies.Boss;
 import krawlercommon.map.*;
+import krawlercommon.map.obstacles.Lava;
 
 public class BossRoomBuilder extends RoomBuilder {
 
@@ -39,16 +40,14 @@ public class BossRoomBuilder extends RoomBuilder {
 
     @Override
     public RoomBuilder buildObstacles() {
-        Obstacle obstacle = new Obstacle();
-        obstacle.setObstacleType(ObstacleType.LAVA);
+        Obstacle obstacle = new Lava();
         obstacle.setX(50);
         obstacle.setY(380);
         obstacle.setWidth(150);
         obstacle.setHeight(50);
         roomData.getObstacles().add(obstacle);
 
-        obstacle = new Obstacle();
-        obstacle.setObstacleType(ObstacleType.LAVA);
+        obstacle = new Lava();
         obstacle.setX(300);
         obstacle.setY(100);
         obstacle.setWidth(150);

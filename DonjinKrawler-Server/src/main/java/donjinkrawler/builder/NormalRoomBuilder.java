@@ -7,9 +7,11 @@ import krawlercommon.enemies.small.SmallEnemyFactory;
 import krawlercommon.items.ItemGenerator;
 import krawlercommon.items.ItemLocationData;
 import krawlercommon.map.Obstacle;
-import krawlercommon.map.ObstacleType;
 import krawlercommon.map.RoomType;
 import krawlercommon.map.Wall;
+import krawlercommon.map.obstacles.Lava;
+import krawlercommon.map.obstacles.Slime;
+import krawlercommon.map.obstacles.Spikes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,12 +77,20 @@ public class NormalRoomBuilder extends RoomBuilder {
     @Override
     public RoomBuilder buildObstacles() {
         for (int i = 0; i < 5; i++) {
-            Obstacle obstacle = new Obstacle();
+            String typeNumber = String.valueOf(rand.nextInt(3) + 1);
+            Obstacle obstacle;
+            if (typeNumber.equals("1")) {
+                obstacle = new Lava();
+            } else if (typeNumber.equals("2")) {
+                obstacle = new Spikes();
+            } else {
+                obstacle = new Slime();
+            }
+
             obstacle.setX(rand.nextInt(350) + 30);
             obstacle.setY(rand.nextInt(350) + 30);
             obstacle.setWidth(35);
             obstacle.setHeight(35);
-            obstacle.setObstacleType(ObstacleType.getTypeByNumber(String.valueOf(rand.nextInt(3) + 1)));
             roomData.getObstacles().add(obstacle);
             // TODO: check if wall is here already
         }

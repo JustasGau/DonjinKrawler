@@ -11,8 +11,8 @@ import donjinkrawler.items.*;
 import donjinkrawler.logging.LoggerSingleton;
 import donjinkrawler.visitor.ItemVisitor;
 import donjinkrawler.visitor.ItemVisitorImpl;
+import donjinkrawler.visitor.ObstacleVisitorImpl;
 import krawlercommon.PlayerData;
-import krawlercommon.composite.FinalBonus;
 import krawlercommon.composite.RawBonus;
 import krawlercommon.enemies.Enemy;
 import krawlercommon.iterator.Iterator;
@@ -27,6 +27,7 @@ import krawlercommon.packets.DamageEnemyPacket;
 import krawlercommon.packets.KickPlayerPacket;
 import krawlercommon.strategies.EnemyStrategy;
 import krawlercommon.strategies.MoveTowardPlayer;
+import krawlercommon.visitor.ObstacleVisitor;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -68,6 +69,7 @@ public class Player implements Subject {
     private RawBonus weaponBonus = null;
     private ItemVisitor itemVisitor;
     private boolean isDead;
+    private ObstacleVisitor obstacleVisitor;
 
     public Player(PlayerData playerData, Client client, donjinkrawler.Client gameClient) {
         data = playerData;
@@ -80,6 +82,7 @@ public class Player implements Subject {
         this.chat = new Chat(this.client, this.getName(), this.getId());
 
         itemVisitor = new ItemVisitorImpl(data, inventory, armorBonus, weaponBonus);
+        obstacleVisitor = new ObstacleVisitorImpl(this);
         loadImage();
     }
 
@@ -169,13 +172,7 @@ public class Player implements Subject {
     }
 
     private void handleObstacleCollision(Obstacle obstacle) {
-        if (obstacle.getObstacleType() == ObstacleType.LAVA) {
-            reduceHealthFromObstacle(10);
-        } else if (obstacle.getObstacleType() == ObstacleType.SPIKES) {
-            reduceHealthFromObstacle(5);
-        } else if (obstacle.getObstacleType() == ObstacleType.SLIME) {
-            reducePlayerSpeed();
-        }
+        obstacle.accept(obstacleVisitor);
         if (backwards) {
             commander.undo();
         } else {
@@ -183,36 +180,7 @@ public class Player implements Subject {
         }
     }
 
-    private void handleItemCollision(BaseItem item) {
-        if (item instanceof Armor) {
-            if (armorBonus != null) {
-                data.getMaxHealth().removeRawBonus(armorBonus);
-            }
-            armorBonus = new RawBonus(((Armor) item).getHp(), 0);
-            data.getMaxHealth().addRawBonus(armorBonus);
-            data.adjustHealthWithMaxHealth();
-            this.inventory.addArmor((Armor) item);
-        } else if (item instanceof Weapon) {
-            if (weaponBonus != null) {
-                data.getDamage().removeRawBonus(weaponBonus);
-            }
-            weaponBonus = new RawBonus(((Weapon) item).getDamage(), 0);
-            data.getDamage().addRawBonus(weaponBonus);
-            this.inventory.addWeapon((Weapon) item);
-        } else if (item instanceof DamagePotion) {
-            DamagePotion damagePotion = (DamagePotion) item;
-            FinalBonus finalBonus = new FinalBonus(0, damagePotion.getMultiplier(), 10);
-            data.getDamage().addFinalBonus(finalBonus);
-            finalBonus.startTimer(data.getDamage());
-        } else if (item instanceof SpeedPotion) {
-            SpeedPotion speedPotion = (SpeedPotion) item;
-            FinalBonus finalBonus = new FinalBonus(0, speedPotion.getMultiplier(), 5);
-            data.getSpeed().addFinalBonus(finalBonus);
-            finalBonus.startTimer(data.getSpeed());
-        }
-    }
-
-    private void reducePlayerSpeed() {
+    public void reducePlayerSpeed() {
         if (dx != 0) {
             if (dx > 0) {
                 dx = 1;
@@ -229,7 +197,7 @@ public class Player implements Subject {
         }
     }
 
-    private void reduceHealthFromObstacle(int health) {
+    public void reduceHealthFromObstacle(int health) {
         obstacleCollisionCount++;
         if (obstacleCollisionCount % 25 == 0) {
             commander.execute(new DamageCommand(this, health));
