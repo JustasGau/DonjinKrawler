@@ -131,7 +131,7 @@ public class Room implements KrawlerCloneable {
 
     private void drawObstacles(Graphics2D g2d) {
         for (Obstacle obstacle : roomData.getObstacles()) {
-            BufferedImage obstacleImage = obstacleImages.get(obstacle.getObstacleType().number);
+            BufferedImage obstacleImage = obstacleImages.get(obstacle.getImageNumber());
             fillImage(g2d, obstacleImage, obstacle.getX(), obstacle.getY(), obstacle.getWidth(), obstacle.getHeight());
         }
     }

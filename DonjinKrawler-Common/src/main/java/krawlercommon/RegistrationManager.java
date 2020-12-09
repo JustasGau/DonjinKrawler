@@ -14,6 +14,9 @@ import krawlercommon.enemies.small.SmallSkeleton;
 import krawlercommon.enemies.small.SmallZombie;
 import krawlercommon.items.*;
 import krawlercommon.map.*;
+import krawlercommon.map.obstacles.Lava;
+import krawlercommon.map.obstacles.Slime;
+import krawlercommon.map.obstacles.Spikes;
 import krawlercommon.packets.*;
 import krawlercommon.strategies.*;
 
@@ -68,7 +71,9 @@ public class RegistrationManager {
         kryo.register(HealthPotionData.class);
         kryo.register(DamagePotionData.class);
         kryo.register(Obstacle.class);
-        kryo.register(ObstacleType.class);
+        kryo.register(Lava.class);
+        kryo.register(Slime.class);
+        kryo.register(Spikes.class);
         kryo.register(Decoration.class);
         kryo.register(Attack.class);
         kryo.register(MoveAwayFromPlayer.class);
