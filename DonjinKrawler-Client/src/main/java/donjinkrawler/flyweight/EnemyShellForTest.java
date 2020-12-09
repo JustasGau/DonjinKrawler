@@ -1,19 +1,20 @@
 package donjinkrawler.flyweight;
 
 import donjinkrawler.AbstractShell;
-import donjinkrawler.Game;
 import donjinkrawler.ShellType;
+import donjinkrawler.decorator.clothes.Clothing;
+import donjinkrawler.visitor.ClothingVisitor;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EnemyShellForTest extends AbstractShell {
 
     private int id;
     private String info = "No strategy";
-    private Map<String, ImageIcon> clothes = new HashMap<>();
+    private List<Clothing> clothes = new ArrayList<>();
 
     public EnemyShellForTest(String name, int id, int x, int y) {
         this.name = name;
@@ -76,22 +77,9 @@ public class EnemyShellForTest extends AbstractShell {
         this.info = info;
     }
 
-    public void drawClothes(Graphics2D g2d, Game g) {
-        int offsetX;
-        int offsetY;
-        for (Map.Entry<String, ImageIcon> entry : clothes.entrySet()) {
-            Image clothImage = entry.getValue().getImage();
-            switch (entry.getKey()) {
-                case "Maracas":
-                case "Poncho":
-                    offsetX = 0;
-                    offsetY = 5;
-                    break;
-                default:
-                    offsetX = 2;
-                    offsetY = -3;
-            }
-            g2d.drawImage(clothImage, getX() + offsetX, getY() + offsetY, g);
+    public void drawClothes(ClothingVisitor visitor) {
+        for (Clothing entry : clothes) {
+            entry.accept(visitor);
         }
     }
 
@@ -101,7 +89,7 @@ public class EnemyShellForTest extends AbstractShell {
     }
 
     @Override
-    public Map<String, ImageIcon> addClothing() {
+    public List<Clothing> addClothing() {
         return clothes;
     }
 
