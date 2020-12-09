@@ -1,18 +1,12 @@
 package donjinkrawler.memento;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
 
 public class History {
-    private List<Memento> history = new ArrayList<>();
-    private int virtualSize = 0;
+    private LinkedList<Memento> history = new LinkedList<>();
 
     public void push(Memento m) {
-        if (virtualSize != history.size() && virtualSize > 0) {
-            history = history.subList(0, virtualSize - 1);
-        }
         history.add(m);
-        virtualSize = history.size();
     }
 
     public boolean undo() throws InterruptedException {
@@ -26,11 +20,11 @@ public class History {
 
 
     private Memento getUndo() {
-        if (virtualSize == 0) {
+        if (history.size() > 0) {
+            return history.removeLast();
+        } else {
             return null;
         }
-        virtualSize = Math.max(0, virtualSize - 1);
-        return history.get(virtualSize);
     }
 
 }
