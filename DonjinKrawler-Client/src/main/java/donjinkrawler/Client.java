@@ -16,7 +16,7 @@ import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Client {
+public final class Client {
 
     private static final int screenWidth = 500;
     private static final int screenHeight = 500;
@@ -31,8 +31,8 @@ public class Client {
     private Map<Integer, RoomData> rooms;
 
     public Client(String serverAddress) throws IOException {
-        setupKryo();
         this.serverAddress = serverAddress;
+        setupKryo();
         logIn();
     }
 

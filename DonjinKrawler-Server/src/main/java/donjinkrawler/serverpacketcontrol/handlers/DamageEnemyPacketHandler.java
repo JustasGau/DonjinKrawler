@@ -16,6 +16,9 @@ public class DamageEnemyPacketHandler extends PacketHandler {
         for (Enemy enemy : request.getGameServer().getCurrentRoom().getEnemies()) {
             if (enemy != null && enemy.getID() == packet.id) {
                 enemy.damage(packet.damage);
+                if (enemy.getHealth() < 0) {
+                    request.getGameServer().getCurrentRoom().getEnemies().remove(enemy);
+                }
                 break;
             }
         }

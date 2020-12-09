@@ -15,3 +15,7 @@ task runClient {
 task runServer {
     dependsOn ':DonjinKrawler-Server:run'
 }
+
+task runConsole {
+    dependsOn ':DonjinKrawler-Console:run'
+}

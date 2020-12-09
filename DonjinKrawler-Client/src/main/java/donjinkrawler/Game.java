@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Game extends JPanel implements ActionListener {
+public final class Game extends JPanel implements ActionListener {
     public static Map<Integer, AbstractShellInterface> shells = new ConcurrentHashMap<>();
     static com.esotericsoftware.kryonet.Client client;
     private static Player player = null;
@@ -113,6 +113,7 @@ public class Game extends JPanel implements ActionListener {
         g2d.drawImage(player.getAttackImage(), player.getX() - 10, player.getY() - 10, this);
         SwingUtils.drawHealthBar(g2d, player.getX(), player.getY(), 20, 5, player.getHealth());
         g2d.setColor(Color.GREEN);
+        g2d.drawString(String.valueOf(player.getHealth()), player.getX() + 5, player.getY() - 20);
         g2d.drawString(player.getName(), player.getX(), player.getY() + 30);
     }
 
@@ -270,6 +271,23 @@ public class Game extends JPanel implements ActionListener {
                     updatedEnemy.setX(enemy.getX());
                     updatedEnemy.setY(enemy.getY());
                     updatedEnemy.setHealth(enemy.getHealth());
+                }
+                if (shells.size() > enemies.size()) {
+                    removeLeftoverShells(enemies);
+                }
+            }
+        }
+    }
+
+    private void removeLeftoverShells(List<Enemy> enemies) {
+        Iterator<AbstractShellInterface> shellIterator = shells.values().iterator();
+
+        while (shellIterator.hasNext()) {
+            AbstractShellInterface shell = shellIterator.next();
+            if (shell.getShellType().equals(ShellType.ENEMY)) {
+                boolean contains = enemies.stream().anyMatch(e -> e.getID() == shell.getID());
+                if (!contains) {
+                    shellIterator.remove();
                 }
             }
         }

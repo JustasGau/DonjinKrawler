@@ -14,8 +14,9 @@ import krawlercommon.map.*;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,16 +64,18 @@ public class Room implements KrawlerCloneable {
             readImages("floors", tileImages);
             readImages("obstacles", obstacleImages);
             readImages("decorations", decorationImages);
-        } catch (IOException ignored) {
-
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
-    private void readImages(String imageFolder, Map<String, BufferedImage> hashMap) throws IOException {
+    private void readImages(String imageFolder, Map<String, BufferedImage> hashMap)
+            throws IOException, URISyntaxException {
         BufferedImage image;
-        for (File f : FileUtils.getResourceFolderFiles(imageFolder)) {
-            image = ImageIO.read(f);
-            hashMap.put(f.getName().split("\\.")[0], image);
+        for (URL url : FileUtils.getResourceFolderFiles(imageFolder)) {
+            image = ImageIO.read(url);
+            String[] splits = url.toString().split("/");
+            hashMap.put(splits[splits.length - 1].split("\\.")[0], image);
         }
     }
 
@@ -218,7 +221,9 @@ public class Room implements KrawlerCloneable {
 
     private void cloneImageMap(Map<String, BufferedImage> origMap, Map<String, BufferedImage> dest) {
         for (Map.Entry<String, BufferedImage> entry : origMap.entrySet()) {
-            dest.put(entry.getKey(), SwingUtils.deepCopy(entry.getValue()));
+            if (entry.getValue() != null) {
+                dest.put(entry.getKey(), SwingUtils.deepCopy(entry.getValue()));
+            }
         }
     }
 

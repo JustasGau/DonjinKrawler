@@ -2,6 +2,7 @@ package donjinkrawler.flyweight;
 
 import donjinkrawler.AbstractShell;
 import donjinkrawler.Game;
+import donjinkrawler.ShellType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -107,6 +108,11 @@ public class EnemyShellForTest extends AbstractShell {
     @Override
     public Image getAttackImage() {
         return null;
+    }
+
+    @Override
+    public ShellType getShellType() {
+        return ShellType.ENEMY;
     }
 
 }
