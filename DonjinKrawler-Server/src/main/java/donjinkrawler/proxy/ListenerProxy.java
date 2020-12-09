@@ -7,7 +7,7 @@ import krawlercommon.packets.ServerFullPacket;
 
 public class ListenerProxy extends Listener {
 
-    BaseListener baseListener;
+    private BaseListener baseListener;
 
     public ListenerProxy(BaseListener baseListener) {
         this.baseListener = baseListener;
