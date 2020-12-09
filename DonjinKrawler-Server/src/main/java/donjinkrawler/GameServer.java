@@ -113,7 +113,7 @@ public class GameServer {
                 copyRoomMap(rooms));
     }
 
-    public void restore(SavedObject state) throws InterruptedException {
+    public void restore(SavedObject state) {
         currentDirection = state.getDirection();
         rooms = state.getRooms();
         if (currentRoom != state.getCurrentRoom()) {

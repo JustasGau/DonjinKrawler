@@ -47,7 +47,7 @@ public class NormalRoomBuilder extends RoomBuilder {
         for (int i = 0; i < 5; i++) {
             int x = rand.nextInt(MAX_WALL_COORD) + MIN_WALL_COORD;
             int y = rand.nextInt(MAX_WALL_COORD) + MIN_WALL_COORD;
-            while ((x > 165 && x < 240) && (y > 165 && y < 240)) {
+            while ((x > 175 && x < 235) || (y > 175 && y < 235)) {
                 x = rand.nextInt(MAX_WALL_COORD) + MIN_WALL_COORD;
                 y = rand.nextInt(MAX_WALL_COORD) + MIN_WALL_COORD;
             }
