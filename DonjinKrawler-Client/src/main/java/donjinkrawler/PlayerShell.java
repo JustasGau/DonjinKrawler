@@ -1,12 +1,14 @@
 package donjinkrawler;
 
+import donjinkrawler.decorator.clothes.Clothing;
 import donjinkrawler.logging.LoggerSingleton;
+import donjinkrawler.visitor.ClothingVisitor;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.InputStream;
-import java.util.Map;
+import java.util.List;
 
 public class PlayerShell extends AbstractShell {
     private LoggerSingleton logger = LoggerSingleton.getInstance();
@@ -30,7 +32,7 @@ public class PlayerShell extends AbstractShell {
     }
 
     @Override
-    public void drawClothes(Graphics2D g2d, Game game) {
+    public void drawClothes(ClothingVisitor visitor) {
         // Todo: implement
     }
 
@@ -40,7 +42,7 @@ public class PlayerShell extends AbstractShell {
     }
 
     @Override
-    public Map<String, ImageIcon> addClothing() {
+    public List<Clothing> addClothing() {
         return null;
     }
 
