@@ -1,9 +1,0 @@
-/home/justas/Projects/sonar-custom-rules-examples/java-custom-rules/src/test/java/org/sonar/samples/java/checks/AvoidMethodDeclarationCheckTest.java
-/home/justas/Projects/sonar-custom-rules-examples/java-custom-rules/src/test/java/org/sonar/samples/java/checks/SecurityAnnotationMandatoryCheckTest.java
-/home/justas/Projects/sonar-custom-rules-examples/java-custom-rules/src/test/java/org/sonar/samples/java/checks/AvoidBrandInMethodNamesCheckTest.java
-/home/justas/Projects/sonar-custom-rules-examples/java-custom-rules/src/test/java/org/sonar/samples/java/MyJavaRulesDefinitionTest.java
-/home/justas/Projects/sonar-custom-rules-examples/java-custom-rules/src/test/java/org/sonar/samples/java/checks/SpringControllerRequestMappingEntityRuleTest.java
-/home/justas/Projects/sonar-custom-rules-examples/java-custom-rules/src/test/java/org/sonar/samples/java/checks/MyCustomSubscriptionRuleTest.java
-/home/justas/Projects/sonar-custom-rules-examples/java-custom-rules/src/test/java/org/sonar/samples/java/checks/AvoidTreeListTest.java
-/home/justas/Projects/sonar-custom-rules-examples/java-custom-rules/src/test/java/org/sonar/samples/java/checks/AvoidSuperClassCheckTest.java
-/home/justas/Projects/sonar-custom-rules-examples/java-custom-rules/src/test/java/org/sonar/samples/java/checks/AvoidAnnotationCheckTest.java
