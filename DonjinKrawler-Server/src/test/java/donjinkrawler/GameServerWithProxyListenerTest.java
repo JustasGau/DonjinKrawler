@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Disabled
 public class GameServerWithProxyListenerTest {
     private static GameServer gameServer;
     private static Client kryoClient;
@@ -57,10 +58,10 @@ public class GameServerWithProxyListenerTest {
     public void testLoginPacket() throws InterruptedException {
         LoginPacket loginPacket = new LoginPacket();
         loginPacket.name = "TestUser";
-        int initialId = ConnectionManager.getInstance().getPlayerIDs();
         kryoClient.sendUDP(loginPacket);
         // wait until packet is handled
-        Thread.sleep(1000);
+        Thread.sleep(2000);
+        assertTrue(ConnectionManager.getInstance().getAllPlayers().size() > 0);
         assertNotNull(ConnectionManager.getInstance().getAllPlayers().get(0));
         assertTrue(ConnectionManager.getInstance().getAllPlayers().get(0).getName().length() > 0);
     }

@@ -38,6 +38,9 @@ public class GameTest {
     com.esotericsoftware.kryonet.Client client;
 
     @Mock
+    Client mockDonjinClient;
+
+    @Mock
     JLabel jLabel;
 
     Player fakePlayer;
@@ -70,7 +73,7 @@ public class GameTest {
         when(mockGraphics.create()).thenReturn(mockGraphics);
         PlayerData playerData = new PlayerData("Arvydas", 1, 250, 250);
         client = mock(com.esotericsoftware.kryonet.Client.class);
-        fakePlayer = new Player(playerData, client, new donjinkrawler.Client("20202020"));
+        fakePlayer = new Player(playerData, client, mockDonjinClient);
         when(client.sendTCP(any())).thenReturn(1);
     }
 

@@ -18,6 +18,7 @@ import krawlercommon.map.obstacles.Lava;
 import krawlercommon.map.obstacles.Slime;
 import krawlercommon.map.obstacles.Spikes;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -32,51 +33,54 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTest {
+    
+    @Mock
+    donjinkrawler.Client mockClient;
 
     @Test
-    public void testSetX() throws IOException {
+    public void testSetX() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
         player.setX(10);
         assertEquals(10, player.getX());
     }
 
     @Test
-    public void testSetY() throws IOException {
+    public void testSetY() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
         player.setY(10);
         assertEquals(10, player.getY());
     }
 
     @Test
-    public void testSetCoordinates() throws IOException {
+    public void testSetCoordinates()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
         player.setCoordinates(1, 2);
         assertEquals(1, player.getX());
         assertEquals(2, player.getY());
     }
 
     @Test
-    public void testSetHasChangedPosition() throws IOException {
+    public void testSetHasChangedPosition()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
         player.setHasChangedPosition(true);
         assertEquals(true, player.hasChangedPosition());
     }
 
     @Test
-    public void testGetName() throws IOException {
+    public void testGetName()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
         assertEquals("JhonnyTest", player.getName());
     }
 
     @Test
     public void testGetImage() throws IOException {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
         InputStream is = getClass().getResourceAsStream("/craft.png");
         ImageIcon fake = new ImageIcon(ImageIO.read(is));
         assertEquals(fake.getImage().getClass().getName(), player.getImage().getClass().getName());
@@ -85,7 +89,7 @@ public class PlayerTest {
     @Test
     public void testGetAttackImage() throws IOException {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
         player.setAttackTimer(11);
         assertNull(player.getAttackImage());
         InputStream is = getClass().getResourceAsStream("/craft.png");
@@ -96,31 +100,31 @@ public class PlayerTest {
     }
 
     @Test
-    public void testGetId() throws IOException {
+    public void testGetId()  {
         PlayerData data = new PlayerData("JhonnyTest", 69, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
         assertEquals(69, player.getId());
     }
 
     @Test
-    public void testSetId() throws IOException {
+    public void testSetId()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
         player.setId(69);
         assertEquals(69, player.getId());
     }
 
     @Test
-    public void testGetData() throws IOException {
+    public void testGetData()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
         assertEquals(data, player.getData());
     }
 
     @Test
-    public void testGetWidthAndGetHeight() throws IOException {
+    public void testGetWidthAndGetHeight()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
 
         ImageIcon ii = new ImageIcon(ClassLoader.getSystemResource("craft.png").getFile());
         Image image = ii.getImage();
@@ -133,34 +137,34 @@ public class PlayerTest {
     }
 
     @Test
-    public void testSetHealth() throws IOException {
+    public void testSetHealth()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
         player.setHealth(69);
         assertEquals(69, player.getHealth());
     }
 
     @Test
-    public void testSetHasNotifiedObservers() throws IOException {
+    public void testSetHasNotifiedObservers()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
         player.setHasNotifiedObservers(true);
         assertEquals(true, player.hasNotifiedObservers());
     }
 
     @Test
-    public void testIncrementTimer() throws IOException {
+    public void testIncrementTimer()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
         player.setAttackTimer(10);
         player.incrementTimer();
         assertEquals(11, player.getAttackTimer());
     }
 
     @Test
-    public void testTestKeyPressed() throws IOException {
+    public void testTestKeyPressed()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
 
         Inventory.doNotOpenInventory = true;
         KeyEvent e = new KeyEvent(new Button(), KeyEvent.VK_I, System.currentTimeMillis(), 0, KeyEvent.VK_I, 'Z');
@@ -192,25 +196,25 @@ public class PlayerTest {
     }
 
     @Test
-    public void testGetDamage() throws IOException {
+    public void testGetDamage()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
         assertEquals(5, player.getDamage());
     }
 
     @Test
-    public void testFindTarget() throws IOException {
+    public void testFindTarget()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
         player.isAttacking(true);
         player.findTarget();
         assertTrue(true);
     }
 
     @Test
-    public void testTestKeyReleased() throws IOException {
+    public void testTestKeyReleased()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
 
         KeyEvent e = new KeyEvent(new Button(), KeyEvent.VK_LEFT, System.currentTimeMillis(), 0, KeyEvent.VK_LEFT, 'Z');
         player.keyReleased(e);
@@ -231,9 +235,9 @@ public class PlayerTest {
     }
 
     @Test
-    public void testAttachAndDetachObserver() throws IOException {
+    public void testAttachAndDetachObserver()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
 
         Boss newBaus = new Boss();
 
@@ -245,9 +249,9 @@ public class PlayerTest {
     }
 
     @Test
-    public void testDetachAllObservers() throws IOException {
+    public void testDetachAllObservers()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
 
         Boss boss1 = new Boss();
         Boss boss2 = new Boss();
@@ -261,9 +265,9 @@ public class PlayerTest {
     }
 
     @Test
-    public void testNotifyObservers() throws IOException {
+    public void testNotifyObservers()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
         player.attachObserver(new Boss());
         player.attachObserver(new Boss());
         player.notifyObservers();
@@ -271,25 +275,25 @@ public class PlayerTest {
     }
 
     @Test
-    public void testGetBotX() throws IOException {
+    public void testGetBotX()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
         player.getBotX();
         assertTrue(true);
     }
 
     @Test
-    public void testGetBotY() throws IOException {
+    public void testGetBotY()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
         player.getBotY();
         assertTrue(true);
     }
 
     @Test
-    public void testMove() throws IOException {
+    public void testMove()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
 
         List<Wall> walls = new ArrayList<>();
         DoorCollection doors = new DoorCollection();
@@ -302,9 +306,9 @@ public class PlayerTest {
     }
 
     @Test
-    public void testCollideWithWall() throws IOException {
+    public void testCollideWithWall()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
 
         List<Wall> walls = new ArrayList<>();
         DoorCollection doors = new DoorCollection();
@@ -318,9 +322,9 @@ public class PlayerTest {
     }
 
     @Test
-    public void testCollideWithObstacle() throws IOException {
+    public void testCollideWithObstacle()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
 
         List<Wall> walls = new ArrayList<>();
         DoorCollection doors = new DoorCollection();
@@ -334,9 +338,9 @@ public class PlayerTest {
     }
 
     @Test
-    public void testCollideWithLavaObstacle() throws IOException {
+    public void testCollideWithLavaObstacle()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
 
         List<Wall> walls = new ArrayList<>();
         DoorCollection doors = new DoorCollection();
@@ -351,9 +355,9 @@ public class PlayerTest {
     }
 
     @Test
-    public void testCollideWithSpikesObstacle() throws IOException {
+    public void testCollideWithSpikesObstacle()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
 
         List<Wall> walls = new ArrayList<>();
         DoorCollection doors = new DoorCollection();
@@ -368,9 +372,9 @@ public class PlayerTest {
     }
 
     @Test
-    public void testCollideWithSlimeObstacle() throws IOException {
+    public void testCollideWithSlimeObstacle()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
 
         List<Wall> walls = new ArrayList<>();
         DoorCollection doors = new DoorCollection();
@@ -385,9 +389,9 @@ public class PlayerTest {
     }
 
     @Test
-    public void testCollideWithDoor() throws IOException {
+    public void testCollideWithDoor()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
 
         List<Wall> walls = new ArrayList<>();
         DoorCollection doors = new DoorCollection();
@@ -401,9 +405,9 @@ public class PlayerTest {
     }
 
     @Test
-    public void testCollideWithItem() throws IOException {
+    public void testCollideWithItem()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
 
         List<Wall> walls = new ArrayList<>();
         DoorCollection doors = new DoorCollection();
@@ -417,9 +421,9 @@ public class PlayerTest {
     }
 
     @Test
-    public void testCollideWithArmor() throws IOException {
+    public void testCollideWithArmor()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
 
         List<Wall> walls = new ArrayList<>();
         DoorCollection doors = new DoorCollection();
@@ -433,9 +437,9 @@ public class PlayerTest {
     }
 
     @Test
-    public void testCollideWithWeapon() throws IOException {
+    public void testCollideWithWeapon()  {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
-        Player player = new Player(data, new Client(), new donjinkrawler.Client(".."));
+        Player player = new Player(data, new Client(), mockClient);
 
         List<Wall> walls = new ArrayList<>();
         DoorCollection doors = new DoorCollection();

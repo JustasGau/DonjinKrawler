@@ -13,14 +13,14 @@ public class GeneratedRegistrationManagerTest {
     public void testRegisterKryo() {
         Kryo kryo = new Kryo();
         RegistrationManager.registerKryo(kryo);
-        assertEquals(64, kryo.getNextRegistrationId());
+        assertEquals(69, kryo.getNextRegistrationId());
     }
 
     @Test
     public void testRegisterKryo2() {
         Kryo kryo = new Kryo(new ListReferenceResolver());
         RegistrationManager.registerKryo(kryo);
-        assertEquals(64, kryo.getNextRegistrationId());
+        assertEquals(69, kryo.getNextRegistrationId());
     }
 }
 
