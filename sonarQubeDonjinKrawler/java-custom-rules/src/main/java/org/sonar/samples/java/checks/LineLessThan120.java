@@ -25,7 +25,7 @@ public class LineLessThan120 extends IssuableSubscriptionVisitor {
     }
 
     @Override
-    public void visitToken(SyntaxToken lastToken){
+    public void visitToken(SyntaxToken lastToken) {
         if (lastToken.column() > 120 && lastToken.line() != firstFoundLine) {
             firstFoundLine = lastToken.line();
             reportIssue(lastToken, "Lines is too long, maximum 120 symbols allowed");

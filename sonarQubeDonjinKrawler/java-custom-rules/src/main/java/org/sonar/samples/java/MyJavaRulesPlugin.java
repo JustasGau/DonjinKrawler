@@ -17,24 +17,25 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package org.sonar.samples.java;
 
 import org.sonar.api.Plugin;
 
 /**
- * Entry point of your plugin containing your custom rules
+ * Entry point of your plugin containing your custom rules.
  */
 public class MyJavaRulesPlugin implements Plugin {
 
-  @Override
-  public void define(Context context) {
+    @Override
+    public void define(Context context) {
 
-    // server extensions -> objects are instantiated during server startup
-    context.addExtension(MyJavaRulesDefinition.class);
+        // server extensions -> objects are instantiated during server startup
+        context.addExtension(MyJavaRulesDefinition.class);
 
-    // batch extensions -> objects are instantiated during code analysis
-    context.addExtension(MyJavaFileCheckRegistrar.class);
+        // batch extensions -> objects are instantiated during code analysis
+        context.addExtension(MyJavaFileCheckRegistrar.class);
 
-  }
+    }
 
 }

@@ -17,33 +17,39 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package org.sonar.samples.java;
+
+import org.sonar.plugins.java.api.JavaCheck;
+import org.sonar.samples.java.checks.BigFunction;
+import org.sonar.samples.java.checks.LineLessThan120;
+import org.sonar.samples.java.checks.ParametersLessThan5;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.sonar.plugins.java.api.JavaCheck;
-import org.sonar.samples.java.checks.ParametersLessThan5;
 
 public final class RulesList {
 
-  private RulesList() {
-  }
+    private RulesList() {
+    }
 
-  public static List<Class<? extends JavaCheck>> getChecks() {
-    List<Class<? extends JavaCheck>> checks = new ArrayList<>();
-    checks.addAll(getJavaChecks());
-    checks.addAll(getJavaTestChecks());
-    return Collections.unmodifiableList(checks);
-  }
+    public static List<Class<? extends JavaCheck>> getChecks() {
+        List<Class<? extends JavaCheck>> checks = new ArrayList<>();
+        checks.addAll(getJavaChecks());
+        checks.addAll(getJavaTestChecks());
+        return Collections.unmodifiableList(checks);
+    }
 
-  public static List<Class<? extends JavaCheck>> getJavaChecks() {
-    return Collections.unmodifiableList(Arrays.asList(
-            ParametersLessThan5.class));
-  }
+    public static List<Class<? extends JavaCheck>> getJavaChecks() {
+        return Collections.unmodifiableList(Arrays.asList(
+                ParametersLessThan5.class,
+                LineLessThan120.class,
+                BigFunction.class));
+    }
 
-  public static List<Class<? extends JavaCheck>> getJavaTestChecks() {
-    return Collections.emptyList();
-  }
+    public static List<Class<? extends JavaCheck>> getJavaTestChecks() {
+        return Collections.emptyList();
+    }
 }

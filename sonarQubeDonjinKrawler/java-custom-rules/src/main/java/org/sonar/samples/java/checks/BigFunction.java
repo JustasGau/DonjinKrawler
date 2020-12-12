@@ -2,11 +2,11 @@ package org.sonar.samples.java.checks;
 
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.java.ast.visitors.LinesOfCodeVisitor;
 import org.sonar.plugins.java.api.IssuableSubscriptionVisitor;
 import org.sonar.plugins.java.api.tree.MethodTree;
 import org.sonar.plugins.java.api.tree.Tree;
 import org.sonar.plugins.java.api.tree.Tree.Kind;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -27,11 +27,13 @@ public class BigFunction extends IssuableSubscriptionVisitor {
 
     @Override
     public void visitNode(Tree tree) {
-        MethodTree node = (MethodTree) tree;
-        int lines = new LinesOfCodeVisitor().linesOfCode(node);
-        if (lines > max) {
-            reportIssue(node.simpleName(), "Reduce this Function from " + lines +
-                    " lines to " + max);
+        MethodTree methodTree = (MethodTree) tree;
+        if (methodTree.block() == null) {
+            return;
+        }
+        int methodSize = methodTree.block().body().size();
+        if (methodSize > max) {
+            reportIssue(methodTree, "Reduce this Function from " + methodSize + " lines to " + max);
         }
     }
 
