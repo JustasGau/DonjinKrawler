@@ -103,3 +103,7 @@ out/
 build
 
 !gradle/wrapper/gradle-wrapper.jar
+
+java-custom-rules/target
+java-custom-rules/.idea
+
