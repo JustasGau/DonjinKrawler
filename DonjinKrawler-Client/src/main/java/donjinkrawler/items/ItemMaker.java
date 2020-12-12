@@ -9,6 +9,7 @@ import krawlercommon.items.*;
 import java.util.Random;
 
 public class ItemMaker {
+    private static final Random random = new Random();
 
     public static BaseItem makeItem(ItemLocationData itemData) {
         if (itemData instanceof ArmorData) {
@@ -26,8 +27,6 @@ public class ItemMaker {
     }
 
     private static Tier getTier() {
-        Random random = new Random();
-
         int luckyNumber = random.nextInt(1000);
 
         if (luckyNumber >= 800 && luckyNumber <= 950) {

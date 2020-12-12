@@ -28,7 +28,7 @@ public class ObserverTest {
     }
 
     @Test
-    public void attachObserverTest() {
+    void attachObserverTest() {
         Player player = new Player(playerData, client, mockClient);
         Enemy enemy = new SmallChicken();
         player.attachObserver(enemy);
@@ -36,7 +36,7 @@ public class ObserverTest {
     }
 
     @Test
-    public void detachObserverTest() {
+    void detachObserverTest() {
         Player player = new Player(playerData, client, mockClient);
         Enemy enemy = new SmallChicken();
         player.attachObserver(enemy);
@@ -45,7 +45,7 @@ public class ObserverTest {
     }
 
     @Test
-    public void detachAllObserversTest() {
+    void detachAllObserversTest() {
         Player player = new Player(playerData, client, mockClient);
         Enemy enemy1 = new SmallChicken();
         Enemy enemy2 = new BigChicken();
@@ -56,8 +56,8 @@ public class ObserverTest {
     }
 
     @Test
-    @Disabled
-    public void notifyObserversTest() {
+    @Disabled(value = "No idea why it fails")
+    void notifyObserversTest() {
         Player player = new Player(playerData, client, mockClient);
         Enemy enemy = new SmallChicken();
         player.attachObserver(enemy);

@@ -1,0 +1,9 @@
+org/sonar/samples/java/MyJavaRulesDefinition.class
+org/sonar/samples/java/MyJavaFileCheckRegistrar.class
+org/sonar/samples/java/MyJavaRulesDefinition$RuleMetatada.class
+org/sonar/samples/java/checks/BigFunction.class
+org/sonar/samples/java/MyJavaRulesPlugin.class
+org/sonar/samples/java/checks/LineLessThan120.class
+org/sonar/samples/java/MyJavaRulesDefinition$Remediation.class
+org/sonar/samples/java/checks/ParametersLessThan5.class
+org/sonar/samples/java/RulesList.class

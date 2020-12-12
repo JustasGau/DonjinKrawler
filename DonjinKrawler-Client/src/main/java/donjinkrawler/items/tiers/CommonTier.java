@@ -4,6 +4,8 @@ import java.util.Random;
 
 public class CommonTier implements Tier {
 
+    private final Random random = new Random();
+
     @Override
     public String getName() {
         return "Common";
@@ -35,7 +37,6 @@ public class CommonTier implements Tier {
     }
 
     private double getRandomDoubleInRange(double min, double max) {
-        Random random = new Random();
         double value = min + (max - min) * random.nextDouble();
         return Math.round(value * 100.0) / 100.0;
     }

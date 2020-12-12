@@ -43,7 +43,6 @@ public final class Game extends JPanel implements ActionListener {
     private final JLabel label;
     LoggerSingleton logger = LoggerSingleton.getInstance();
     private GameMap gameMap;
-    private MusicMaker musicMaker = new MusicMaker();
 
     public Game(com.esotericsoftware.kryonet.Client client,
                 JLabel label,

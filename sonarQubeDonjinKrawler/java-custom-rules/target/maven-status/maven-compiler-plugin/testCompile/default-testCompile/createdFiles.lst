@@ -1,0 +1,3 @@
+org/sonar/samples/java/checks/ParametersLessThan5Test.class
+org/sonar/samples/java/checks/BigFunctionTest.class
+org/sonar/samples/java/checks/LineLessThan120Test.class

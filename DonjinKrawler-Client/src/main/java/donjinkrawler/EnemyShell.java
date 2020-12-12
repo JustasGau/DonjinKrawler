@@ -25,7 +25,7 @@ public class EnemyShell extends AbstractShell {
 
     @Override
     public void loadImage() {
-
+        // Not needed for EnemyShell
     }
 
     @Override
@@ -38,14 +38,17 @@ public class EnemyShell extends AbstractShell {
         return type.getImage();
     }
 
+    @Override
     public int getID() {
         return id;
     }
 
+    @Override
     public String getInfo() {
         return info;
     }
 
+    @Override
     public void setInfo(String info) {
         this.info = info;
     }

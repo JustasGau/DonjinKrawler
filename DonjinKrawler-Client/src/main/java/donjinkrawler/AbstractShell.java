@@ -55,10 +55,6 @@ public abstract class AbstractShell implements AbstractShellInterface {
         this.info = info;
     }
 
-    public abstract void drawClothes(ClothingVisitor visitor);
-
-    public abstract List<Clothing> addClothing();
-
     public double getHealth() {
         return health;
     }
@@ -66,8 +62,6 @@ public abstract class AbstractShell implements AbstractShellInterface {
     public void setHealth(double val) {
         health = val;
     }
-
-    public abstract Image getAttackImage();
 
     public boolean isAttacking() {
         return this.attack;
