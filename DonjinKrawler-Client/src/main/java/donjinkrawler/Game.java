@@ -4,7 +4,6 @@ import donjinkrawler.decorator.EnemyClothingDecorator;
 import donjinkrawler.decorator.MaracasEnemy;
 import donjinkrawler.decorator.PonchosEnemy;
 import donjinkrawler.decorator.SombrerosEnemy;
-import donjinkrawler.facade.MusicMaker;
 import donjinkrawler.flyweight.EnemyFlyweight;
 import donjinkrawler.flyweight.EnemySelector;
 import donjinkrawler.logging.LoggerSingleton;
@@ -43,7 +42,6 @@ public final class Game extends JPanel implements ActionListener {
     private final JLabel label;
     LoggerSingleton logger = LoggerSingleton.getInstance();
     private GameMap gameMap;
-    private MusicMaker musicMaker = new MusicMaker();
 
     public Game(com.esotericsoftware.kryonet.Client client,
                 JLabel label,

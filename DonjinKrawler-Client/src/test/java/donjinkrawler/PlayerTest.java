@@ -33,12 +33,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTest {
-    
+
     @Mock
     donjinkrawler.Client mockClient;
 
     @Test
-    public void testSetX() {
+    void testSetX() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
         player.setX(10);
@@ -46,7 +46,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testSetY() {
+    void testSetY() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
         player.setY(10);
@@ -54,7 +54,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testSetCoordinates()  {
+    void testSetCoordinates() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
         player.setCoordinates(1, 2);
@@ -63,7 +63,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testSetHasChangedPosition()  {
+    void testSetHasChangedPosition() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
         player.setHasChangedPosition(true);
@@ -71,14 +71,14 @@ public class PlayerTest {
     }
 
     @Test
-    public void testGetName()  {
+    void testGetName() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
         assertEquals("JhonnyTest", player.getName());
     }
 
     @Test
-    public void testGetImage() throws IOException {
+    void testGetImage() throws IOException {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
         InputStream is = getClass().getResourceAsStream("/craft.png");
@@ -87,7 +87,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testGetAttackImage() throws IOException {
+    void testGetAttackImage() throws IOException {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
         player.setAttackTimer(11);
@@ -100,14 +100,14 @@ public class PlayerTest {
     }
 
     @Test
-    public void testGetId()  {
+    void testGetId() {
         PlayerData data = new PlayerData("JhonnyTest", 69, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
         assertEquals(69, player.getId());
     }
 
     @Test
-    public void testSetId()  {
+    void testSetId() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
         player.setId(69);
@@ -115,14 +115,14 @@ public class PlayerTest {
     }
 
     @Test
-    public void testGetData()  {
+    void testGetData() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
         assertEquals(data, player.getData());
     }
 
     @Test
-    public void testGetWidthAndGetHeight()  {
+    void testGetWidthAndGetHeight() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
 
@@ -137,7 +137,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testSetHealth()  {
+    void testSetHealth() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
         player.setHealth(69);
@@ -145,7 +145,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testSetHasNotifiedObservers()  {
+    void testSetHasNotifiedObservers() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
         player.setHasNotifiedObservers(true);
@@ -153,7 +153,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testIncrementTimer()  {
+    void testIncrementTimer() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
         player.setAttackTimer(10);
@@ -162,7 +162,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testTestKeyPressed()  {
+    void testTestKeyPressed() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
 
@@ -196,14 +196,14 @@ public class PlayerTest {
     }
 
     @Test
-    public void testGetDamage()  {
+    void testGetDamage() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
         assertEquals(5, player.getDamage());
     }
 
     @Test
-    public void testFindTarget()  {
+    void testFindTarget() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
         player.isAttacking(true);
@@ -212,7 +212,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testTestKeyReleased()  {
+    void testTestKeyReleased() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
 
@@ -235,7 +235,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testAttachAndDetachObserver()  {
+    void testAttachAndDetachObserver() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
 
@@ -249,7 +249,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testDetachAllObservers()  {
+    void testDetachAllObservers() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
 
@@ -265,7 +265,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testNotifyObservers()  {
+    void testNotifyObservers() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
         player.attachObserver(new Boss());
@@ -275,7 +275,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testGetBotX()  {
+    void testGetBotX() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
         player.getBotX();
@@ -283,7 +283,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testGetBotY()  {
+    void testGetBotY() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
         player.getBotY();
@@ -291,7 +291,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testMove()  {
+    void testMove() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
 
@@ -306,7 +306,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testCollideWithWall()  {
+    void testCollideWithWall() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
 
@@ -322,7 +322,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testCollideWithObstacle()  {
+    void testCollideWithObstacle() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
 
@@ -338,7 +338,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testCollideWithLavaObstacle()  {
+    void testCollideWithLavaObstacle() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
 
@@ -355,7 +355,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testCollideWithSpikesObstacle()  {
+    void testCollideWithSpikesObstacle() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
 
@@ -372,7 +372,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testCollideWithSlimeObstacle()  {
+    void testCollideWithSlimeObstacle() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
 
@@ -389,7 +389,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testCollideWithDoor()  {
+    void testCollideWithDoor() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
 
@@ -405,7 +405,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testCollideWithItem()  {
+    void testCollideWithItem() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
 
@@ -421,7 +421,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testCollideWithArmor()  {
+    void testCollideWithArmor() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
 
@@ -437,7 +437,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testCollideWithWeapon()  {
+    void testCollideWithWeapon() {
         PlayerData data = new PlayerData("JhonnyTest", 1, 2, 3);
         Player player = new Player(data, new Client(), mockClient);
 

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="3" passed="3" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2020-12-12T16:34:26 EET" name="Surefire suite" finished-at="2020-12-12T16:34:26 EET" duration-ms="678">
+    <groups>
+    </groups>
+    <test started-at="2020-12-12T16:34:26 EET" name="Surefire test" finished-at="2020-12-12T16:34:26 EET" duration-ms="678">
+      <class name="org.sonar.samples.java.checks.LineLessThan120Test">
+        <test-method signature="test()" started-at="2020-12-12T16:34:26 EET" name="test" finished-at="2020-12-12T16:34:26 EET" duration-ms="611" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- test -->
+      </class> <!-- org.sonar.samples.java.checks.LineLessThan120Test -->
+      <class name="org.sonar.samples.java.checks.BigFunctionTest">
+        <test-method signature="test()" started-at="2020-12-12T16:34:26 EET" name="test" finished-at="2020-12-12T16:34:26 EET" duration-ms="30" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- test -->
+      </class> <!-- org.sonar.samples.java.checks.BigFunctionTest -->
+      <class name="org.sonar.samples.java.checks.ParametersLessThan5Test">
+        <test-method signature="test()" started-at="2020-12-12T16:34:26 EET" name="test" finished-at="2020-12-12T16:34:26 EET" duration-ms="11" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- test -->
+      </class> <!-- org.sonar.samples.java.checks.ParametersLessThan5Test -->
+    </test> <!-- Surefire test -->
+  </suite> <!-- Surefire suite -->
+</testng-results>

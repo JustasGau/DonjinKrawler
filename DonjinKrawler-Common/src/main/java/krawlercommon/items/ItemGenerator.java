@@ -3,8 +3,10 @@ package krawlercommon.items;
 import java.util.Random;
 
 public class ItemGenerator {
+    private static Random rand = new Random();
+
     public static ItemLocationData generateRandomItem(int id) {
-        Random rand = new Random();
+
         return generateRandomItem(id, rand.nextInt(300) + 30, rand.nextInt(300) + 30);
     }
 
@@ -26,12 +28,10 @@ public class ItemGenerator {
     }
 
     public static ItemLocationData generateRandomPotion(int id) {
-        Random rand = new Random();
         return generateRandomPotion(id, rand.nextInt(300) + 30, rand.nextInt(300) + 30);
     }
 
     public static ItemLocationData generateRandomPotion(int id, int x, int y) {
-        Random rand = new Random();
         int num = rand.nextInt(3) + 1;
         if (num == 1) {
             return new HealthPotionData(id, x, y);

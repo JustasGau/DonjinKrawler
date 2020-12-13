@@ -1,0 +1,3 @@
+/home/eli/Coding/DonjinKrawler/sonarQubeDonjinKrawler/java-custom-rules/src/test/java/org/sonar/samples/java/checks/LineLessThan120Test.java
+/home/eli/Coding/DonjinKrawler/sonarQubeDonjinKrawler/java-custom-rules/src/test/java/org/sonar/samples/java/checks/BigFunctionTest.java
+/home/eli/Coding/DonjinKrawler/sonarQubeDonjinKrawler/java-custom-rules/src/test/java/org/sonar/samples/java/checks/ParametersLessThan5Test.java

@@ -4,7 +4,6 @@ import donjinkrawler.builder.BossRoomBuilder;
 import donjinkrawler.builder.ItemRoomBuilder;
 import donjinkrawler.builder.NormalRoomBuilder;
 import donjinkrawler.builder.RoomDirector;
-import donjinkrawler.logging.LoggerSingleton;
 import krawlercommon.map.RoomData;
 import krawlercommon.map.RoomType;
 
@@ -12,8 +11,8 @@ import java.util.*;
 
 public class GameMapGenerator {
     private final int walkers = 2;
-    private LoggerSingleton logger = LoggerSingleton.getInstance();
-    private int size = 10;
+    private final Random rand = new Random();
+    private int size;
     private final int walkerSteps = size * 4;
 
     public GameMapGenerator(int size) {
@@ -28,7 +27,6 @@ public class GameMapGenerator {
     public List<String> generate() {
         int x = 0;
         int y = 0;
-        Random rand = new Random();
         int minDif = -1;
         //has a bias to move right and down
         int maxDif = 2;

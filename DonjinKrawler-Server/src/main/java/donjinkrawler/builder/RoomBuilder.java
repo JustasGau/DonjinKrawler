@@ -11,6 +11,7 @@ import java.util.Random;
 public abstract class RoomBuilder {
     private static final int MAP_WIDTH = 500;
     private static final int MAP_HEIGHT = 500;
+    private final Random rand = new Random();
     RoomData roomData;
 
     public RoomBuilder startNew(int id) {
@@ -41,7 +42,6 @@ public abstract class RoomBuilder {
     }
 
     protected void generateRandomDecorations(int fromImage, int toImage) {
-        Random rand = new Random();
         int corner;
         Bounds bound;
         List<Bounds> pairList = getPairList();

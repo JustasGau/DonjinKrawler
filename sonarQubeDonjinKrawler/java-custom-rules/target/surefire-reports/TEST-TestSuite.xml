@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="TestSuite" time="0.843" tests="3" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="awt.toolkit" value="sun.awt.X11.XToolkit"/>
+    <property name="java.specification.version" value="11"/>
+    <property name="sun.cpu.isalist" value=""/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/home/eli/Coding/DonjinKrawler/sonarQubeDonjinKrawler/java-custom-rules/target/test-classes:/home/eli/Coding/DonjinKrawler/sonarQubeDonjinKrawler/java-custom-rules/target/classes:/home/eli/.m2/repository/org/sonarsource/sonarqube/sonar-plugin-api/8.2.0.32929/sonar-plugin-api-8.2.0.32929.jar:/home/eli/.m2/repository/org/sonarsource/java/sonar-java-plugin/6.3.0.21585/sonar-java-plugin-6.3.0.21585.jar:/home/eli/.m2/repository/org/sonarsource/java/java-surefire/6.3.0.21585/java-surefire-6.3.0.21585.jar:/home/eli/.m2/repository/com/fasterxml/staxmate/staxmate/2.3.1/staxmate-2.3.1.jar:/home/eli/.m2/repository/org/codehaus/woodstox/stax2-api/3.1.4/stax2-api-3.1.4.jar:/home/eli/.m2/repository/org/sonarsource/analyzer-commons/sonar-xml-parsing/1.11.0.541/sonar-xml-parsing-1.11.0.541.jar:/home/eli/.m2/repository/xerces/xercesImpl/2.12.0/xercesImpl-2.12.0.jar:/home/eli/.m2/repository/xml-apis/xml-apis/1.4.01/xml-apis-1.4.01.jar:/home/eli/.m2/repository/com/fasterxml/woodstox/woodstox-core/5.2.0/woodstox-core-5.2.0.jar:/home/eli/.m2/repository/org/sonarsource/java/java-frontend/6.3.0.21585/java-frontend-6.3.0.21585.jar:/home/eli/.m2/repository/org/sonarsource/java/jdt/6.3.0.21585/jdt-6.3.0.21585-shaded.jar:/home/eli/.m2/repository/org/eclipse/jdt/org.eclipse.jdt.core/3.20.0/org.eclipse.jdt.core-3.20.0.jar:/home/eli/.m2/repository/org/eclipse/platform/org.eclipse.core.resources/3.13.800/org.eclipse.core.resources-3.13.800.jar:/home/eli/.m2/repository/org/eclipse/platform/org.eclipse.core.runtime/3.19.0/org.eclipse.core.runtime-3.19.0.jar:/home/eli/.m2/repository/org/eclipse/platform/org.eclipse.osgi/3.16.0/org.eclipse.osgi-3.16.0.jar:/home/eli/.m2/repository/org/eclipse/platform/org.eclipse.equinox.common/3.13.0/org.eclipse.equinox.common-3.13.0.jar:/home/eli/.m2/repository/org/eclipse/platform/org.eclipse.core.jobs/3.10.800/org.eclipse.core.jobs-3.10.800.jar:/home/eli/.m2/repository/org/eclipse/platform/org.eclipse.equinox.preferences/3.8.0/org.eclipse.equinox.preferences-3.8.0.jar:/home/eli/.m2/repository/org/eclipse/platform/org.eclipse.core.contenttype/3.7.800/org.eclipse.core.contenttype-3.7.800.jar:/home/eli/.m2/repository/org/eclipse/platform/org.eclipse.text/3.10.300/org.eclipse.text-3.10.300.jar:/home/eli/.m2/repository/org/eclipse/platform/org.eclipse.core.commands/3.9.700/org.eclipse.core.commands-3.9.700.jar:/home/eli/.m2/repository/org/ow2/asm/asm-commons/7.1/asm-commons-7.1.jar:/home/eli/.m2/repository/org/ow2/asm/asm/7.1/asm-7.1.jar:/home/eli/.m2/repository/org/ow2/asm/asm-tree/7.1/asm-tree-7.1.jar:/home/eli/.m2/repository/org/ow2/asm/asm-analysis/7.1/asm-analysis-7.1.jar:/home/eli/.m2/repository/org/ow2/asm/asm-util/7.1/asm-util-7.1.jar:/home/eli/.m2/repository/org/sonarsource/java/java-checks/6.3.0.21585/java-checks-6.3.0.21585.jar:/home/eli/.m2/repository/org/sonarsource/analyzer-commons/sonar-analyzer-recognizers/1.11.0.541/sonar-analyzer-recognizers-1.11.0.541.jar:/home/eli/.m2/repository/org/sonarsource/java/external-reports/6.3.0.21585/external-reports-6.3.0.21585.jar:/home/eli/.m2/repository/org/sonarsource/java/java-jsp/6.3.0.21585/java-jsp-6.3.0.21585.jar:/home/eli/.m2/repository/org/apache/tomcat/embed/tomcat-embed-jasper/9.0.33/tomcat-embed-jasper-9.0.33.jar:/home/eli/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/9.0.33/tomcat-embed-core-9.0.33.jar:/home/eli/.m2/repository/org/apache/tomcat/tomcat-annotations-api/9.0.33/tomcat-annotations-api-9.0.33.jar:/home/eli/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/9.0.33/tomcat-embed-el-9.0.33.jar:/home/eli/.m2/repository/org/sonarsource/analyzer-commons/sonar-analyzer-commons/1.11.0.541/sonar-analyzer-commons-1.11.0.541.jar:/home/eli/.m2/repository/org/sonarsource/sonarqube/sonar-plugin-api-impl/8.2.0.32929/sonar-plugin-api-impl-8.2.0.32929.jar:/home/eli/.m2/repository/commons-codec/commons-codec/1.12/commons-codec-1.12.jar:/home/eli/.m2/repository/commons-io/commons-io/2.6/commons-io-2.6.jar:/home/eli/.m2/repository/org/apache/commons/commons-csv/1.7/commons-csv-1.7.jar:/home/eli/.m2/repository/org/sonarsource/sslr-squid-bridge/sslr-squid-bridge/2.6.1/sslr-squid-bridge-2.6.1.jar:/home/eli/.m2/repository/org/picocontainer/picocontainer/2.14.1/picocontainer-2.14.1.jar:/home/eli/.m2/repository/org/sonarsource/java/java-checks-testkit/6.3.0.21585/java-checks-testkit-6.3.0.21585.jar:/home/eli/.m2/repository/com/google/code/findbugs/jsr305/1.3.9/jsr305-1.3.9.jar:/home/eli/.m2/repository/com/google/code/gson/gson/2.6.2/gson-2.6.2.jar:/home/eli/.m2/repository/org/sonarsource/sslr/sslr-testing-harness/1.21/sslr-testing-harness-1.21.jar:/home/eli/.m2/repository/org/sonarsource/sslr/sslr-core/1.21/sslr-core-1.21.jar:/home/eli/.m2/repository/cglib/cglib-nodep/3.1/cglib-nodep-3.1.jar:/home/eli/.m2/repository/org/sonarsource/sslr/sslr-toolkit/1.21/sslr-toolkit-1.21.jar:/home/eli/.m2/repository/org/sonarsource/sslr/sslr-xpath/1.21/sslr-xpath-1.21.jar:/home/eli/.m2/repository/jaxen/jaxen/1.1.4/jaxen-1.1.4.jar:/home/eli/.m2/repository/org/codehaus/sonar/sonar-colorizer/3.7/sonar-colorizer-3.7.jar:/home/eli/.m2/repository/org/codehaus/sonar/sonar-channel/3.7/sonar-channel-3.7.jar:/home/eli/.m2/repository/org/easytesting/fest-assert/1.4/fest-assert-1.4.jar:/home/eli/.m2/repository/org/easytesting/fest-util/1.1.6/fest-util-1.1.6.jar:/home/eli/.m2/repository/org/hamcrest/hamcrest-all/1.1/hamcrest-all-1.1.jar:/home/eli/.m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6.jar:/home/eli/.m2/repository/com/google/guava/guava/26.0-jre/guava-26.0-jre.jar:/home/eli/.m2/repository/org/checkerframework/checker-qual/2.5.2/checker-qual-2.5.2.jar:/home/eli/.m2/repository/com/google/errorprone/error_prone_annotations/2.1.3/error_prone_annotations-2.1.3.jar:/home/eli/.m2/repository/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar:/home/eli/.m2/repository/org/codehaus/mojo/animal-sniffer-annotations/1.14/animal-sniffer-annotations-1.14.jar:/home/eli/.m2/repository/org/slf4j/slf4j-api/1.6.2/slf4j-api-1.6.2.jar:/home/eli/.m2/repository/junit/junit/4.11/junit-4.11.jar:/home/eli/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/home/eli/.m2/repository/org/assertj/assertj-core/3.6.1/assertj-core-3.6.1.jar:/home/eli/.m2/repository/ch/qos/logback/logback-classic/0.9.30/logback-classic-0.9.30.jar:/home/eli/.m2/repository/ch/qos/logback/logback-core/0.9.30/logback-core-0.9.30.jar:/home/eli/.m2/repository/org/testng/testng/7.3.0/testng-7.3.0.jar:/home/eli/.m2/repository/com/beust/jcommander/1.78/jcommander-1.78.jar:/home/eli/.m2/repository/org/apache/ant/ant/1.10.3/ant-1.10.3.jar:/home/eli/.m2/repository/org/apache/ant/ant-launcher/1.10.3/ant-launcher-1.10.3.jar:/home/eli/.m2/repository/com/google/inject/guice/4.2.2/guice-4.2.2-no_aop.jar:/home/eli/.m2/repository/javax/inject/javax.inject/1/javax.inject-1.jar:/home/eli/.m2/repository/aopalliance/aopalliance/1.0/aopalliance-1.0.jar:/home/eli/.m2/repository/org/yaml/snakeyaml/1.21/snakeyaml-1.21.jar:"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="https://openjdk.java.net/"/>
+    <property name="user.timezone" value="Europe/Vilnius"/>
+    <property name="java.vm.specification.version" value="11"/>
+    <property name="os.name" value="Linux"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-11-openjdk/lib"/>
+    <property name="sun.java.command" value="/home/eli/Coding/DonjinKrawler/sonarQubeDonjinKrawler/java-custom-rules/target/surefire/surefirebooter14138708242724310896.jar /home/eli/Coding/DonjinKrawler/sonarQubeDonjinKrawler/java-custom-rules/target/surefire 2020-12-12T16-34-25_503-jvmRun1 surefire5909800359210374926tmp surefire_012776392352426437179tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/home/eli/Coding/DonjinKrawler/sonarQubeDonjinKrawler/java-custom-rules/target/test-classes:/home/eli/Coding/DonjinKrawler/sonarQubeDonjinKrawler/java-custom-rules/target/classes:/home/eli/.m2/repository/org/sonarsource/sonarqube/sonar-plugin-api/8.2.0.32929/sonar-plugin-api-8.2.0.32929.jar:/home/eli/.m2/repository/org/sonarsource/java/sonar-java-plugin/6.3.0.21585/sonar-java-plugin-6.3.0.21585.jar:/home/eli/.m2/repository/org/sonarsource/java/java-surefire/6.3.0.21585/java-surefire-6.3.0.21585.jar:/home/eli/.m2/repository/com/fasterxml/staxmate/staxmate/2.3.1/staxmate-2.3.1.jar:/home/eli/.m2/repository/org/codehaus/woodstox/stax2-api/3.1.4/stax2-api-3.1.4.jar:/home/eli/.m2/repository/org/sonarsource/analyzer-commons/sonar-xml-parsing/1.11.0.541/sonar-xml-parsing-1.11.0.541.jar:/home/eli/.m2/repository/xerces/xercesImpl/2.12.0/xercesImpl-2.12.0.jar:/home/eli/.m2/repository/xml-apis/xml-apis/1.4.01/xml-apis-1.4.01.jar:/home/eli/.m2/repository/com/fasterxml/woodstox/woodstox-core/5.2.0/woodstox-core-5.2.0.jar:/home/eli/.m2/repository/org/sonarsource/java/java-frontend/6.3.0.21585/java-frontend-6.3.0.21585.jar:/home/eli/.m2/repository/org/sonarsource/java/jdt/6.3.0.21585/jdt-6.3.0.21585-shaded.jar:/home/eli/.m2/repository/org/eclipse/jdt/org.eclipse.jdt.core/3.20.0/org.eclipse.jdt.core-3.20.0.jar:/home/eli/.m2/repository/org/eclipse/platform/org.eclipse.core.resources/3.13.800/org.eclipse.core.resources-3.13.800.jar:/home/eli/.m2/repository/org/eclipse/platform/org.eclipse.core.runtime/3.19.0/org.eclipse.core.runtime-3.19.0.jar:/home/eli/.m2/repository/org/eclipse/platform/org.eclipse.osgi/3.16.0/org.eclipse.osgi-3.16.0.jar:/home/eli/.m2/repository/org/eclipse/platform/org.eclipse.equinox.common/3.13.0/org.eclipse.equinox.common-3.13.0.jar:/home/eli/.m2/repository/org/eclipse/platform/org.eclipse.core.jobs/3.10.800/org.eclipse.core.jobs-3.10.800.jar:/home/eli/.m2/repository/org/eclipse/platform/org.eclipse.equinox.preferences/3.8.0/org.eclipse.equinox.preferences-3.8.0.jar:/home/eli/.m2/repository/org/eclipse/platform/org.eclipse.core.contenttype/3.7.800/org.eclipse.core.contenttype-3.7.800.jar:/home/eli/.m2/repository/org/eclipse/platform/org.eclipse.text/3.10.300/org.eclipse.text-3.10.300.jar:/home/eli/.m2/repository/org/eclipse/platform/org.eclipse.core.commands/3.9.700/org.eclipse.core.commands-3.9.700.jar:/home/eli/.m2/repository/org/ow2/asm/asm-commons/7.1/asm-commons-7.1.jar:/home/eli/.m2/repository/org/ow2/asm/asm/7.1/asm-7.1.jar:/home/eli/.m2/repository/org/ow2/asm/asm-tree/7.1/asm-tree-7.1.jar:/home/eli/.m2/repository/org/ow2/asm/asm-analysis/7.1/asm-analysis-7.1.jar:/home/eli/.m2/repository/org/ow2/asm/asm-util/7.1/asm-util-7.1.jar:/home/eli/.m2/repository/org/sonarsource/java/java-checks/6.3.0.21585/java-checks-6.3.0.21585.jar:/home/eli/.m2/repository/org/sonarsource/analyzer-commons/sonar-analyzer-recognizers/1.11.0.541/sonar-analyzer-recognizers-1.11.0.541.jar:/home/eli/.m2/repository/org/sonarsource/java/external-reports/6.3.0.21585/external-reports-6.3.0.21585.jar:/home/eli/.m2/repository/org/sonarsource/java/java-jsp/6.3.0.21585/java-jsp-6.3.0.21585.jar:/home/eli/.m2/repository/org/apache/tomcat/embed/tomcat-embed-jasper/9.0.33/tomcat-embed-jasper-9.0.33.jar:/home/eli/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/9.0.33/tomcat-embed-core-9.0.33.jar:/home/eli/.m2/repository/org/apache/tomcat/tomcat-annotations-api/9.0.33/tomcat-annotations-api-9.0.33.jar:/home/eli/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/9.0.33/tomcat-embed-el-9.0.33.jar:/home/eli/.m2/repository/org/sonarsource/analyzer-commons/sonar-analyzer-commons/1.11.0.541/sonar-analyzer-commons-1.11.0.541.jar:/home/eli/.m2/repository/org/sonarsource/sonarqube/sonar-plugin-api-impl/8.2.0.32929/sonar-plugin-api-impl-8.2.0.32929.jar:/home/eli/.m2/repository/commons-codec/commons-codec/1.12/commons-codec-1.12.jar:/home/eli/.m2/repository/commons-io/commons-io/2.6/commons-io-2.6.jar:/home/eli/.m2/repository/org/apache/commons/commons-csv/1.7/commons-csv-1.7.jar:/home/eli/.m2/repository/org/sonarsource/sslr-squid-bridge/sslr-squid-bridge/2.6.1/sslr-squid-bridge-2.6.1.jar:/home/eli/.m2/repository/org/picocontainer/picocontainer/2.14.1/picocontainer-2.14.1.jar:/home/eli/.m2/repository/org/sonarsource/java/java-checks-testkit/6.3.0.21585/java-checks-testkit-6.3.0.21585.jar:/home/eli/.m2/repository/com/google/code/findbugs/jsr305/1.3.9/jsr305-1.3.9.jar:/home/eli/.m2/repository/com/google/code/gson/gson/2.6.2/gson-2.6.2.jar:/home/eli/.m2/repository/org/sonarsource/sslr/sslr-testing-harness/1.21/sslr-testing-harness-1.21.jar:/home/eli/.m2/repository/org/sonarsource/sslr/sslr-core/1.21/sslr-core-1.21.jar:/home/eli/.m2/repository/cglib/cglib-nodep/3.1/cglib-nodep-3.1.jar:/home/eli/.m2/repository/org/sonarsource/sslr/sslr-toolkit/1.21/sslr-toolkit-1.21.jar:/home/eli/.m2/repository/org/sonarsource/sslr/sslr-xpath/1.21/sslr-xpath-1.21.jar:/home/eli/.m2/repository/jaxen/jaxen/1.1.4/jaxen-1.1.4.jar:/home/eli/.m2/repository/org/codehaus/sonar/sonar-colorizer/3.7/sonar-colorizer-3.7.jar:/home/eli/.m2/repository/org/codehaus/sonar/sonar-channel/3.7/sonar-channel-3.7.jar:/home/eli/.m2/repository/org/easytesting/fest-assert/1.4/fest-assert-1.4.jar:/home/eli/.m2/repository/org/easytesting/fest-util/1.1.6/fest-util-1.1.6.jar:/home/eli/.m2/repository/org/hamcrest/hamcrest-all/1.1/hamcrest-all-1.1.jar:/home/eli/.m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6.jar:/home/eli/.m2/repository/com/google/guava/guava/26.0-jre/guava-26.0-jre.jar:/home/eli/.m2/repository/org/checkerframework/checker-qual/2.5.2/checker-qual-2.5.2.jar:/home/eli/.m2/repository/com/google/errorprone/error_prone_annotations/2.1.3/error_prone_annotations-2.1.3.jar:/home/eli/.m2/repository/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar:/home/eli/.m2/repository/org/codehaus/mojo/animal-sniffer-annotations/1.14/animal-sniffer-annotations-1.14.jar:/home/eli/.m2/repository/org/slf4j/slf4j-api/1.6.2/slf4j-api-1.6.2.jar:/home/eli/.m2/repository/junit/junit/4.11/junit-4.11.jar:/home/eli/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/home/eli/.m2/repository/org/assertj/assertj-core/3.6.1/assertj-core-3.6.1.jar:/home/eli/.m2/repository/ch/qos/logback/logback-classic/0.9.30/logback-classic-0.9.30.jar:/home/eli/.m2/repository/ch/qos/logback/logback-core/0.9.30/logback-core-0.9.30.jar:/home/eli/.m2/repository/org/testng/testng/7.3.0/testng-7.3.0.jar:/home/eli/.m2/repository/com/beust/jcommander/1.78/jcommander-1.78.jar:/home/eli/.m2/repository/org/apache/ant/ant/1.10.3/ant-1.10.3.jar:/home/eli/.m2/repository/org/apache/ant/ant-launcher/1.10.3/ant-launcher-1.10.3.jar:/home/eli/.m2/repository/com/google/inject/guice/4.2.2/guice-4.2.2-no_aop.jar:/home/eli/.m2/repository/javax/inject/javax.inject/1/javax.inject-1.jar:/home/eli/.m2/repository/aopalliance/aopalliance/1.0/aopalliance-1.0.jar:/home/eli/.m2/repository/org/yaml/snakeyaml/1.21/snakeyaml-1.21.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/home/eli"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2020-07-14"/>
+    <property name="java.home" value="/usr/lib/jvm/java-11-openjdk"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/home/eli/Coding/DonjinKrawler/sonarQubeDonjinKrawler/java-custom-rules"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
+    <property name="surefire.real.class.path" value="/home/eli/Coding/DonjinKrawler/sonarQubeDonjinKrawler/java-custom-rules/target/surefire/surefirebooter14138708242724310896.jar"/>
+    <property name="awt.useSystemAAFontSettings" value="lcd"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="11.0.8+10"/>
+    <property name="user.name" value="eli"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="5.9.13-arch1-1"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="localRepository" value="/home/eli/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="java.version" value="11.0.8"/>
+    <property name="user.dir" value="/home/eli/Coding/DonjinKrawler/sonarQubeDonjinKrawler/java-custom-rules"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="java.awt.printerjob" value="sun.print.PSPrinterJob"/>
+    <property name="sun.os.patch.level" value="unknown"/>
+    <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.vendor" value="N/A"/>
+    <property name="java.vm.version" value="11.0.8+10"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="55.0"/>
+  </properties>
+  <testcase name="test on test(org.sonar.samples.java.checks.LineLessThan120Test)" classname="org.sonar.samples.java.checks.LineLessThan120Test" time="0.601">
+    <system-out><![CDATA[Usage: <main class> [options] The XML suite files to run
+  Options:
+    -alwaysrunlisteners
+      Should MethodInvocation Listeners be run even for skipped methods
+      Default: true
+    -configfailurepolicy
+      Configuration failure policy (skip or continue)
+    -d
+      Output directory
+    -dataproviderthreadcount
+      Number of threads to use when running data providers
+    -dependencyinjectorfactory
+      The dependency injector factory implementation that TestNG should use.
+    -excludegroups
+      Comma-separated list of group names to  exclude
+    -failwheneverythingskipped
+      Should TestNG fail execution if all tests were skipped and nothing was 
+      run. 
+      Default: false
+    -groups
+      Comma-separated list of group names to be run
+    -junit
+      JUnit mode
+      Default: false
+    -listener
+      List of .class files or list of class names implementing ITestListener 
+      or ISuiteListener
+    -methods
+      Comma separated of test methods
+      Default: []
+    -methodselectors
+      List of .class files or list of class names implementing IMethodSelector
+    -mixed
+      Mixed mode - autodetect the type of current test and run it with 
+      appropriate runner
+      Default: false
+    -objectfactory
+      List of .class files or list of class names implementing 
+      ITestRunnerFactory 
+    -parallel
+      Parallel mode (methods, tests or classes)
+      Possible Values: [tests, methods, classes, instances, none, true, false]
+    -port
+      The port
+    -reporter
+      Extended configuration for custom report listener
+    -spilistenerstoskip
+      Comma separated fully qualified class names of listeners that should be 
+      skipped from being wired in via Service Loaders.
+      Default: <empty string>
+    -suitename
+      Default name of test suite, if not specified in suite definition file or 
+      source code
+    -suitethreadpoolsize
+      Size of the thread pool to use to run suites
+      Default: 1
+    -testclass
+      The list of test classes
+    -testjar
+      A jar file containing the tests
+    -testname
+      Default name of test, if not specified in suitedefinition file or source 
+      code 
+    -testnames
+      The list of test names to run
+    -testrunfactory, -testRunFactory
+      The factory used to create tests
+    -threadcount
+      Number of threads to use when running tests in parallel
+    -threadpoolfactoryclass
+      The threadpool executor factory implementation that TestNG should use.
+    -usedefaultlisteners
+      Whether to use the default listeners
+      Default: true
+    -log, -verbose
+      Level of verbosity
+    -xmlpathinjar
+      The full path to the xml file inside the jar file (only valid if 
+      -testjar was specified)
+      Default: testng.xml
+
+16:34:26.221 [main] DEBUG o.s.java.bytecode.ClassLoaderBuilder - ----- Classpath analyzed by Squid:
+16:34:26.223 [main] DEBUG o.s.java.bytecode.ClassLoaderBuilder - /home/eli/Coding/DonjinKrawler/sonarQubeDonjinKrawler/java-custom-rules/target/test-classes
+16:34:26.223 [main] DEBUG o.s.java.bytecode.ClassLoaderBuilder - -----
+16:34:26.265 [main] INFO  o.s.analyzer.commons.ProgressReport - 1 source files to be analyzed
+16:34:26.705 [Report about progress of Java AST analyzer] INFO  o.s.analyzer.commons.ProgressReport - 1/1 source files have been analyzed
+]]></system-out>
+    <system-err><![CDATA[[TestNG] [ERROR] No test suite found. Nothing to run
+]]></system-err>
+  </testcase>
+  <testcase name="test on test(org.sonar.samples.java.checks.BigFunctionTest)" classname="org.sonar.samples.java.checks.BigFunctionTest" time="0.031">
+    <system-out><![CDATA[16:34:26.720 [main] DEBUG o.s.java.bytecode.ClassLoaderBuilder - ----- Classpath analyzed by Squid:
+16:34:26.720 [main] DEBUG o.s.java.bytecode.ClassLoaderBuilder - /home/eli/Coding/DonjinKrawler/sonarQubeDonjinKrawler/java-custom-rules/target/test-classes
+16:34:26.720 [main] DEBUG o.s.java.bytecode.ClassLoaderBuilder - -----
+16:34:26.720 [main] INFO  o.s.analyzer.commons.ProgressReport - 1 source files to be analyzed
+16:34:26.746 [Report about progress of Java AST analyzer] INFO  o.s.analyzer.commons.ProgressReport - 1/1 source files have been analyzed
+]]></system-out>
+  </testcase>
+  <testcase name="test on test(org.sonar.samples.java.checks.ParametersLessThan5Test)" classname="org.sonar.samples.java.checks.ParametersLessThan5Test" time="0.011">
+    <system-out><![CDATA[16:34:26.749 [main] DEBUG o.s.java.bytecode.ClassLoaderBuilder - ----- Classpath analyzed by Squid:
+16:34:26.749 [main] DEBUG o.s.java.bytecode.ClassLoaderBuilder - /home/eli/Coding/DonjinKrawler/sonarQubeDonjinKrawler/java-custom-rules/target/test-classes
+16:34:26.749 [main] DEBUG o.s.java.bytecode.ClassLoaderBuilder - -----
+16:34:26.749 [main] INFO  o.s.analyzer.commons.ProgressReport - 1 source files to be analyzed
+16:34:26.757 [Report about progress of Java AST analyzer] INFO  o.s.analyzer.commons.ProgressReport - 1/1 source files have been analyzed
+]]></system-out>
+  </testcase>
+</testsuite>

@@ -14,7 +14,6 @@ import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.util.HashMap;
 import java.util.Map;
 
 public final class Client {
@@ -59,6 +58,7 @@ public final class Client {
         Client client = this;
 
         kryoClient.addListener(new Listener() {
+            @Override
             public void received(Connection connection, Object object) {
                 packetControlChain.handle(client, object);
             }
@@ -71,7 +71,7 @@ public final class Client {
 
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         messageLabel.setBackground(Color.lightGray);
         frame.getContentPane().add(messageLabel, BorderLayout.SOUTH);
@@ -121,7 +121,7 @@ public final class Client {
         this.messageLabel.setText(text);
     }
 
-    public void setRooms(HashMap<Integer, RoomData> rooms) {
+    public void setRooms(Map<Integer, RoomData> rooms) {
         this.rooms = rooms;
     }
 
