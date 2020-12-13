@@ -4,7 +4,6 @@ import donjinkrawler.decorator.EnemyClothingDecorator;
 import donjinkrawler.decorator.MaracasEnemy;
 import donjinkrawler.decorator.PonchosEnemy;
 import donjinkrawler.decorator.SombrerosEnemy;
-import donjinkrawler.facade.MusicMaker;
 import donjinkrawler.flyweight.EnemyFlyweight;
 import donjinkrawler.flyweight.EnemySelector;
 import donjinkrawler.logging.LoggerSingleton;

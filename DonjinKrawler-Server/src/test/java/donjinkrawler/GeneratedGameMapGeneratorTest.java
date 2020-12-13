@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GeneratedGameMapGeneratorTest {
     @Test
     public void testGenerate() {
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> (new GameMapGenerator(0)).generate());
         assertThrows(NegativeArraySizeException.class, () -> (new GameMapGenerator(-1)).generate());
         assertTrue((new GameMapGenerator(40)).generate() instanceof java.util.ArrayList);
     }

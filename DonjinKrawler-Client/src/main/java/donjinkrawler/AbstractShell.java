@@ -1,10 +1,6 @@
 package donjinkrawler;
 
-import donjinkrawler.decorator.clothes.Clothing;
-import donjinkrawler.visitor.ClothingVisitor;
-
 import java.awt.*;
-import java.util.List;
 
 public abstract class AbstractShell implements AbstractShellInterface {
 
